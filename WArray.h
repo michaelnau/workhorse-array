@@ -197,8 +197,8 @@ typedef struct WArrayNamespace {
 	bool		(*none)		(const WArray* array, ElementCondition* condition, const void* conditionData);
 	bool		(*one)		(const WArray* array, ElementCondition* condition, const void* conditionData);
 
-	WArray* 	(*filter)	(const WArray* array, ElementFilter* filter, const void* filterData );
-	WArray* 	(*reject)	(const WArray* array, ElementFilter* filter, const void* filterData );
+	WArray* 	(*filter)	(const WArray* array, ElementCondition* filter, const void* filterData );
+	WArray* 	(*reject)	(const WArray* array, ElementCondition* filter, const void* filterData );
 	WArray* 	(*map)		(const WArray* array, ElementMap*, const void*, const ElementType* type );
 	void*		(*reduce)	(const WArray* array, ElementReduce*, const void*, const ElementType* type );
 
@@ -879,7 +879,7 @@ warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* fo
 	@pre filter != NULL
 */
 WArray*
-warray_filter( const WArray* array, ElementFilter* filter, const void* filterData );
+warray_filter( const WArray* array, ElementCondition* filter, const void* filterData );
 
 /**	Reject all elements meeting a criterion and put the rest in a new array.
 
@@ -887,7 +887,7 @@ warray_filter( const WArray* array, ElementFilter* filter, const void* filterDat
 	@pre reject != NULL
 */
 WArray*
-warray_reject( const WArray* array, ElementFilter* reject, const void* rejectData );
+warray_reject( const WArray* array, ElementCondition* reject, const void* rejectData );
 
 /**	Map each element to a new element of a specified type and put them all in a new array.
 
@@ -955,7 +955,7 @@ warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValu
 	@pre filter != NULL
 */
 WArray*
-warray_select( WArray* array, ElementFilter* filter, const void* filterData );
+warray_select( WArray* array, ElementCondition* filter, const void* filterData );
 
 /**	Delete all elements meeting a filter criterion and keep the rest.
 
@@ -967,7 +967,7 @@ warray_select( WArray* array, ElementFilter* filter, const void* filterData );
 	@pre filter != NULL
 */
 WArray*
-warray_unselect( WArray* array, ElementFilter* filter, const void* filterData );
+warray_unselect( WArray* array, ElementCondition* filter, const void* filterData );
 
 //------------------------------------------------------------
 //	Do stuff with the elements.

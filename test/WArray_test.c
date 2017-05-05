@@ -54,7 +54,6 @@ WArrayNamespace a = warrayNamespace;
 IteratorNamespace it = iteratorNameSpace;
 
 //--------------------------------------------------------------------------------
-
 typedef struct Person {
 	char*	name;
 	char*	firstname;

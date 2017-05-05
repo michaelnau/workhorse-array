@@ -497,7 +497,7 @@ warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* fo
 }
 
 WArray*
-warray_filter( const WArray* array, ElementFilter* filter, const void* filterData )
+warray_filter( const WArray* array, ElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -516,7 +516,7 @@ warray_filter( const WArray* array, ElementFilter* filter, const void* filterDat
 }
 
 WArray*
-warray_reject( const WArray* array, ElementFilter* reject, const void* rejectData )
+warray_reject( const WArray* array, ElementCondition* reject, const void* rejectData )
 {
 	assert( array );
 	assert( reject );
@@ -534,7 +534,7 @@ warray_reject( const WArray* array, ElementFilter* reject, const void* rejectDat
 }
 
 WArray*
-warray_select( WArray* array, ElementFilter* filter, const void* filterData )
+warray_select( WArray* array, ElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -554,7 +554,7 @@ warray_select( WArray* array, ElementFilter* filter, const void* filterData )
 }
 
 WArray*
-warray_unselect( WArray* array, ElementFilter* filter, const void* filterData )
+warray_unselect( WArray* array, ElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );

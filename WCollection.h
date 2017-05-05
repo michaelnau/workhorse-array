@@ -1,5 +1,5 @@
 /**	@file
-	Types and functions common for Collection modules
+	Types and functions common for collection modules
 */
 #ifndef COLLECTION_H_INCLUDED
 #define COLLECTION_H_INCLUDED
@@ -45,10 +45,6 @@ typedef void	ElementForeach(const void* element, void* foreachData );
 /**	Function prototype for doing read-only stuff to an element and its index.
 */
 typedef void	ElementForeachIndex(const void* element, size_t index, void* foreachData );
-
-/**	Function prototype returning true for an element to be included in the filter.
-*/
-typedef	bool	ElementFilter(const void* element, const void* filterData);
 
 /**	Function prototype for mapping an input element to an output element.
 */
