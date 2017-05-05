@@ -61,13 +61,13 @@ typedef bool	ElementCondition(const void* element, const void* conditionData);
 /**	Defines the essential behaviour and thus the type of a collection element.
 	It is passed to functions like warray_new().
 */
-typedef struct ElementType {
+typedef struct WType {
 	ElementClone*		clone;		///<Method to copy an element into the collection. Mandatory.
 	ElementDelete*		delete;		///<Method to destroy an element, e.g. if it is removed from the collection. Mandatory.
 	ElementCompare*		compare;	///<Method to compare two elements with each other. Mandatory only for some collection functions.
 	ElementFromString*	fromString;	///<Method to parse an element from a string. Mandatory only for some collection functions.
 	ElementToString*	toString;	///<Method to convert an element to a string. Mandatory only for some collection functions.
-}ElementType;
+}WType;
 
 //---------------------------------------------------------------------------------
 //	Predefined element types
@@ -81,7 +81,7 @@ typedef struct ElementType {
 	- fromString = Element_fromStringUndefined()
 	- toString = Element_toStringUndefined()
 */
-extern const ElementType* elementPtr;
+extern const WType* elementPtr;
 
 /** Defines a collection ElementType for int values. Can be passed to functions like warray_new().
 
@@ -91,7 +91,7 @@ extern const ElementType* elementPtr;
 	- fromString = Element_fromStringInt()
 	- toString = Element_toStringInt()
 */
-extern const ElementType* elementInt;
+extern const WType* elementInt;
 
 /** Defines a collection ElementType for char* values. Can be passed to functions like warray_new().
 
@@ -101,7 +101,7 @@ extern const ElementType* elementInt;
 	- fromString = Element_fromStringStr()
 	- toString = Element_toStringStr()
 */
-extern const ElementType* elementStr;
+extern const WType* elementStr;
 
 /** Defines a collection ElementType for double values. Can be passed to functions like warray_new().
 
@@ -111,7 +111,7 @@ extern const ElementType* elementStr;
 	- fromString = Element_fromStringDouble()
 	- toString = Element_toStringDouble()
 */
-extern const ElementType* elementDouble;
+extern const WType* elementDouble;
 
 //---------------------------------------------------------------------------------
 //	Raw void* pointer element methods

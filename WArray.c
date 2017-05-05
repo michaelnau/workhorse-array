@@ -63,7 +63,7 @@ do {							\
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
-const ElementType* arrayElement = &(ElementType){
+const WType* arrayElement = &(WType){
 	.clone = (ElementClone*)warray_clone,
 	.delete = (ElementDelete*)warray_delete,
 	.compare = (ElementCompare*)warray_compare,
@@ -80,7 +80,7 @@ enum ArrayParameters {
 //-------------------------------------------------------------------------------
 
 WArray*
-warray_new( size_t capacity, const ElementType* type )
+warray_new( size_t capacity, const WType* type )
 {
 	assert( not type or type->clone );
 	assert( not type or type->delete );
@@ -574,7 +574,7 @@ warray_unselect( WArray* array, ElementCondition* filter, const void* filterData
 }
 
 WArray*
-warray_map( const WArray* array, ElementMap* map, const void* mapData, const ElementType* type )
+warray_map( const WArray* array, ElementMap* map, const void* mapData, const WType* type )
 {
 	assert( array );
 	assert( map );
@@ -595,7 +595,7 @@ warray_map( const WArray* array, ElementMap* map, const void* mapData, const Ele
 }
 
 void*
-warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const ElementType* type )
+warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const WType* type )
 {
 	assert( array );
 	assert( reduce );

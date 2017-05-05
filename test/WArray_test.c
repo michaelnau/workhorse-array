@@ -82,7 +82,7 @@ deletePerson( void** element ) {
 	*element = NULL;
 }
 
-ElementType* personType = &(ElementType){
+WType* personType = &(WType){
     .clone = (ElementClone*)clonePerson,
     .delete = (ElementDelete*)deletePerson
 };

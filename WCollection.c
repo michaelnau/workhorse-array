@@ -36,7 +36,7 @@ char __elementNotFound;
 //	Default methods for unspecified pointer types
 //---------------------------------------------------------------------------------
 
-const ElementType* elementPtr = &(ElementType) {
+const WType* elementPtr = &(WType) {
 	.clone = Element_clonePtr,
 	.delete = Element_deletePtr,
 	.compare = Element_compareUndefined,
@@ -56,7 +56,7 @@ void Element_deletePtr( void** elementPtr ) {
 //	int methods
 //---------------------------------------------------------------------------------
 
-const ElementType* elementInt = &(ElementType) {
+const WType* elementInt = &(WType) {
 	.clone = Element_cloneInt,
 	.delete = Element_deleteInt,
 	.compare = Element_compareInt,
@@ -91,7 +91,7 @@ char* Element_toStringInt( const void* element ) {
 //	char* methods
 //---------------------------------------------------------------------------------
 
-const ElementType* elementStr = &(ElementType) {
+const WType* elementStr = &(WType) {
 	.clone = Element_cloneStr,
 	.delete = Element_delete,
 	.compare = Element_compareStr,
@@ -121,7 +121,7 @@ char* Element_toStringStr( const void* element ) {
 //	double methods
 //---------------------------------------------------------------------------------
 
-const ElementType* elementDouble = &(ElementType) {
+const WType* elementDouble = &(WType) {
 	.clone = Element_cloneDouble,
 	.delete = Element_delete,
 	.compare = Element_compareDouble,

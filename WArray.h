@@ -118,7 +118,7 @@
 typedef struct WArray {
 	size_t				size;			///<Public read-only, the actual number of elements
 	size_t				capacity;		///<Public read-only, the maximum number of elements before the array must grow
-	const ElementType*	type;			///<Public read only, pointer to the element methods
+	const WType*	type;			///<Public read only, pointer to the element methods
 	void**				data;			//Private, do not directly access it.
 }WArray;
 
@@ -131,7 +131,7 @@ typedef struct WArray {
 	- fromString = warray_fromString,
 	- toString = warray_toString
 */
-extern const ElementType* arrayElement;
+extern const WType* arrayElement;
 
 /**	When declared as autoArray, an array gets automatically destroyed when
 	leaving scope.
@@ -158,7 +158,7 @@ extern const ElementType* arrayElement;
 	\endcode
 */
 typedef struct WArrayNamespace {
-	WArray* 	(*new)		(size_t capacity, const ElementType* type);
+	WArray* 	(*new)		(size_t capacity, const WType* type);
     WArray* 	(*clone)	(const WArray* array);
 	void		(*delete)	(WArray** array);
 	WArray*		(*clear)	(WArray* array);
@@ -199,8 +199,8 @@ typedef struct WArrayNamespace {
 
 	WArray* 	(*filter)	(const WArray* array, ElementCondition* filter, const void* filterData );
 	WArray* 	(*reject)	(const WArray* array, ElementCondition* filter, const void* filterData );
-	WArray* 	(*map)		(const WArray* array, ElementMap*, const void*, const ElementType* type );
-	void*		(*reduce)	(const WArray* array, ElementReduce*, const void*, const ElementType* type );
+	WArray* 	(*map)		(const WArray* array, ElementMap*, const void*, const WType* type );
+	void*		(*reduce)	(const WArray* array, ElementReduce*, const void*, const WType* type );
 
 	void		(*foreach)	(const WArray* array, ElementForeach* foreach, void* foreachData);
 	void		(*foreachIndex)(const WArray* array, ElementForeachIndex* foreach, void* foreachData);
@@ -342,7 +342,7 @@ typedef struct WArrayNamespace {
 	\endcode
 */
 WArray*
-warray_new( size_t capacity, const ElementType* type );
+warray_new( size_t capacity, const WType* type );
 
 /**	Clone the given array by cloning the elements with the array->type->clone() method.
 
@@ -930,7 +930,7 @@ warray_reject( const WArray* array, ElementCondition* reject, const void* reject
 	\endcode
 */
 WArray*
-warray_map( const WArray* array, ElementMap* map, const void* mapData, const ElementType* type );
+warray_map( const WArray* array, ElementMap* map, const void* mapData, const WType* type );
 
 /**	Reduce all elements to a single return value of an arbitrary type.
 
@@ -943,7 +943,7 @@ warray_map( const WArray* array, ElementMap* map, const void* mapData, const Ele
 	@pre reduce != NULL
 */
 void*
-warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const ElementType* type );
+warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const WType* type );
 
 /**	Keep all elements meeting a filter criterion and delete the rest.
 
