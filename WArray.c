@@ -1101,13 +1101,13 @@ warray_one( const WArray* array, WElementCondition* condition, const void* condi
 //-------------------------------------------------------------------------------
 
 typedef struct ArrayIterator {
-	Iterator	base;
+	WIterator	base;
 	size_t		current;
 	int			direction;
 }ArrayIterator;
 
 static bool
-ArrayIterator_hasNext( const Iterator* iterator )
+ArrayIterator_hasNext( const WIterator* iterator )
 {
 	assert( iterator );
 
@@ -1118,10 +1118,10 @@ ArrayIterator_hasNext( const Iterator* iterator )
 }
 
 static const void*
-ArrayIterator_next( Iterator* iterator )
+ArrayIterator_next( WIterator* iterator )
 {
 	assert( iterator );
-	assert( Iterator_hasNext( iterator ));
+	assert( WIterator_hasNext( iterator ));
 
 	ArrayIterator* ai = (ArrayIterator*)iterator;
 	const WArray* array = ai->base.collection;
@@ -1132,7 +1132,7 @@ ArrayIterator_next( Iterator* iterator )
 	return array->data[current];
 }
 
-Iterator*
+WIterator*
 warray_iterator( const WArray* array )
 {
 	assert( array );
@@ -1145,10 +1145,10 @@ warray_iterator( const WArray* array )
 	iterator->current = 0;
 	iterator->direction = 1;
 
-	return (Iterator*)iterator;
+	return (WIterator*)iterator;
 }
 
-Iterator*
+WIterator*
 warray_iteratorReverse( const WArray* array )
 {
 	assert( array );
@@ -1161,7 +1161,7 @@ warray_iteratorReverse( const WArray* array )
 	iterator->current = array->size-1;
 	iterator->direction = -1;
 
-	return (Iterator*)iterator;
+	return (WIterator*)iterator;
 }
 
 //-------------------------------------------------------------------------------

@@ -298,33 +298,33 @@ WElement_foreachIndexStrPrint( const void* element, size_t index, const void* fo
 /**	Iterator type for collection modules. To be used only through the iterator
 	functions.
 */
-typedef struct Iterator {
+typedef struct WIterator {
 	const void* collection;										//Private, do not use.
-	bool		(*hasNext)(const struct Iterator* iterator);	//Private, do not use.
-	const void*	(*next)(struct Iterator* iterator);				//Private, do not use.
-}Iterator;
+	bool		(*hasNext)(const struct WIterator* iterator);	//Private, do not use.
+	const void*	(*next)(struct WIterator* iterator);			//Private, do not use.
+}WIterator;
 
 /**	When declared as autoIterator, an iterator gets automatically destroyed when
 	leaving scope.
 */
-#define autoIterator __attribute__(( cleanup( Iterator_delete ))) Iterator
+#define autoWIterator __attribute__(( cleanup( WIterator_delete ))) WIterator
 
 //---------------------------------------------------------------------------------
 
 /**
 */
-typedef struct IteratorNamespace {
-	void		(*delete)	(Iterator** iterator);
-	bool		(*hasNext)	(const Iterator* iterator);
-	const void*	(*next)		(Iterator* iterator);
-}IteratorNamespace;
+typedef struct WIteratorNamespace {
+	void		(*delete)	(WIterator** iterator);
+	bool		(*hasNext)	(const WIterator* iterator);
+	const void*	(*next)		(WIterator* iterator);
+}WIteratorNamespace;
 
 /**
 */
-#define iteratorNameSpace {			\
-	.delete = Iterator_delete,		\
-	.hasNext = Iterator_hasNext,	\
-	.next = Iterator_next,			\
+#define witeratorNamespace {			\
+	.delete = WIterator_delete,		\
+	.hasNext = WIterator_hasNext,	\
+	.next = WIterator_next,			\
 }
 
 /**	Delete the iterator and free its memory.
@@ -332,7 +332,7 @@ typedef struct IteratorNamespace {
 	@param iterator
 */
 void
-Iterator_delete( Iterator** iterator );
+WIterator_delete( WIterator** iterator );
 
 /**	Check if there are more elements in the iterator.
 
@@ -340,7 +340,7 @@ Iterator_delete( Iterator** iterator );
 	@return
 */
 static inline bool
-Iterator_hasNext( const Iterator* iterator ) { return iterator->hasNext( iterator ); }
+WIterator_hasNext( const WIterator* iterator ) { return iterator->hasNext( iterator ); }
 
 /**	Return the next element in the iterator.
 
@@ -351,7 +351,7 @@ Iterator_hasNext( const Iterator* iterator ) { return iterator->hasNext( iterato
 		clone of it.
 */
 static inline const void*
-Iterator_next( Iterator* iterator ) { return iterator->next( iterator ); }
+WIterator_next( WIterator* iterator ) { return iterator->next( iterator ); }
 
 //---------------------------------------------------------------------------------
 

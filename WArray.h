@@ -230,8 +230,8 @@ typedef struct WArrayNamespace {
 	WArray*		(*intersect)(const WArray* array1, const WArray* array2);
 	WArray*		(*symDiff)	(const WArray* array1, const WArray* array2);
 
-	Iterator*	(*iterator)	(const WArray* array);
-	Iterator*	(*iteratorReverse)(const WArray* array);
+	WIterator*	(*iterator)	(const WArray* array);
+	WIterator*	(*iteratorReverse)(const WArray* array);
 }WArrayNamespace;
 
 /**	Predefined value for ArrayNamespace variables
@@ -1160,7 +1160,7 @@ warray_addToSet( WArray* array, const void* element );
 	@param array
 	@return
 */
-Iterator*
+WIterator*
 warray_iterator( const WArray* array );
 
 /** Return an iterator capable of traversing the array in reverse direction.
@@ -1168,7 +1168,7 @@ warray_iterator( const WArray* array );
 	@param array
 	@return
 */
-Iterator*
+WIterator*
 warray_iteratorReverse( const WArray* array );
 
 //------------------------------------------------------------

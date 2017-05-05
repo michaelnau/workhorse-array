@@ -229,7 +229,7 @@ void WElement_foreachIndexStrPrint( const void* element, size_t index, const voi
 //---------------------------------------------------------------------------------
 
 void
-Iterator_delete( Iterator** iterator )
+WIterator_delete( WIterator** iterator )
 {
 	if ( not iterator ) return;
 
