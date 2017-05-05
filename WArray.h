@@ -101,8 +101,8 @@
 	Statistics operations for double elements
     -----------------------------------------
 */
-#ifndef ARRAY_H_INCLUDED
-#define ARRAY_H_INCLUDED
+#ifndef WARRAY_H_INCLUDED
+#define WARRAY_H_INCLUDED
 
 #include "WCollection.h"
 #include <stdbool.h>	//bool
