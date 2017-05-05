@@ -37,18 +37,18 @@ char __welementNotFound;
 //---------------------------------------------------------------------------------
 
 const WType* wtypePtr = &(WType) {
-	.clone = Element_clonePtr,
-	.delete = Element_deletePtr,
-	.compare = Element_compareUndefined,
-	.fromString = Element_fromStringUndefined,
-	.toString = Element_toStringUndefined
+	.clone = WElement_clonePtr,
+	.delete = WElement_deletePtr,
+//	.compare = Element_compareUndefined,
+//	.fromString = Element_fromStringUndefined,
+//	.toString = Element_toStringUndefined
 };
 
-void* Element_clonePtr( const void* element ) {
+void* WElement_clonePtr( const void* element ) {
 	return (void*)element;
 }
 
-void Element_deletePtr( void** wtypePtr ) {
+void WElement_deletePtr( void** wtypePtr ) {
 	(void)wtypePtr;
 }
 
@@ -57,32 +57,32 @@ void Element_deletePtr( void** wtypePtr ) {
 //---------------------------------------------------------------------------------
 
 const WType* wtypeInt = &(WType) {
-	.clone = Element_cloneInt,
-	.delete = Element_deleteInt,
-	.compare = Element_compareInt,
-	.fromString = Element_fromStringInt,
-	.toString = Element_toStringInt
+	.clone = WElement_cloneInt,
+	.delete = WElement_deleteInt,
+	.compare = WElement_compareInt,
+	.fromString = WElement_fromStringInt,
+	.toString = WElement_toStringInt
 };
 
-void* Element_cloneInt( const void* element ) {
+void* WElement_cloneInt( const void* element ) {
 	return (void*)element;
 }
 
-void Element_deleteInt( void** wtypePtr ) {
+void WElement_deleteInt( void** wtypePtr ) {
 	(void)wtypePtr;
 }
 
-int Element_compareInt( const void* e1, const void* e2 ) {
+int WElement_compareInt( const void* e1, const void* e2 ) {
 	return (long)e1 - (long)e2;
 }
 
-void* Element_fromStringInt( const char* string ) {
+void* WElement_fromStringInt( const char* string ) {
 	assert( string );
 
 	return (void*)strtol( string, NULL, 0 );
 }
 
-char* Element_toStringInt( const void* element ) {
+char* WElement_toStringInt( const void* element ) {
 	char* string = NULL;
     return asprintf( &string, "%ld", (long)element ) >= 0 ? string : strdup( "" );
 }
@@ -92,28 +92,28 @@ char* Element_toStringInt( const void* element ) {
 //---------------------------------------------------------------------------------
 
 const WType* wtypeStr = &(WType) {
-	.clone = Element_cloneStr,
-	.delete = Element_delete,
-	.compare = Element_compareStr,
-	.fromString = Element_fromStringStr,
-	.toString = Element_toStringStr
+	.clone = WElement_cloneStr,
+	.delete = WElement_delete,
+	.compare = WElement_compareStr,
+	.fromString = WElement_fromStringStr,
+	.toString = WElement_toStringStr
 };
 
-void* Element_cloneStr( const void* element ) {
+void* WElement_cloneStr( const void* element ) {
 	return element ? strdup( element ) : NULL;
 }
 
-int Element_compareStr( const void* e1, const void* e2 ) {
+int WElement_compareStr( const void* e1, const void* e2 ) {
 	if ( e1 and e2 ) return strcmp( e1, e2 );
 	if ( not e1 and not e2 ) return 0;
 	return e1 ? 1 : -1;
 }
 
-void* Element_fromStringStr( const char* string ) {
+void* WElement_fromStringStr( const char* string ) {
 	return string ? strdup( string ) : strdup( "" );
 }
 
-char* Element_toStringStr( const void* element ) {
+char* WElement_toStringStr( const void* element ) {
 	return element ? strdup( element ) : strdup( "" );
 }
 
@@ -122,25 +122,25 @@ char* Element_toStringStr( const void* element ) {
 //---------------------------------------------------------------------------------
 
 const WType* wtypeDouble = &(WType) {
-	.clone = Element_cloneDouble,
-	.delete = Element_delete,
-	.compare = Element_compareDouble,
-	.fromString = Element_fromStringDouble,
-	.toString = Element_toStringDouble
+	.clone = WElement_cloneDouble,
+	.delete = WElement_delete,
+	.compare = WElement_compareDouble,
+	.fromString = WElement_fromStringDouble,
+	.toString = WElement_toStringDouble
 };
 
-void* Element_cloneDouble( const void* element ) {
+void* WElement_cloneDouble( const void* element ) {
 	double* clone = xmalloc( sizeof( double ));
 	*clone = *(double*)element;
 	return clone;
 }
 
-int Element_compareDouble( const void* e1, const void* e2 ) {
+int WElement_compareDouble( const void* e1, const void* e2 ) {
 	return (e1 and e2) ? *(double*)e1 - *(double*)e2 :
 			e1 ? +1 : -1;	//NULL values are considered to be less than every double value
 }
 
-void* Element_fromStringDouble( const char* string ) {
+void* WElement_fromStringDouble( const char* string ) {
 	assert( string );
 
 	double* element = xmalloc( sizeof( double ));
@@ -148,7 +148,7 @@ void* Element_fromStringDouble( const char* string ) {
 	return element;
 }
 
-char* Element_toStringDouble( const void* element ) {
+char* WElement_toStringDouble( const void* element ) {
 	char* string = NULL;
     return not element ?									strdup("") :	//NULL element
 		asprintf( &string, "%lf", *(double*)element ) < 0 ?	strdup("") :	//Problems in stringifying double
@@ -158,7 +158,7 @@ char* Element_toStringDouble( const void* element ) {
 //---------------------------------------------------------------------------------
 
 void
-Element_delete( void** wtypePtr )
+WElement_delete( void** wtypePtr )
 {
 	if ( not wtypePtr or not *wtypePtr ) return;
 
@@ -203,12 +203,12 @@ char* Element_toStringUndefined( const void* element ) {
 //	Condition functions
 //---------------------------------------------------------------------------------
 
-bool Element_conditionStrEquals( const void* e1, const void* e2 ) {
+bool WElement_conditionStrEquals( const void* e1, const void* e2 ) {
 	if ( e1 and e2 ) return strcmp( e1, e2 ) == 0;
 	return e1 == e2;
 }
 
-bool Element_conditionStrEmpty( const void* element, const void* conditionData ) {
+bool WElement_conditionStrEmpty( const void* element, const void* conditionData ) {
 	(void)conditionData;
 	if ( element ) return ((char*)element)[0] == 0;
 	return true;
@@ -218,11 +218,11 @@ bool Element_conditionStrEmpty( const void* element, const void* conditionData )
 //	Foreach functions
 //---------------------------------------------------------------------------------
 
-void Element_foreachStrPrint( const void* element, const void* foreachData ) {
+void WElement_foreachStrPrint( const void* element, const void* foreachData ) {
 	printf( "%s%s", (char*)element, foreachData ? (char*)foreachData : "" );
 }
 
-void Element_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData ) {
+void WElement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData ) {
 	printf( "%u/%s%s", index, (char*)element, foreachData ? (char*)foreachData : "" );
 }
 

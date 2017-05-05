@@ -123,14 +123,14 @@ extern const WType* wtypeDouble;
 	@return
 */
 void*
-Element_clonePtr( const void* element );
+WElement_clonePtr( const void* element );
 
 /**	Does nothing and especially does not free the element.
 
 	@param elementPtr
 */
 void
-Element_deletePtr( void** wtypePtr );
+WElement_deletePtr( void** wtypePtr );
 
 
 //---------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ Element_deletePtr( void** wtypePtr );
 	@return
 */
 void*
-Element_cloneInt( const void* element );
+WElement_cloneInt( const void* element );
 
 /**	Do nothing with the element.
 
@@ -154,22 +154,22 @@ Element_cloneInt( const void* element );
 	@param elementPtr The pointer to the element
 */
 void
-Element_deleteInt( void** wtypePtr );
+WElement_deleteInt( void** element );
 
 /**	Compare the pointer values directly.
 */
 int
-Element_compareInt( const void* element1, const void* element2 );
+WElement_compareInt( const void* element1, const void* element2 );
 
 /**	Convert the string with strtol() to a number.
 */
 void*
-Element_fromStringInt( const char* wtypeStr );
+WElement_fromStringInt( const char* str );
 
 /**	Convert the pointer value to a string.
 */
 char*
-Element_toStringInt( const void* element );
+WElement_toStringInt( const void* element );
 
 //---------------------------------------------------------------------------------
 //	char* element methods
@@ -181,22 +181,22 @@ Element_toStringInt( const void* element );
 	@return The cloned string.
 */
 void*
-Element_cloneStr( const void *element );
+WElement_cloneStr( const void* element );
 
 /**	Free the string and set the pointer to NULL.
 
 	@param elementPointer The pointer to the element
 */
-#define Element_deleteString Element_delete
+#define WElement_deleteStr WElement_delete
 
 int
-Element_compareStr( const void* element1, const void* element2 );
+WElement_compareStr( const void* element1, const void* element2 );
 
 void*
-Element_fromStringStr( const char* string );
+WElement_fromStringStr( const char* str );
 
 char*
-Element_toStringStr( const void* element );
+WElement_toStringStr( const void* element );
 
 //---------------------------------------------------------------------------------
 //	double element methods
@@ -208,18 +208,18 @@ Element_toStringStr( const void* element );
 	@return The cloned double.
 */
 void*
-Element_cloneDouble( const void *element );
+WElement_cloneDouble( const void *element );
 
-#define Element_deleteDouble( ... ) Element_delete( __VA_ARGS__ )
+#define WElement_deleteDouble( ... ) WElement_delete( __VA_ARGS__ )
 
 int
-Element_compareDouble( const void* element1, const void* element2 );
+WElement_compareDouble( const void* element1, const void* element2 );
 
 void*
-Element_fromStringDouble( const char* string );
+WElement_fromStringDouble( const char* str );
 
 char*
-Element_toStringDouble( const void* element );
+WElement_toStringDouble( const void* element );
 
 //---------------------------------------------------------------------------------
 //	Other element methods
@@ -228,8 +228,9 @@ Element_toStringDouble( const void* element );
 /**	Generic delete method, freeing the element and NULLing the pointer
 */
 void
-Element_delete( void **wtypePtr );
+WElement_delete( void **wtypePtr );
 
+#if 0
 //---------------------------------------------------------------------------------
 //	Aborting element methods
 //---------------------------------------------------------------------------------
@@ -268,26 +269,27 @@ Element_fromStringUndefined( const char* wtypeStr );
 */
 char*
 Element_toStringUndefined( const void* element );
+#endif // 0
 
 //---------------------------------------------------------------------------------
 //	Condition functions
 //---------------------------------------------------------------------------------
 
 bool
-Element_conditionStrEquals( const void* e1, const void* e2 );
+WElement_conditionStrEquals( const void* e1, const void* e2 );
 
 bool
-Element_conditionStrEmpty( const void* element, const void* conditionData );
+WElement_conditionStrEmpty( const void* element, const void* conditionData );
 
 //---------------------------------------------------------------------------------
 //	Foreach functions
 //---------------------------------------------------------------------------------
 
 void
-Element_foreachStrPrint( const void* element, const void* foreachData );
+WElement_foreachStrPrint( const void* element, const void* foreachData );
 
 void
-Element_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData );
+WElement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData );
 
 //---------------------------------------------------------------------------------
 //	Iterators
