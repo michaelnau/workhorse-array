@@ -1,8 +1,8 @@
 /**	@file
 	Types and functions common for collection modules
 */
-#ifndef COLLECTION_H_INCLUDED
-#define COLLECTION_H_INCLUDED
+#ifndef WCOLLECTION_H_INCLUDED
+#define WCOLLECTION_H_INCLUDED
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -355,4 +355,4 @@ WIterator_next( WIterator* iterator ) { return iterator->next( iterator ); }
 
 //---------------------------------------------------------------------------------
 
-#endif // COLLECTION_H_INCLUDED
+#endif // WCOLLECTION_H_INCLUDED
