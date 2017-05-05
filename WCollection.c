@@ -34,16 +34,8 @@ static char welementNotFound;
 const void* WElementNotFound = &welementNotFound;
 
 //---------------------------------------------------------------------------------
-//	Default methods for unspecified pointer types
+//	Raw void* type
 //---------------------------------------------------------------------------------
-
-const WType* wtypePtr = &(WType) {
-	.clone = WElement_clonePtr,
-	.delete = WElement_deletePtr,
-//	.compare = Element_compareUndefined,
-//	.fromString = Element_fromStringUndefined,
-//	.toString = Element_toStringUndefined
-};
 
 void* WElement_clonePtr( const void* element ) {
 	return (void*)element;
@@ -53,17 +45,19 @@ void WElement_deletePtr( void** wtypePtr ) {
 	(void)wtypePtr;
 }
 
-//---------------------------------------------------------------------------------
-//	int methods
-//---------------------------------------------------------------------------------
+int WElement_comparePtr( const void* e1, const void* e2 ) {
+	return (long)e1 - (long)e2;
+}
 
-const WType* wtypeInt = &(WType) {
-	.clone = WElement_cloneInt,
-	.delete = WElement_deleteInt,
-	.compare = WElement_compareInt,
-	.fromString = WElement_fromStringInt,
-	.toString = WElement_toStringInt
+const WType* wtypePtr = &(WType) {
+	.clone = WElement_clonePtr,
+	.delete = WElement_deletePtr,
+	.compare = WElement_comparePtr,
 };
+
+//---------------------------------------------------------------------------------
+//	int type
+//---------------------------------------------------------------------------------
 
 void* WElement_cloneInt( const void* element ) {
 	return (void*)element;
@@ -88,20 +82,27 @@ char* WElement_toStringInt( const void* element ) {
     return asprintf( &string, "%ld", (long)element ) >= 0 ? string : strdup( "" );
 }
 
-//---------------------------------------------------------------------------------
-//	char* methods
-//---------------------------------------------------------------------------------
-
-const WType* wtypeStr = &(WType) {
-	.clone = WElement_cloneStr,
-	.delete = WElement_delete,
-	.compare = WElement_compareStr,
-	.fromString = WElement_fromStringStr,
-	.toString = WElement_toStringStr
+const WType* wtypeInt = &(WType) {
+	.clone = WElement_cloneInt,
+	.delete = WElement_deleteInt,
+	.compare = WElement_compareInt,
+	.fromString = WElement_fromStringInt,
+	.toString = WElement_toStringInt
 };
+
+//---------------------------------------------------------------------------------
+//	char* type
+//---------------------------------------------------------------------------------
 
 void* WElement_cloneStr( const void* element ) {
 	return element ? strdup( element ) : NULL;
+}
+
+void WElement_delete( void** wtypePtr ) {
+	if ( not wtypePtr ) return;
+
+	free( *wtypePtr );
+	*wtypePtr = NULL;
 }
 
 int WElement_compareStr( const void* e1, const void* e2 ) {
@@ -118,17 +119,17 @@ char* WElement_toStringStr( const void* element ) {
 	return element ? strdup( element ) : strdup( "" );
 }
 
-//---------------------------------------------------------------------------------
-//	double methods
-//---------------------------------------------------------------------------------
-
-const WType* wtypeDouble = &(WType) {
-	.clone = WElement_cloneDouble,
+const WType* wtypeStr = &(WType) {
+	.clone = WElement_cloneStr,
 	.delete = WElement_delete,
-	.compare = WElement_compareDouble,
-	.fromString = WElement_fromStringDouble,
-	.toString = WElement_toStringDouble
+	.compare = WElement_compareStr,
+	.fromString = WElement_fromStringStr,
+	.toString = WElement_toStringStr
 };
+
+//---------------------------------------------------------------------------------
+//	double type
+//---------------------------------------------------------------------------------
 
 void* WElement_cloneDouble( const void* element ) {
 	double* clone = xmalloc( sizeof( double ));
@@ -156,16 +157,15 @@ char* WElement_toStringDouble( const void* element ) {
 															string;			//Actual double
 }
 
+const WType* wtypeDouble = &(WType) {
+	.clone = WElement_cloneDouble,
+	.delete = WElement_delete,
+	.compare = WElement_compareDouble,
+	.fromString = WElement_fromStringDouble,
+	.toString = WElement_toStringDouble
+};
+
 //---------------------------------------------------------------------------------
-
-void
-WElement_delete( void** wtypePtr )
-{
-	if ( not wtypePtr or not *wtypePtr ) return;
-
-	free( *wtypePtr );
-	*wtypePtr = NULL;
-}
 
 //---------------------------------------------------------------------------------
 //	Stubs for elements not implementing methods
@@ -227,6 +227,8 @@ void WElement_foreachIndexStrPrint( const void* element, size_t index, const voi
 	printf( "%u/%s%s", index, (char*)element, foreachData ? (char*)foreachData : "" );
 }
 
+//---------------------------------------------------------------------------------
+//	Iterator functions
 //---------------------------------------------------------------------------------
 
 void

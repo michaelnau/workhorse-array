@@ -58,13 +58,17 @@ typedef	void*	WElementReduce(const void* element, const void* intermediate);
 */
 typedef bool	WElementCondition(const void* element, const void* conditionData);
 
+//---------------------------------------------------------------------------------
+//	The WType struct
+//---------------------------------------------------------------------------------
+
 /**	Defines the essential behaviour and thus the type of a collection element.
 	It is passed to functions like warray_new().
 */
 typedef struct WType {
 	WElementClone*		clone;		///<Method to copy an element into the collection. Mandatory.
 	WElementDelete*		delete;		///<Method to destroy an element, e.g. if it is removed from the collection. Mandatory.
-	WElementCompare*		compare;	///<Method to compare two elements with each other. Mandatory only for some collection functions.
+	WElementCompare*	compare;	///<Method to compare two elements with each other. Mandatory only for some collection functions.
 	WElementFromString*	fromString;	///<Method to parse an element from a string. Mandatory only for some collection functions.
 	WElementToString*	toString;	///<Method to convert an element to a string. Mandatory only for some collection functions.
 }WType;
@@ -77,9 +81,9 @@ typedef struct WType {
 
 	- clone = Element_clonePtr()
 	- delete = Element_deletePtr()
-	- compare = Element_compareUndefined()
-	- fromString = Element_fromStringUndefined()
-	- toString = Element_toStringUndefined()
+	- compare = Element_comparePtr()
+	- fromString = NULL
+	- toString = NULL
 */
 extern const WType* wtypePtr;
 
@@ -130,8 +134,12 @@ WElement_clonePtr( const void* element );
 	@param elementPtr
 */
 void
-WElement_deletePtr( void** wtypePtr );
+WElement_deletePtr( void** element );
 
+/**
+*/
+int
+WElement_comparePtr( const void* element1, const void* element2 );
 
 //---------------------------------------------------------------------------------
 //	int element methods
@@ -175,7 +183,7 @@ WElement_toStringInt( const void* element );
 //	char* element methods
 //---------------------------------------------------------------------------------
 
-/**	Clones a string element.
+/**	Clone a char* element.
 
 	@param element The string to be cloned
 	@return The cloned string.
@@ -208,7 +216,7 @@ WElement_toStringStr( const void* element );
 	@return The cloned double.
 */
 void*
-WElement_cloneDouble( const void *element );
+WElement_cloneDouble( const void* element );
 
 #define WElement_deleteDouble( ... ) WElement_delete( __VA_ARGS__ )
 
@@ -228,55 +236,14 @@ WElement_toStringDouble( const void* element );
 /**	Generic delete method, freeing the element and NULLing the pointer
 */
 void
-WElement_delete( void **wtypePtr );
-
-#if 0
-//---------------------------------------------------------------------------------
-//	Aborting element methods
-//---------------------------------------------------------------------------------
-
-/**	Method stub for elements not implementing a clone() method
-
-	If called it aborts the program with an error message.
-*/
-void*
-Element_cloneUndefined( const void* elememt );
-
-/**	Method stub for elements not implementing a delete() method
-
-	If called it aborts the program with an error message.
-*/
-void
-Element_deleteUndefined( void** wtypePtr );
-
-/**	Method stub for elements not implementing a compare() method
-
-	If called it aborts the program with an error message.
-*/
-int
-Element_compareUndefined( const void* element1, const void* element2 );
-
-/**	Method stub for elements not implementing a fromString() method
-
-	If called it aborts the program with an error message.
-*/
-void*
-Element_fromStringUndefined( const char* wtypeStr );
-
-/**	Method stub for elements not implementing a toString() method
-
-	If called it aborts the program with an error message.
-*/
-char*
-Element_toStringUndefined( const void* element );
-#endif // 0
+WElement_delete( void** element );
 
 //---------------------------------------------------------------------------------
 //	Condition functions
 //---------------------------------------------------------------------------------
 
 bool
-WElement_conditionStrEquals( const void* e1, const void* e2 );
+WElement_conditionStrEquals( const void* element1, const void* element2 );
 
 bool
 WElement_conditionStrEmpty( const void* element, const void* conditionData );
@@ -321,7 +288,7 @@ typedef struct WIteratorNamespace {
 
 /**
 */
-#define witeratorNamespace {			\
+#define witeratorNamespace {		\
 	.delete = WIterator_delete,		\
 	.hasNext = WIterator_hasNext,	\
 	.next = WIterator_next,			\
