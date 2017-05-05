@@ -32,7 +32,7 @@ typedef int		ElementCompare(const void* element1, const void* element2);
 
 /**	Function prototype for getting an element from a string.
 */
-typedef void*	ElementFromString(const char* elementStr);
+typedef void*	ElementFromString(const char* wtypeStr);
 
 /**	Function prototype for converting an element to a string.
 */
@@ -81,7 +81,7 @@ typedef struct WType {
 	- fromString = Element_fromStringUndefined()
 	- toString = Element_toStringUndefined()
 */
-extern const WType* elementPtr;
+extern const WType* wtypePtr;
 
 /** Defines a collection ElementType for int values. Can be passed to functions like warray_new().
 
@@ -91,7 +91,7 @@ extern const WType* elementPtr;
 	- fromString = Element_fromStringInt()
 	- toString = Element_toStringInt()
 */
-extern const WType* elementInt;
+extern const WType* wtypeInt;
 
 /** Defines a collection ElementType for char* values. Can be passed to functions like warray_new().
 
@@ -101,7 +101,7 @@ extern const WType* elementInt;
 	- fromString = Element_fromStringStr()
 	- toString = Element_toStringStr()
 */
-extern const WType* elementStr;
+extern const WType* wtypeStr;
 
 /** Defines a collection ElementType for double values. Can be passed to functions like warray_new().
 
@@ -111,7 +111,7 @@ extern const WType* elementStr;
 	- fromString = Element_fromStringDouble()
 	- toString = Element_toStringDouble()
 */
-extern const WType* elementDouble;
+extern const WType* wtypeDouble;
 
 //---------------------------------------------------------------------------------
 //	Raw void* pointer element methods
@@ -130,7 +130,7 @@ Element_clonePtr( const void* element );
 	@param elementPtr
 */
 void
-Element_deletePtr( void** elementPtr );
+Element_deletePtr( void** wtypePtr );
 
 
 //---------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ Element_cloneInt( const void* element );
 	@param elementPtr The pointer to the element
 */
 void
-Element_deleteInt( void** elementPtr );
+Element_deleteInt( void** wtypePtr );
 
 /**	Compare the pointer values directly.
 */
@@ -164,7 +164,7 @@ Element_compareInt( const void* element1, const void* element2 );
 /**	Convert the string with strtol() to a number.
 */
 void*
-Element_fromStringInt( const char* elementStr );
+Element_fromStringInt( const char* wtypeStr );
 
 /**	Convert the pointer value to a string.
 */
@@ -228,7 +228,7 @@ Element_toStringDouble( const void* element );
 /**	Generic delete method, freeing the element and NULLing the pointer
 */
 void
-Element_delete( void **elementPtr );
+Element_delete( void **wtypePtr );
 
 //---------------------------------------------------------------------------------
 //	Aborting element methods
@@ -246,7 +246,7 @@ Element_cloneUndefined( const void* elememt );
 	If called it aborts the program with an error message.
 */
 void
-Element_deleteUndefined( void** elementPtr );
+Element_deleteUndefined( void** wtypePtr );
 
 /**	Method stub for elements not implementing a compare() method
 
@@ -260,7 +260,7 @@ Element_compareUndefined( const void* element1, const void* element2 );
 	If called it aborts the program with an error message.
 */
 void*
-Element_fromStringUndefined( const char* elementStr );
+Element_fromStringUndefined( const char* wtypeStr );
 
 /**	Method stub for elements not implementing a toString() method
 

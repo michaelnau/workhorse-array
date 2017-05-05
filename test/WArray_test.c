@@ -92,7 +92,7 @@ WType* personType = &(WType){
 void
 Test_warray_clone_ints()
 {
-	autoWArray *array = warray_new( 0, elementInt );
+	autoWArray *array = warray_new( 0, wtypeInt );
 	autoWArray *clone1 = warray_clone( array );
 	assert_true( warray_empty( clone1 ));
 
@@ -117,7 +117,7 @@ Test_warray_clone_ints()
 void
 Test_warray_clone_strings()
 {
-	autoWArray *array = warray_new( 0, elementStr );
+	autoWArray *array = warray_new( 0, wtypeStr );
 	autoWArray *clone1 = warray_clone( array );
 	assert_true( warray_empty( clone1 ));
 
@@ -142,7 +142,7 @@ Test_warray_clone_strings()
 void
 Test_warray_append_ints()
 {
-	autoWArray *array = warray_new( 0, elementInt );
+	autoWArray *array = warray_new( 0, wtypeInt );
 	assert_equal( warray_size( array ), 0 );
 
 	warray_append( array, (void*)1 );
@@ -168,7 +168,7 @@ Test_warray_append_ints()
 void
 Test_warray_append_strings()
 {
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
 	warray_append( array, "cat" );
 	const char* string1 = warray_at( array, 0 );
@@ -191,7 +191,7 @@ Test_warray_append_strings()
 void
 Test_warray_prepend_strings()
 {
-	autoWArray *array = a.new( 3, elementStr );
+	autoWArray *array = a.new( 3, wtypeStr );
 
 	warray_prepend( array, "cat" );
 	const char*string1 = warray_at( array, 0 );
@@ -210,7 +210,7 @@ Test_warray_prepend_strings()
 void
 Test_warray_insert_strings()
 {
-	autoWArray *array = a.new( 3, elementStr );
+	autoWArray *array = a.new( 3, wtypeStr );
 
 	//Insert 1st element
 	warray_insert( array, 0, "cat" );
@@ -245,7 +245,7 @@ Test_warray_insert_strings()
 void
 Test_warray_insertSorted()
 {
-	autoWArray* array = warray_new( 0, elementStr );
+	autoWArray* array = warray_new( 0, wtypeStr );
 
     warray_insertSorted( array, "lion" );
     assert_equal( array->size, 1 );
@@ -289,7 +289,7 @@ Test_warray_insertSorted()
 void
 Test_warray_set()
 {
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
 	a.set( array, 0, "cat" );
 	assert_equal( a.size( array ), 1 );
@@ -321,7 +321,7 @@ Test_warray_set()
 void
 Test_warray_append_n()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	warray_append_n( array, 1, (void*[]){ "cat" });
 	assert_strequal( a.at( array, 0 ), "cat" );
@@ -344,7 +344,7 @@ Test_warray_append_n()
 void
 Test_warray_prepend_n()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	warray_prepend_n( array, 1, (void*[]){ "cat" });
 	assert_strequal( a.at( array, 0 ), "cat" );
@@ -370,7 +370,7 @@ Test_warray_prepend_n()
 void
 Test_warray_firstLastEmptyNonEmpty()
 {
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 	assert_true( warray_empty( array ));
 	assert_false( warray_nonEmpty( array ));
 
@@ -395,7 +395,7 @@ Test_warray_firstLastEmptyNonEmpty()
 void
 Test_warray_steal()
 {
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
 	//Steal the only element.
 	warray_append( array, "cat" );
@@ -431,7 +431,7 @@ Test_warray_steal()
 void
 Test_warray_stealFirstLast()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	a.append( array, NULL );
 	assert_equal( a.stealFirst( array ), NULL );
@@ -458,7 +458,7 @@ Test_warray_stealFirstLast()
 void
 Test_warray_removeAt()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	//Remove the only element.
 	a.append( array, "cat" );
@@ -491,7 +491,7 @@ Test_warray_removeAt()
 void
 Test_warray_removeFirst()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	a.append( array, "cat" );
 	warray_removeFirst( array );
@@ -514,7 +514,7 @@ Test_warray_removeFirst()
 void
 Test_warray_removeLast()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	a.append( array, "cat" );
 	a.removeLast( array );
@@ -548,8 +548,8 @@ append( const void* element, void* data )
 void
 Test_warray_foreachForeachIndex()
 {
-	autoWArray* array = a.new( 0, elementStr );
-	autoWArray* copy = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
+	autoWArray* copy = a.new( 0, wtypeStr );
 
 	warray_foreach( array, append, copy );
 	assert_true( warray_empty( copy ));
@@ -582,7 +582,7 @@ Test_warray_filterReject()
         return strlen( element ) > 3;
 	}
 
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
 	autoWArray* newArray1 = warray_filter( array, isLongWord, NULL );
 	assert_equal( newArray1->size, 0 );
@@ -614,9 +614,9 @@ void
 Test_warray_map()
 {
 
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
-	autoWArray* newArray1 = warray_map( array, makeItGood, "good", elementStr );
+	autoWArray* newArray1 = warray_map( array, makeItGood, "good", wtypeStr );
 	assert_equal( newArray1->size, 0 );
 
 	warray_append( array, "cat" );
@@ -624,7 +624,7 @@ Test_warray_map()
 	warray_append( array, "sea-hawk" );
 	warray_append( array, "chimpanzee" );
 
-    autoWArray* newArray2 = warray_map( array, makeItGood, "good", elementStr );
+    autoWArray* newArray2 = warray_map( array, makeItGood, "good", wtypeStr );
     assert_strequal( warray_at( newArray2, 0 ), "My cat is good." );
     assert_strequal( warray_at( newArray2, 1 ), "My dog is good." );
     assert_strequal( warray_at( newArray2, 2 ), "My sea-hawk is good." );
@@ -638,9 +638,9 @@ joinAnimals( const void* element, const void* reduction ) {
 void
 Test_warray_reduce()
 {
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
-	autoChar* string1 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
+	autoChar* string1 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", wtypeStr );
 	assert_strequal( string1, "My favorite animals are turtle");
 
 	warray_append( array, "cat" );
@@ -648,7 +648,7 @@ Test_warray_reduce()
 	warray_append( array, "sea-hawk" );
 	warray_append( array, "chimpanzee" );
 
-    autoChar* string2 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
+    autoChar* string2 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", wtypeStr );
     assert_strequal( string2, "My favorite animals are turtle and cat and dog and sea-hawk and chimpanzee" );
 }
 
@@ -661,7 +661,7 @@ Test_warray_minMax()
 //		return strcmp( element1, element2 );
 //	}
 
-	autoWArray *array = a.new( 0, elementStr );
+	autoWArray *array = a.new( 0, wtypeStr );
 
 	warray_append( array, "cat" );
 	assert_strequal( warray_min( array ), "cat" );
@@ -686,7 +686,7 @@ Test_warray_minMax()
 void
 Test_warray_indexRindex()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	assert_equal( a.index( array, NULL ), -1 );
 	assert_equal( a.rindex( array, NULL ), -1 );
@@ -732,7 +732,7 @@ Test_warray_indexRindex()
 void
 Test_warray_count()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	assert_equal( warray_count( array, Element_conditionStrEquals, NULL ), 0 );
 	assert_equal( a.count( array, Element_conditionStrEquals, "Test" ), 0 );
@@ -761,7 +761,7 @@ Test_warray_count()
 void
 Test_warray_toStringFromString()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	autoChar* joined1 = warray_toString( array, ", " );
 	assert_strequal( joined1, "" );
@@ -816,7 +816,7 @@ Test_warray_allAnyOneNone()
 		return strcmp( element1, element2 ) == 0;
 	}
 
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	assert_true( warray_all( array, equals, "foo" ));
 	assert_false( warray_any( array, equals, "foo" ));
@@ -863,7 +863,7 @@ Test_warray_allAnyOneNone()
 void
 Test_warray_sort()
 {
-	WArray* array = a.new( 0, elementStr );
+	WArray* array = a.new( 0, wtypeStr );
 
 	warray_sort( array );
     assert_true( warray_empty( array ));
@@ -893,7 +893,7 @@ Test_warray_sort()
 void
 Test_warray_compact()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	warray_compact( array );
 	assert_true( a.empty( array ));
@@ -919,7 +919,7 @@ Test_warray_compact()
 void
 Test_warray_distinct()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	warray_distinct( array );
 	assert_true( a.empty( array ));
@@ -953,7 +953,7 @@ Test_warray_distinct()
 void
 Test_warray_reverse()
 {
-	autoWArray* array = a.new( 0, elementStr );
+	autoWArray* array = a.new( 0, wtypeStr );
 
 	warray_reverse( array );
 	assert_true( a.empty( array ));
@@ -989,8 +989,8 @@ Test_warray_reverse()
 void
 Test_warray_concat()
 {
-	autoWArray* array1 = a.new( 0, elementStr );
-	autoWArray* array2 = a.new( 0, elementStr );
+	autoWArray* array1 = a.new( 0, wtypeStr );
+	autoWArray* array2 = a.new( 0, wtypeStr );
 
 	autoWArray* concat1 = warray_concat( warray_clone( array1 ), array2 );
     assert_true( warray_empty( concat1 ));
@@ -1028,8 +1028,8 @@ Test_warray_concat()
 void
 Test_warray_union()
 {
-	autoWArray* array1 = a.new( 0, elementStr );
-	autoWArray* array2 = a.new( 0, elementStr );
+	autoWArray* array1 = a.new( 0, wtypeStr );
+	autoWArray* array2 = a.new( 0, wtypeStr );
 
 	autoWArray* union1 = warray_unite( array1, array2 );
 	assert_equal( union1->size, 0 );
@@ -1063,8 +1063,8 @@ Test_warray_union()
 	assert_true( a.index( union6, "cat" ) >= 0 );
 	assert_true( a.index( union6, "dog" ) >= 0 );
 
-	autoWArray* array3 = a.new( 0, elementStr );
-	autoWArray* array4 = a.new( 0, elementStr );
+	autoWArray* array3 = a.new( 0, wtypeStr );
+	autoWArray* array4 = a.new( 0, wtypeStr );
 	a.append_n( array3, 5, (void*[]){ "cat", "", "dog", "cat", "elephant" });
 	a.append_n( array4, 6, (void*[]){ "bird", NULL, NULL, "dog", "bird", "mouse" });
 	autoWArray* union7 = warray_unite( array3, array4 );
@@ -1080,8 +1080,8 @@ Test_warray_union()
 void
 Test_warray_intersect()
 {
-	autoWArray* array1 = a.new( 0, elementStr );
-	autoWArray* array2 = a.new( 0, elementStr );
+	autoWArray* array1 = a.new( 0, wtypeStr );
+	autoWArray* array2 = a.new( 0, wtypeStr );
 
 	autoWArray* inter1 = warray_intersect( array1, array2 );
 	assert_equal( inter1->size, 0 );
@@ -1109,8 +1109,8 @@ Test_warray_intersect()
 	assert_equal( a.count( inter5, Element_conditionStrEquals, "cat" ), 1 );
 	assert_equal( a.count( inter5, Element_conditionStrEquals, "dog" ), 1 );
 
-	autoWArray* array3 = a.new( 0, elementStr );
-	autoWArray* array4 = a.new( 0, elementStr );
+	autoWArray* array3 = a.new( 0, wtypeStr );
+	autoWArray* array4 = a.new( 0, wtypeStr );
 	a.append_n( array3, 7, (void*[]){ "cat", "dog", NULL, NULL, "", "bird", "elephant" });
 	a.append_n( array4, 6, (void*[]){ "dog", "mouse", NULL, "bird", "crocodile", "", "" });
 	autoWArray* inter6 = a.intersect( array3, array4 );
@@ -1123,8 +1123,8 @@ Test_warray_intersect()
 void
 Test_warray_symDiff()
 {
-	autoWArray* array1 = a.new( 0, elementStr );
-	autoWArray* array2 = a.new( 0, elementStr );
+	autoWArray* array1 = a.new( 0, wtypeStr );
+	autoWArray* array2 = a.new( 0, wtypeStr );
 
 	autoWArray* sym1 = warray_symDiff( array1, array2 );
 	assert_equal( sym1->size, 0 );
@@ -1149,8 +1149,8 @@ Test_warray_symDiff()
 	autoWArray* sym5 = a.symDiff( array1, array2 );
 	assert_equal( sym5->size, 0 );
 
-	autoWArray* array3 = a.new( 0, elementStr );
-	autoWArray* array4 = a.new( 0, elementStr );
+	autoWArray* array3 = a.new( 0, wtypeStr );
+	autoWArray* array4 = a.new( 0, wtypeStr );
 	a.append_n( array3, 6, (void*[]){ "cat", "dog", NULL, NULL, "bird", "elephant" });
 	a.append_n( array4, 7, (void*[]){ "dog", "mouse", NULL, "bird", "crocodile", "", "" });
 	autoWArray* sym6 = a.symDiff( array3, array4 );
@@ -1164,7 +1164,7 @@ Test_warray_symDiff()
 void
 Test_warray_addToSet()
 {
-	autoWArray* set = a.new( 0, elementStr );
+	autoWArray* set = a.new( 0, wtypeStr );
 
 	warray_addToSet( set, "cat" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
@@ -1202,8 +1202,8 @@ Test_warray_addToSet()
 void
 Test_warray_compare()
 {
-    autoWArray* array1 = a.new( 0, elementStr );
-    autoWArray* array2 = a.new( 0, elementStr );
+    autoWArray* array1 = a.new( 0, wtypeStr );
+    autoWArray* array2 = a.new( 0, wtypeStr );
 
     assert_equal( warray_compare( array1, array2 ), 0 );
 
@@ -1226,8 +1226,8 @@ Test_warray_compare()
     a.prepend( array2, "" );
     assert_equal( a.compare( array1, array2 ), 1 );
 
-	autoWArray* array3 = a.new( 0, elementStr );
-	autoWArray* array4 = a.new( 0, elementStr );
+	autoWArray* array3 = a.new( 0, wtypeStr );
+	autoWArray* array4 = a.new( 0, wtypeStr );
 
     a.append_n( array3, 6, (void*[]){ "cat", "", NULL, "lion", "elephant", "mouse" });
     a.append_n( array4, 6, (void*[]){ "cat", "", NULL, "lion", "elephant", "snake" });
@@ -1249,7 +1249,7 @@ comparePerson( const void* key, const void* element )
 void
 Test_warray_bsearch()
 {
-	autoWArray* array1 = a.new( 0, elementStr );
+	autoWArray* array1 = a.new( 0, wtypeStr );
 	a.append_n( array1, 5, (void*[]){ "cat", "dog", "lion", "mouse", "zebra" });
 	assert_equal( warray_bsearch( array1, Element_compareStr, "cat" ), 0 );
 	assert_equal( a.bsearch( array1, Element_compareStr, "dog" ), 1 );
@@ -1278,7 +1278,7 @@ Test_warray_bsearch()
 void
 Test_warray_iterator()
 {
-	autoWArray* ar = a.new( 0, elementStr );
+	autoWArray* ar = a.new( 0, wtypeStr );
 	autoIterator* iter1a = a.iterator( ar );
 	autoIterator* iter1b = a.iteratorReverse( ar );
 	assert_false( it.hasNext( iter1a ));
@@ -1311,15 +1311,15 @@ Test_warray_iterator()
 void
 Test_warray_iteratorFullExample()
 {
-	autoWArray* ar1 = a.new( 0, elementStr );
-	autoWArray* ar2 = a.new( 0, elementStr );
+	autoWArray* ar1 = a.new( 0, wtypeStr );
+	autoWArray* ar2 = a.new( 0, wtypeStr );
 
 	a.append_n( ar1, 3, (void*[]){ "1.", "2.", "3." });
 	a.append_n( ar2, 3, (void*[]){ "cat", "dog", "lion" });
 	autoIterator* iter1 = warray_iterator( ar1 );
 	autoIterator* iter2 = warray_iterator( ar2 );
 
-	WArray* ar3 = a.new( 0, elementStr );
+	WArray* ar3 = a.new( 0, wtypeStr );
 	while ( Iterator_hasNext( iter1 ) and Iterator_hasNext( iter2 )) {
 		a.append( ar3, Iterator_next( iter1 ));
 		a.append( ar3, Iterator_next( iter2 ));
@@ -1514,7 +1514,7 @@ removeAtElement( WArray* array, size_t size )
 void
 Fuzztest_Array
 {
-	autoWArray* array = a.new( 5, elementStr );
+	autoWArray* array = a.new( 5, wtypeStr );
 	double direction = 0.01;
 	size_t size = 0;
 	printf("\n");

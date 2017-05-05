@@ -87,7 +87,7 @@ warray_new( size_t capacity, const WType* type )
 
 	WArray *array = xnew( WArray,
 		.capacity	= capacity ? capacity : ArrayDefaultCapacity,
-		.type	= type ? type : elementPtr,
+		.type	= type ? type : wtypePtr,
 	);
 	array->data = xmalloc( array->capacity * sizeof( void* ));
 
@@ -579,7 +579,7 @@ warray_map( const WArray* array, ElementMap* map, const void* mapData, const WTy
 	assert( array );
 	assert( map );
 
-	if ( not type ) type = elementPtr;
+	if ( not type ) type = wtypePtr;
 	WArray* newArray = warray_new( array->capacity, type );
 
 	//TODO: warray_map() with OpenMP pragma
@@ -600,7 +600,7 @@ warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValu
 	assert( array );
 	assert( reduce );
 
-	if ( not type ) type = elementPtr;
+	if ( not type ) type = wtypePtr;
 
 	if ( array->size == 0 )
 		return type->clone( startValue );
@@ -697,10 +697,10 @@ warray_toString( const WArray* array, const char delimiters[] )
 	char* string = toString( array->data[0] );		//The first element without delimiters
 
 	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiters and next element.
-		char* elementStr = toString( array->data[i] );
-		char* tempString = str_printf( "%s%s%s", string, delimiters, elementStr );
+		char* wtypeStr = toString( array->data[i] );
+		char* tempString = str_printf( "%s%s%s", string, delimiters, wtypeStr );
 		free( string );
-		free( elementStr );
+		free( wtypeStr );
 		string = tempString;
 	}
 
@@ -714,7 +714,7 @@ warray_fromString( const char string[], const char delimiters[] )
 	assert( string );
 	assert( delimiters and delimiters[0] );
 
-	WArray* array = warray_new( 0, elementStr );
+	WArray* array = warray_new( 0, wtypeStr );
 
 	char* newString = strdup( string );
 	char* context = NULL;

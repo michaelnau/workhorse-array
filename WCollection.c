@@ -36,7 +36,7 @@ char __elementNotFound;
 //	Default methods for unspecified pointer types
 //---------------------------------------------------------------------------------
 
-const WType* elementPtr = &(WType) {
+const WType* wtypePtr = &(WType) {
 	.clone = Element_clonePtr,
 	.delete = Element_deletePtr,
 	.compare = Element_compareUndefined,
@@ -48,15 +48,15 @@ void* Element_clonePtr( const void* element ) {
 	return (void*)element;
 }
 
-void Element_deletePtr( void** elementPtr ) {
-	(void)elementPtr;
+void Element_deletePtr( void** wtypePtr ) {
+	(void)wtypePtr;
 }
 
 //---------------------------------------------------------------------------------
 //	int methods
 //---------------------------------------------------------------------------------
 
-const WType* elementInt = &(WType) {
+const WType* wtypeInt = &(WType) {
 	.clone = Element_cloneInt,
 	.delete = Element_deleteInt,
 	.compare = Element_compareInt,
@@ -68,8 +68,8 @@ void* Element_cloneInt( const void* element ) {
 	return (void*)element;
 }
 
-void Element_deleteInt( void** elementPtr ) {
-	(void)elementPtr;
+void Element_deleteInt( void** wtypePtr ) {
+	(void)wtypePtr;
 }
 
 int Element_compareInt( const void* e1, const void* e2 ) {
@@ -91,7 +91,7 @@ char* Element_toStringInt( const void* element ) {
 //	char* methods
 //---------------------------------------------------------------------------------
 
-const WType* elementStr = &(WType) {
+const WType* wtypeStr = &(WType) {
 	.clone = Element_cloneStr,
 	.delete = Element_delete,
 	.compare = Element_compareStr,
@@ -121,7 +121,7 @@ char* Element_toStringStr( const void* element ) {
 //	double methods
 //---------------------------------------------------------------------------------
 
-const WType* elementDouble = &(WType) {
+const WType* wtypeDouble = &(WType) {
 	.clone = Element_cloneDouble,
 	.delete = Element_delete,
 	.compare = Element_compareDouble,
@@ -158,12 +158,12 @@ char* Element_toStringDouble( const void* element ) {
 //---------------------------------------------------------------------------------
 
 void
-Element_delete( void** elementPtr )
+Element_delete( void** wtypePtr )
 {
-	if ( not elementPtr or not *elementPtr ) return;
+	if ( not wtypePtr or not *wtypePtr ) return;
 
-	free( *elementPtr );
-	*elementPtr = NULL;
+	free( *wtypePtr );
+	*wtypePtr = NULL;
 }
 
 //---------------------------------------------------------------------------------
@@ -176,8 +176,8 @@ void* Element_cloneUndefined( const void* element ) {
 	return NULL;
 }
 
-void Element_deleteUndefined( void** elementPtr ) {
-	(void)elementPtr;
+void Element_deleteUndefined( void** wtypePtr ) {
+	(void)wtypePtr;
 	die( "The delete() method is undefined for this element type." );
 }
 
