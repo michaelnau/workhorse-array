@@ -11,8 +11,8 @@
 
 /**	Return value of search functions if no element could be found.
 */
-#define ElementNotFound ((void*)&__elementNotFound)
-extern char __elementNotFound;
+#define WElementNotFound ((void*)&__welementNotFound)
+extern char __welementNotFound;
 
 //---------------------------------------------------------------------------------
 //	Function prototypes for the element methods
@@ -20,60 +20,60 @@ extern char __elementNotFound;
 
 /**	Function prototype for cloning an element.
 */
-typedef void*	ElementClone(const void* element);
+typedef void*	WElementClone(const void* element);
 
 /**	Function prototype for deleting an element.
 */
-typedef void	ElementDelete(void** element);
+typedef void	WElementDelete(void** element);
 
 /**	Function prototype for comparing to elements with another.
 */
-typedef int		ElementCompare(const void* element1, const void* element2);
+typedef int		WElementCompare(const void* element1, const void* element2);
 
 /**	Function prototype for getting an element from a string.
 */
-typedef void*	ElementFromString(const char* wtypeStr);
+typedef void*	WElementFromString(const char* wtypeStr);
 
 /**	Function prototype for converting an element to a string.
 */
-typedef char*	ElementToString(const void* element);
+typedef char*	WElementToString(const void* element);
 
 /**	Function prototype for doing read-only stuff to an element.
 */
-typedef void	ElementForeach(const void* element, void* foreachData );
+typedef void	WElementForeach(const void* element, void* foreachData );
 
 /**	Function prototype for doing read-only stuff to an element and its index.
 */
-typedef void	ElementForeachIndex(const void* element, size_t index, void* foreachData );
+typedef void	WElementForeachIndex(const void* element, size_t index, void* foreachData );
 
 /**	Function prototype for mapping an input element to an output element.
 */
-typedef void*	ElementMap(const void* element, const void* mapData);
+typedef void*	WElementMap(const void* element, const void* mapData);
 
 /**	Function prototype for combining the element and the intermediate result to a new internediate result.
 */
-typedef	void*	ElementReduce(const void* element, const void* intermediate);
+typedef	void*	WElementReduce(const void* element, const void* intermediate);
 
 /**	Function prototype returning true if the element meets a certaion condition.
 */
-typedef bool	ElementCondition(const void* element, const void* conditionData);
+typedef bool	WElementCondition(const void* element, const void* conditionData);
 
 /**	Defines the essential behaviour and thus the type of a collection element.
 	It is passed to functions like warray_new().
 */
 typedef struct WType {
-	ElementClone*		clone;		///<Method to copy an element into the collection. Mandatory.
-	ElementDelete*		delete;		///<Method to destroy an element, e.g. if it is removed from the collection. Mandatory.
-	ElementCompare*		compare;	///<Method to compare two elements with each other. Mandatory only for some collection functions.
-	ElementFromString*	fromString;	///<Method to parse an element from a string. Mandatory only for some collection functions.
-	ElementToString*	toString;	///<Method to convert an element to a string. Mandatory only for some collection functions.
+	WElementClone*		clone;		///<Method to copy an element into the collection. Mandatory.
+	WElementDelete*		delete;		///<Method to destroy an element, e.g. if it is removed from the collection. Mandatory.
+	WElementCompare*		compare;	///<Method to compare two elements with each other. Mandatory only for some collection functions.
+	WElementFromString*	fromString;	///<Method to parse an element from a string. Mandatory only for some collection functions.
+	WElementToString*	toString;	///<Method to convert an element to a string. Mandatory only for some collection functions.
 }WType;
 
 //---------------------------------------------------------------------------------
 //	Predefined element types
 //---------------------------------------------------------------------------------
 
-/** Defines a collection ElementType for raw void* pointers. Can be passed to functions like warray_new().
+/** Defines a collection WType for raw void* pointers. Can be passed to functions like warray_new().
 
 	- clone = Element_clonePtr()
 	- delete = Element_deletePtr()
@@ -83,7 +83,7 @@ typedef struct WType {
 */
 extern const WType* wtypePtr;
 
-/** Defines a collection ElementType for int values. Can be passed to functions like warray_new().
+/** Defines a collection WType for int values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneInt()
 	- delete = Element_deleteInt()
@@ -93,7 +93,7 @@ extern const WType* wtypePtr;
 */
 extern const WType* wtypeInt;
 
-/** Defines a collection ElementType for char* values. Can be passed to functions like warray_new().
+/** Defines a collection WType for char* values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneStr()
 	- delete = Element_delete()
@@ -103,7 +103,7 @@ extern const WType* wtypeInt;
 */
 extern const WType* wtypeStr;
 
-/** Defines a collection ElementType for double values. Can be passed to functions like warray_new().
+/** Defines a collection WType for double values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneDouble()
 	- delete = Element_delete()

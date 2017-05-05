@@ -83,8 +83,8 @@ deletePerson( void** element ) {
 }
 
 WType* personType = &(WType){
-    .clone = (ElementClone*)clonePerson,
-    .delete = (ElementDelete*)deletePerson
+    .clone = (WElementClone*)clonePerson,
+    .delete = (WElementDelete*)deletePerson
 };
 
 //--------------------------------------------------------------------------------
@@ -1407,7 +1407,7 @@ isSorted( const WArray* array )
 {
 	if ( not array->size ) return true;
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 	for ( size_t j = 0; j < array->size-1; j++ ) {
 		if ( compare( a.at( array, j ), a.at( array, j+1 )) == 1 )
 			return false;
@@ -1427,7 +1427,7 @@ isDistinct( const WArray* array )
 {
 	if ( not array->size ) return true;
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 	for ( size_t i = 0; i < array->size-1; i++ ) {
 		for ( size_t j = i+1; j < array->size; j++ ) {
 			if ( compare( array->data[i], array->data[j] ) == 0 )

@@ -30,7 +30,7 @@ xmalloc( size_t size )
 
 //---------------------------------------------------------------------------------
 
-char __elementNotFound;
+char __welementNotFound;
 
 //---------------------------------------------------------------------------------
 //	Default methods for unspecified pointer types

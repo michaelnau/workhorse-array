@@ -192,32 +192,32 @@ typedef struct WArrayNamespace {
 	bool		(*empty)	(const WArray* array);
 	bool		(*nonEmpty)	(const WArray* array);
 
-	bool		(*all)		(const WArray* array, ElementCondition* condition, const void* conditionData);
-	bool		(*any)		(const WArray* array, ElementCondition* condition, const void* conditionData);
-	bool		(*none)		(const WArray* array, ElementCondition* condition, const void* conditionData);
-	bool		(*one)		(const WArray* array, ElementCondition* condition, const void* conditionData);
+	bool		(*all)		(const WArray* array, WElementCondition* condition, const void* conditionData);
+	bool		(*any)		(const WArray* array, WElementCondition* condition, const void* conditionData);
+	bool		(*none)		(const WArray* array, WElementCondition* condition, const void* conditionData);
+	bool		(*one)		(const WArray* array, WElementCondition* condition, const void* conditionData);
 
-	WArray* 	(*filter)	(const WArray* array, ElementCondition* filter, const void* filterData );
-	WArray* 	(*reject)	(const WArray* array, ElementCondition* filter, const void* filterData );
-	WArray* 	(*map)		(const WArray* array, ElementMap*, const void*, const WType* type );
-	void*		(*reduce)	(const WArray* array, ElementReduce*, const void*, const WType* type );
+	WArray* 	(*filter)	(const WArray* array, WElementCondition* filter, const void* filterData );
+	WArray* 	(*reject)	(const WArray* array, WElementCondition* filter, const void* filterData );
+	WArray* 	(*map)		(const WArray* array, WElementMap*, const void*, const WType* type );
+	void*		(*reduce)	(const WArray* array, WElementReduce*, const void*, const WType* type );
 
-	void		(*foreach)	(const WArray* array, ElementForeach* foreach, void* foreachData);
-	void		(*foreachIndex)(const WArray* array, ElementForeachIndex* foreach, void* foreachData);
+	void		(*foreach)	(const WArray* array, WElementForeach* foreach, void* foreachData);
+	void		(*foreachIndex)(const WArray* array, WElementForeachIndex* foreach, void* foreachData);
 
 //TODO: a.min() and a.max() disturbed by min() and max() macros
 //	const void*	(*min)		(const Array*);
 //	const void*	(*max)		(const Array*);
 	ssize_t		(*index)	(const WArray* array, const void* element);
 	ssize_t		(*rindex)	(const WArray* array, const void* element);
-	ssize_t		(*bsearch)	(const WArray* array, ElementCompare* compare, const void* key);
+	ssize_t		(*bsearch)	(const WArray* array, WElementCompare* compare, const void* key);
 	bool		(*contains)	(const WArray* array, const void* element);
-	size_t		(*count)	(const WArray* array, ElementCondition*, const void* conditionData);
+	size_t		(*count)	(const WArray* array, WElementCondition*, const void* conditionData);
 
 	WArray*		(*reverse)	(WArray* array);
 	WArray*		(*compact)	(WArray* array);
 	WArray*		(*sort)		(WArray* array);
-	WArray*		(*sortBy)	(WArray* array, ElementCompare* compare);
+	WArray*		(*sortBy)	(WArray* array, WElementCompare* compare);
 	WArray*		(*distinct)	(WArray* array);
 	WArray*		(*shuffle)	(WArray* array);
 
@@ -334,7 +334,7 @@ typedef struct WArrayNamespace {
 	Array* a3 = warray_new( 10, elementStr );	//elementStr is predefined for char* strings.
 	Array* a4 = warray_new( 0, elementInt );		//elementInt is predefined for int values.
 
-	static const ElementType carType = {
+	static const WType carType = {
         .clone = cloneCar,
         .delete = deleteCar
 	};
@@ -728,7 +728,7 @@ warray_rindex( const WArray* array, const void* element );
 	@pre compare != NULL
 */
 ssize_t
-warray_bsearch( const WArray* array, ElementCompare* compare, const void* key );
+warray_bsearch( const WArray* array, WElementCompare* compare, const void* key );
 
 /**	Search the array for the given element. The given element is compared
 	with the array elements using the array compare() method.
@@ -752,7 +752,7 @@ warray_contains( const WArray* array, const void* element ) { return warray_inde
 	@pre condition != NULL
 */
 size_t
-warray_count( const WArray* array, ElementCondition* condition, const void* conditionData );
+warray_count( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
 //	Comparing arrays
@@ -863,7 +863,7 @@ warray_nonEmpty( const WArray* array ) { return array->size > 0; }
 	@pre foreach != NULL
 */
 void
-warray_foreach( const WArray* array, ElementForeach* foreach, void* foreachData  );
+warray_foreach( const WArray* array, WElementForeach* foreach, void* foreachData  );
 
 /*	Apply a read-only function to all elements and their indexes.
 
@@ -871,7 +871,7 @@ warray_foreach( const WArray* array, ElementForeach* foreach, void* foreachData 
 	@pre foreach != NULL
 */
 void
-warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* foreachData );
+warray_foreachIndex( const WArray* array, WElementForeachIndex* foreach, void* foreachData );
 
 /**	Take all elements meeting a filter criterion and put them in a new array.
 
@@ -879,7 +879,7 @@ warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* fo
 	@pre filter != NULL
 */
 WArray*
-warray_filter( const WArray* array, ElementCondition* filter, const void* filterData );
+warray_filter( const WArray* array, WElementCondition* filter, const void* filterData );
 
 /**	Reject all elements meeting a criterion and put the rest in a new array.
 
@@ -887,7 +887,7 @@ warray_filter( const WArray* array, ElementCondition* filter, const void* filter
 	@pre reject != NULL
 */
 WArray*
-warray_reject( const WArray* array, ElementCondition* reject, const void* rejectData );
+warray_reject( const WArray* array, WElementCondition* reject, const void* rejectData );
 
 /**	Map each element to a new element of a specified type and put them all in a new array.
 
@@ -930,7 +930,7 @@ warray_reject( const WArray* array, ElementCondition* reject, const void* reject
 	\endcode
 */
 WArray*
-warray_map( const WArray* array, ElementMap* map, const void* mapData, const WType* type );
+warray_map( const WArray* array, WElementMap* map, const void* mapData, const WType* type );
 
 /**	Reduce all elements to a single return value of an arbitrary type.
 
@@ -943,7 +943,7 @@ warray_map( const WArray* array, ElementMap* map, const void* mapData, const WTy
 	@pre reduce != NULL
 */
 void*
-warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const WType* type );
+warray_reduce( const WArray* array, WElementReduce* reduce, const void* startValue, const WType* type );
 
 /**	Keep all elements meeting a filter criterion and delete the rest.
 
@@ -955,7 +955,7 @@ warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValu
 	@pre filter != NULL
 */
 WArray*
-warray_select( WArray* array, ElementCondition* filter, const void* filterData );
+warray_select( WArray* array, WElementCondition* filter, const void* filterData );
 
 /**	Delete all elements meeting a filter criterion and keep the rest.
 
@@ -967,7 +967,7 @@ warray_select( WArray* array, ElementCondition* filter, const void* filterData )
 	@pre filter != NULL
 */
 WArray*
-warray_unselect( WArray* array, ElementCondition* filter, const void* filterData );
+warray_unselect( WArray* array, WElementCondition* filter, const void* filterData );
 
 //------------------------------------------------------------
 //	Do stuff with the elements.
@@ -1017,7 +1017,7 @@ warray_sort( WArray* array );
 	@pre compare != NULL
 */
 WArray*
-warray_sortBy( WArray* array, ElementCompare* compare );
+warray_sortBy( WArray* array, WElementCompare* compare );
 
 /** Remove all identical elements using the comparison function from the
 	element type. It is undefined which of the duplicate elements remains afterwards.
@@ -1057,7 +1057,7 @@ warray_concat( WArray* array1, const WArray* array2 );
 	@pre condition != NULL
 */
 bool
-warray_all( const WArray* array, ElementCondition* condition, const void* conditionData );
+warray_all( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Return true if at least one element meets a condition.
 
@@ -1068,7 +1068,7 @@ warray_all( const WArray* array, ElementCondition* condition, const void* condit
 	@pre condition != NULL
 */
 bool
-warray_any( const WArray* array, ElementCondition* condition, const void* conditionData );
+warray_any( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Return true if no element meets a condition.
 
@@ -1079,7 +1079,7 @@ warray_any( const WArray* array, ElementCondition* condition, const void* condit
 	@pre condition != NULL
 */
 bool
-warray_none( const WArray* array, ElementCondition* condition, const void* conditionData );
+warray_none( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Return true if exactly one element meets a condition.
 
@@ -1090,7 +1090,7 @@ warray_none( const WArray* array, ElementCondition* condition, const void* condi
 	@pre condition != NULL
 */
 bool
-warray_one( const WArray* array, ElementCondition* condition, const void* conditionData );
+warray_one( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
 //	Common set operations

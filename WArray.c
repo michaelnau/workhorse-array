@@ -64,11 +64,11 @@ do {							\
 //-------------------------------------------------------------------------------
 
 const WType* arrayElement = &(WType){
-	.clone = (ElementClone*)warray_clone,
-	.delete = (ElementDelete*)warray_delete,
-	.compare = (ElementCompare*)warray_compare,
-	.fromString = (ElementFromString*)warray_fromString,
-	.toString = (ElementToString*)warray_toString
+	.clone = (WElementClone*)warray_clone,
+	.delete = (WElementDelete*)warray_delete,
+	.compare = (WElementCompare*)warray_compare,
+	.fromString = (WElementFromString*)warray_fromString,
+	.toString = (WElementToString*)warray_toString
 };
 
 enum ArrayParameters {
@@ -246,7 +246,7 @@ warray_insertSorted( WArray* array, const void* element )
 	assert( array );
 	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 	void** data = array->data;
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( compare( element, data[i] ) < 0 )
@@ -477,7 +477,7 @@ warray_removeLast( WArray* array )
 //-------------------------------------------------------------------------------
 
 void
-warray_foreach( const WArray* array, ElementForeach* foreach, void* foreachData )
+warray_foreach( const WArray* array, WElementForeach* foreach, void* foreachData )
 {
 	assert( array );
 	assert( foreach );
@@ -487,7 +487,7 @@ warray_foreach( const WArray* array, ElementForeach* foreach, void* foreachData 
 }
 
 void
-warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* foreachData )
+warray_foreachIndex( const WArray* array, WElementForeachIndex* foreach, void* foreachData )
 {
 	assert( array );
 	assert( foreach );
@@ -497,7 +497,7 @@ warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* fo
 }
 
 WArray*
-warray_filter( const WArray* array, ElementCondition* filter, const void* filterData )
+warray_filter( const WArray* array, WElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -516,7 +516,7 @@ warray_filter( const WArray* array, ElementCondition* filter, const void* filter
 }
 
 WArray*
-warray_reject( const WArray* array, ElementCondition* reject, const void* rejectData )
+warray_reject( const WArray* array, WElementCondition* reject, const void* rejectData )
 {
 	assert( array );
 	assert( reject );
@@ -534,7 +534,7 @@ warray_reject( const WArray* array, ElementCondition* reject, const void* reject
 }
 
 WArray*
-warray_select( WArray* array, ElementCondition* filter, const void* filterData )
+warray_select( WArray* array, WElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -554,7 +554,7 @@ warray_select( WArray* array, ElementCondition* filter, const void* filterData )
 }
 
 WArray*
-warray_unselect( WArray* array, ElementCondition* filter, const void* filterData )
+warray_unselect( WArray* array, WElementCondition* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -574,7 +574,7 @@ warray_unselect( WArray* array, ElementCondition* filter, const void* filterData
 }
 
 WArray*
-warray_map( const WArray* array, ElementMap* map, const void* mapData, const WType* type )
+warray_map( const WArray* array, WElementMap* map, const void* mapData, const WType* type )
 {
 	assert( array );
 	assert( map );
@@ -595,7 +595,7 @@ warray_map( const WArray* array, ElementMap* map, const void* mapData, const WTy
 }
 
 void*
-warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const WType* type )
+warray_reduce( const WArray* array, WElementReduce* reduce, const void* startValue, const WType* type )
 {
 	assert( array );
 	assert( reduce );
@@ -617,7 +617,7 @@ warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValu
 }
 
 size_t
-warray_count( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_count( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -638,7 +638,7 @@ warray_index( const WArray* array, const void* element )
 	assert( array );
 	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 
 	for ( size_t i = 0; i < array->size; i++ ) {
 		if ( compare( element, array->data[i] ) == 0 )
@@ -654,7 +654,7 @@ warray_rindex( const WArray* array, const void* element )
 	assert( array );
 	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 
 	for ( size_t i = array->size-1; i < array->size; i-- ) {
 		if ( compare( element, array->data[i] ) == 0 )
@@ -693,7 +693,7 @@ warray_toString( const WArray* array, const char delimiters[] )
 
 	if ( not array->size ) return strdup( "" );
 
-	ElementToString* toString = array->type->toString;
+	WElementToString* toString = array->type->toString;
 	char* string = toString( array->data[0] );		//The first element without delimiters
 
 	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiters and next element.
@@ -740,7 +740,7 @@ warray_compare( const WArray* array1, const WArray* array2 )
 	assert( array1->type->compare != NULL && "Need a comparison function." );
 
 	//Setup some variables to save avoid unnecessary pointer accesses in the loop.
-	ElementCompare* compare = array1->type->compare;
+	WElementCompare* compare = array1->type->compare;
 	void** data1 = array1->data;
 	void** data2 = array2->data;
 
@@ -764,7 +764,7 @@ warray_min( const WArray* array )
 	assert( warray_nonEmpty( array ));
 	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 
     void* minimum = array->data[0];
     for ( size_t i = 1; i < array->size; i++ ) {
@@ -782,7 +782,7 @@ warray_max( const WArray* array )
 	assert( warray_nonEmpty( array ));
 	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 
     void* maximum = array->data[0];
     for ( size_t i = 1; i < array->size; i++ ) {
@@ -795,7 +795,7 @@ warray_max( const WArray* array )
 
 // Helper struct to get both the bsearch comparison function and the key into our actual comparison function.
 typedef struct ElementComparer {
-	ElementCompare* compare;
+	WElementCompare* compare;
 	const void*		element;
 }ElementComparer;
 
@@ -809,7 +809,7 @@ compareKeyWithElement( const void* key, const void* element )
 }
 
 ssize_t
-warray_bsearch( const WArray* array, ElementCompare* compare, const void* key )
+warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 {
 	assert( array );
 	assert( compare );
@@ -904,7 +904,7 @@ warray_sort( WArray* array )
 }
 
 WArray*
-warray_sortBy( WArray* array, ElementCompare* compare )
+warray_sortBy( WArray* array, WElementCompare* compare )
 {
 	assert( array );
 	assert( compare );
@@ -925,7 +925,7 @@ warray_distinct( WArray* array)
 	assert( array );
    	assert( array->type->compare );
 
-	ElementCompare* compare = array->type->compare;
+	WElementCompare* compare = array->type->compare;
 
 	for ( size_t i = 0; i < array->size; i++ ) {
 		for ( size_t j = i+1; j < array->size; j++ ) {
@@ -981,7 +981,7 @@ warray_intersect( const WArray* array1, const WArray* array2 )
 	assert( array2->type->compare && "Need an element comparison method." );
 
 	WArray* intersection = warray_new( array1->capacity, array1->type );
-	ElementCompare* compare = array1->type->compare;
+	WElementCompare* compare = array1->type->compare;
 
 	for ( size_t i = 0; i < array1->size; i++ ) {
 		for ( size_t j = 0; j < array2->size; j++ ) {
@@ -1004,7 +1004,7 @@ warray_symDiff( const WArray* array1, const WArray* array2 )
 	assert( array1->type->compare && "Need an element comparison method." );
 	assert( array2->type->compare && "Need an element comparison method." );
 
-	ElementCompare* compare = array1->type->compare;
+	WElementCompare* compare = array1->type->compare;
 	bool equals( const void* element1, const void* element2 ) {
 		return compare( element1, element2 ) == 0;
 	}
@@ -1038,7 +1038,7 @@ warray_addToSet( WArray* array, const void* element )
 //-------------------------------------------------------------------------------
 
 bool
-warray_all( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_all( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -1053,7 +1053,7 @@ warray_all( const WArray* array, ElementCondition* condition, const void* condit
 }
 
 bool
-warray_any( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_any( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -1068,7 +1068,7 @@ warray_any( const WArray* array, ElementCondition* condition, const void* condit
 }
 
 bool
-warray_none( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_none( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -1083,7 +1083,7 @@ warray_none( const WArray* array, ElementCondition* condition, const void* condi
 }
 
 bool
-warray_one( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_one( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
