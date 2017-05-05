@@ -9,10 +9,10 @@
 
 //---------------------------------------------------------------------------------
 
-/**	Return value of search functions if no element could be found.
+/**	Return value of search functions if no element could be found. A unique pointer
+	value not matching any other pointer.
 */
-#define WElementNotFound ((void*)&__welementNotFound)
-extern char __welementNotFound;
+extern const void* WElementNotFound;
 
 //---------------------------------------------------------------------------------
 //	Function prototypes for the element methods
