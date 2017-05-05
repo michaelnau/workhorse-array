@@ -1,10 +1,52 @@
 #define _GNU_SOURCE
-#include "Array.h"
-#include "Basic.h"
-#include "Contract.h"
-#include "CString.h"
-#include <iso646.h>
+#include "WArray.h"
+#define TEST_IMPLEMENTATION
 #include "Testing.h"
+#include <assert.h>
+#include <iso646.h>
+#include <stdarg.h>
+#include <stdlib.h>
+
+//--------------------------------------------------------------------------------
+
+#define autoChar __attribute__(( cleanup( str_delete ))) char
+
+static char*
+str_printf( const char* format, ... )
+{
+	char* string;
+
+    va_list args;
+    va_start( args, format );
+	vasprintf( &string, format, args );
+	va_end( args );
+
+	return string;
+}
+
+static void
+str_delete( char** string )
+{
+	if ( not string ) return;
+
+	free( *string );
+	*string = NULL;
+}
+
+static void*
+xmalloc( size_t size )
+{
+	void* ptr = malloc( size );
+	if ( !ptr ) {
+		fputs( "Out of memory.", stderr );
+		exit( EXIT_FAILURE );
+	}
+
+	return ptr;
+}
+
+#define xnew( type, ... )							\
+	memcpy( xmalloc( sizeof( type )), &(type){ __VA_ARGS__ }, sizeof(type) )
 
 //--------------------------------------------------------------------------------
 
@@ -24,8 +66,8 @@ clonePerson( const Person* person ) {
 	assert( person );
 
 	return xnew( Person,
-		.name = str_dup( person->name ),
-		.firstname = str_dup( person->firstname ),
+		.name = strdup( person->name ),
+		.firstname = strdup( person->firstname ),
 		.age = person->age,
 	);
 }
@@ -496,14 +538,17 @@ Test_Array_removeLast()
 
 //--------------------------------------------------------------------------------
 
+static void
+append( const void* element, void* data )
+{
+	Array* array = data;
+	Array_append( array, element );
+}
+
+
 void
 Test_Array_foreachForeachIndex()
 {
-	void append( const void* element, void* data ) {
-		Array* array = data;
-        Array_append( array, element );
-	}
-
 	autoArray* array = a.new( 0, elementStr );
 	autoArray* copy = a.new( 0, elementStr );
 
@@ -533,7 +578,8 @@ Test_Array_foreachForeachIndex()
 void
 Test_Array_filterReject()
 {
-	bool isLongWord( const void* element, const void* filterData ) {
+	bool isLongWord( const void* element, const void* unused ) {
+		(void) unused;
         return strlen( element ) > 3;
 	}
 
@@ -560,12 +606,14 @@ Test_Array_filterReject()
     assert_strequal( Array_at( newArray2b, 1 ), "dog" );
     assert_equal( newArray2b->size, 2 );
 }
+static void*
+makeItGood( const void* element, const void* mapData )
+{
+	return str_printf( "My %s is %s.", (char*)element, (char*)mapData );
+}
 void
 Test_Array_map()
 {
-	void* makeItGood( const void* element, const void* mapData ) {
-		return str_printf( "My %s is %s.", (char*)element, (char*)mapData );
-	}
 
 	autoArray *array = a.new( 0, elementStr );
 
@@ -584,13 +632,13 @@ Test_Array_map()
     assert_strequal( Array_at( newArray2, 3 ), "My chimpanzee is good." );
     assert_equal( newArray2->size, 4 );
 }
+static void*
+joinAnimals( const void* element, const void* reduction ) {
+	return str_printf( "%s and %s", (char*)reduction, (char*)element );
+}
 void
 Test_Array_reduce()
 {
-	void* joinAnimals( const void* element, const void* reduction ) {
-		return str_printf( "%s and %s", (char*)reduction, (char*)element );
-	}
-
 	autoArray *array = a.new( 0, elementStr );
 
 	autoChar* string1 = Array_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
@@ -610,9 +658,9 @@ Test_Array_reduce()
 void
 Test_Array_minMax()
 {
-	int compareStrings( const void* element1, const void* element2 ) {
-		return strcmp( element1, element2 );
-	}
+//	int compareStrings( const void* element1, const void* element2 ) {
+//		return strcmp( element1, element2 );
+//	}
 
 	autoArray *array = a.new( 0, elementStr );
 
@@ -1193,6 +1241,12 @@ Test_Array_compare()
 	assert_equal( a.compare( array3, array4 ), 1 );
 }
 
+static int
+comparePerson( const void* key, const void* element )
+{
+	const Person* person = element;
+	return strcmp( key, person->name );
+}
 void
 Test_Array_bsearch()
 {
@@ -1213,10 +1267,6 @@ Test_Array_bsearch()
 		&(Person){	"Smith",	"Greg",		12	},
 		&(Person){	"West",		"Mitch", 	66	},
 	});
-	int comparePerson( const void* key, const void* element ) {
-		const Person* person = element;
-		return strcmp( key, person->name );
-	}
 
 	assert_equal( a.bsearch( array2, comparePerson, "Abelson" ), 0 );
 	assert_equal( a.bsearch( array2, comparePerson, "Smith" ), 3 );
@@ -1288,58 +1338,66 @@ Test_Array_iteratorFullExample()
 
 //--------------------------------------------------------------------------------
 
-void Testsuite_Array()
-{
-	Test_Array_clone_ints();
-	Test_Array_clone_strings();
+int main() {
+	printf( "\n" );
 
-	Test_Array_append_ints();
-	Test_Array_append_strings();
-	Test_Array_prepend_strings();
-	Test_Array_insert_strings();
-	Test_Array_insertSorted();
-	Test_Array_set();
-	Test_Array_append_n();
-	Test_Array_prepend_n();
+	testsuite( Test_Array_clone_ints );
+	testsuite( Test_Array_clone_strings );
 
-	Test_Array_firstLastEmptyNonEmpty();
-	Test_Array_steal();
-	Test_Array_stealFirstLast();
-	Test_Array_removeAt();
-	Test_Array_removeFirst();
-	Test_Array_removeLast();
-	Test_Array_filterReject();
-	Test_Array_map();
-	Test_Array_reduce();
+	testsuite( Test_Array_append_ints );
+	testsuite( Test_Array_append_strings );
+	testsuite( Test_Array_prepend_strings );
+	testsuite( Test_Array_insert_strings );
+	testsuite( Test_Array_insertSorted );
+	testsuite( Test_Array_set );
+	testsuite( Test_Array_append_n );
+	testsuite( Test_Array_prepend_n );
 
-	Test_Array_minMax();
-	Test_Array_indexRindex();
-	Test_Array_count();
+	testsuite( Test_Array_firstLastEmptyNonEmpty );
+	testsuite( Test_Array_steal );
+	testsuite( Test_Array_stealFirstLast );
+	testsuite( Test_Array_removeAt );
+	testsuite( Test_Array_removeFirst );
+	testsuite( Test_Array_removeLast );
+	testsuite( Test_Array_filterReject );
+	testsuite( Test_Array_map );
+	testsuite( Test_Array_reduce );
 
-	Test_Array_toStringFromString();
-	Test_Array_foreachForeachIndex();
-	Test_Array_allAnyOneNone();
+	testsuite( Test_Array_minMax );
+	testsuite( Test_Array_indexRindex );
+	testsuite( Test_Array_count );
 
-	Test_Array_sort();
-	Test_Array_compact();
-	Test_Array_distinct();
-	Test_Array_reverse();
-	Test_Array_concat();
+	testsuite( Test_Array_toStringFromString );
+	testsuite( Test_Array_foreachForeachIndex );
+	testsuite( Test_Array_allAnyOneNone );
 
-	Test_Array_union();
-	Test_Array_intersect();
-	Test_Array_symDiff();
-	Test_Array_addToSet();
+	testsuite( Test_Array_sort );
+	testsuite( Test_Array_compact );
+	testsuite( Test_Array_distinct );
+	testsuite( Test_Array_reverse );
+	testsuite( Test_Array_concat );
 
-	Test_Array_compare();
-	Test_Array_bsearch();
+	testsuite( Test_Array_union );
+	testsuite( Test_Array_intersect );
+	testsuite( Test_Array_symDiff );
+	testsuite( Test_Array_addToSet );
 
-	Test_Array_iterator();
-	Test_Array_iteratorFullExample();
+	testsuite( Test_Array_compare );
+	testsuite( Test_Array_bsearch );
+
+	testsuite( Test_Array_iterator );
+	testsuite( Test_Array_iteratorFullExample );
+
+	printf( "\n" );
+	printf( "----------------------------\n" );
+	printf( "| Tests  | Failed | Passed |\n" );
+	printf( "| %-6u | %-6u | %-6u |\n", testsFailed+testsPassed, testsFailed, testsPassed );
+	printf( "----------------------------\n" );
 }
 
 //--------------------------------------------------------------------------------
 
+#if 0
 #include "Random.h"
 enum {
 	FuzztestRuns	= 10000,
@@ -1455,7 +1513,7 @@ removeAtElement( Array* array, size_t size )
 	return size-1;
 }
 void
-Fuzztest_Array()
+Fuzztest_Array
 {
 	autoArray* array = a.new( 5, elementStr );
 	double direction = 0.01;
@@ -1565,3 +1623,4 @@ Fuzztest_Array()
 }
 
 //--------------------------------------------------------------------------------
+#endif

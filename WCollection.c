@@ -1,5 +1,5 @@
 #define _GNU_SOURCE
-#include "Collection.h"
+#include "WCollection.h"
 
 #include <assert.h>		//assert()
 #include <iso646.h>		//and, or, not

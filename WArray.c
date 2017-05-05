@@ -1,5 +1,5 @@
 #define _GNU_SOURCE
-#include "Array.h"
+#include "WArray.h"
 //#include "Contract.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not

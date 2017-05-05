@@ -104,7 +104,7 @@
 #ifndef ARRAY_H_INCLUDED
 #define ARRAY_H_INCLUDED
 
-#include "Collection.h"
+#include "WCollection.h"
 #include <stdbool.h>	//bool
 #include <sys/types.h>	//ssize_t
 
