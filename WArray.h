@@ -131,7 +131,7 @@ typedef struct WArray {
 	- fromString = warray_fromString,
 	- toString = warray_toString
 */
-extern const WType* arrayElement;
+extern const WType* wtypeArray;
 
 /**	When declared as autoArray, an array gets automatically destroyed when
 	leaving scope.

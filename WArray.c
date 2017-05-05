@@ -65,7 +65,7 @@ do {							\
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
-const WType* arrayElement = &(WType){
+const WType* wtypeArray = &(WType){
 	.clone = (WElementClone*)warray_clone,
 	.delete = (WElementDelete*)warray_delete,
 	.compare = (WElementCompare*)warray_compare,
