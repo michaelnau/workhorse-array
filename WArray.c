@@ -64,11 +64,11 @@ do {							\
 //-------------------------------------------------------------------------------
 
 const ElementType* arrayElement = &(ElementType){
-	.clone = (ElementClone*)Array_clone,
-	.delete = (ElementDelete*)Array_delete,
-	.compare = (ElementCompare*)Array_compare,
-	.fromString = (ElementFromString*)Array_fromString,
-	.toString = (ElementToString*)Array_toString
+	.clone = (ElementClone*)warray_clone,
+	.delete = (ElementDelete*)warray_delete,
+	.compare = (ElementCompare*)warray_compare,
+	.fromString = (ElementFromString*)warray_fromString,
+	.toString = (ElementToString*)warray_toString
 };
 
 enum ArrayParameters {
@@ -80,7 +80,7 @@ enum ArrayParameters {
 //-------------------------------------------------------------------------------
 
 WArray*
-Array_new( size_t capacity, const ElementType* type )
+warray_new( size_t capacity, const ElementType* type )
 {
 	assert( not type or type->clone );
 	assert( not type or type->delete );
@@ -96,7 +96,7 @@ Array_new( size_t capacity, const ElementType* type )
 }
 
 WArray*
-Array_clone( const WArray *self )
+warray_clone( const WArray *self )
 {
 	assert( self );
 
@@ -107,53 +107,53 @@ Array_clone( const WArray *self )
 		.type	= self->type
 	);
 
-	//TODO: Array_clone() with OpenMP pragma
+	//TODO: warray_clone() with OpenMP pragma
 	for ( size_t i = 0; i < self->size; i++ )
 		copy->data[i] = self->type->clone( self->data[i] );
 
 	assert( copy );
-	assert( Array_equal( self, copy ));
+	assert( warray_equal( self, copy ));
 	return checkArray( copy );
 }
 
 void
-Array_delete( WArray** selfPointer )
+warray_delete( WArray** selfPointer )
 {
 	if ( not selfPointer or not *selfPointer ) return;
 
 	WArray *self = *selfPointer;
 
-	Array_clear( self );
+	warray_clear( self );
 	free( self->data );
 	free( self );
 	*selfPointer = NULL;
 }
 
 WArray*
-Array_clear( WArray *self )
+warray_clear( WArray *self )
 {
 	if ( not self ) return self;
 
-	//TODO: Array_clear() with OpenMP pragma
+	//TODO: warray_clear() with OpenMP pragma
 	for ( size_t i = 0; i < self->size; i++ )
 		self->type->delete( &self->data[i] );
 
 	self->size = 0;
 
 	assert( self );
-	assert( Array_empty( self ));
+	assert( warray_empty( self ));
 	return checkArray( self );
 }
 
 void
-Array_assign( WArray** arrayPointer, WArray* other )
+warray_assign( WArray** arrayPointer, WArray* other )
 {
 	if ( not arrayPointer ) return;
 	WArray* array = *arrayPointer;
 
 	assert( array->type == other->type );
 
-	Array_delete( arrayPointer );
+	warray_delete( arrayPointer );
 	*arrayPointer = other;
 
 	checkArray( array );
@@ -186,7 +186,7 @@ put( WArray* array, size_t position, const void* element )
 }
 
 WArray*
-Array_append( WArray* array, const void* element )
+warray_append( WArray* array, const void* element )
 {
 	assert( array );
 
@@ -196,7 +196,7 @@ Array_append( WArray* array, const void* element )
 }
 
 WArray*
-Array_prepend( WArray* array, const void* element )
+warray_prepend( WArray* array, const void* element )
 {
 	assert( array );
 
@@ -207,7 +207,7 @@ Array_prepend( WArray* array, const void* element )
 }
 
 WArray*
-Array_set( WArray* array, size_t position, const void* element )
+warray_set( WArray* array, size_t position, const void* element )
 {
 	assert( array );
 
@@ -226,7 +226,7 @@ Array_set( WArray* array, size_t position, const void* element )
 }
 
 WArray*
-Array_insert( WArray* array, size_t position, const void* element )
+warray_insert( WArray* array, size_t position, const void* element )
 {
 	assert( array );
 
@@ -241,7 +241,7 @@ Array_insert( WArray* array, size_t position, const void* element )
 }
 
 WArray*
-Array_insertSorted( WArray* array, const void* element )
+warray_insertSorted( WArray* array, const void* element )
 {
 	assert( array );
 	assert( array->type->compare );
@@ -250,64 +250,64 @@ Array_insertSorted( WArray* array, const void* element )
 	void** data = array->data;
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( compare( element, data[i] ) < 0 )
-			return Array_insert( array, i, element );
+			return warray_insert( array, i, element );
     }
 
-	return Array_append( array, element );
+	return warray_append( array, element );
 }
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
 WArray*
-Array_append_n( WArray* array, size_t n, void* const elements[n] )
+warray_append_n( WArray* array, size_t n, void* const elements[n] )
 {
    	assert( array );
 	assert( n > 0 );
 	assert( elements );
 
-	//TODO: Array_append_n() with OpenMP pragma
+	//TODO: warray_append_n() with OpenMP pragma
 	for ( size_t i = 0; i < n; i++ )
-		Array_append( array, elements[i] );
+		warray_append( array, elements[i] );
 
 	return array;
 }
 
 WArray*
-Array_prepend_n( WArray* array, size_t n, void* const elements[n] )
+warray_prepend_n( WArray* array, size_t n, void* const elements[n] )
 {
    	assert( array );
 	assert( n > 0 );
 	assert( elements );
 
-	//TODO: Array_prepend_n() with OpenMP pragma
-	return Array_insert_n( array, 0, n, elements );
+	//TODO: warray_prepend_n() with OpenMP pragma
+	return warray_insert_n( array, 0, n, elements );
 }
 
 WArray*
-Array_insert_n( WArray* array, size_t position, size_t n, void* const elements[n] )
+warray_insert_n( WArray* array, size_t position, size_t n, void* const elements[n] )
 {
    	assert( array );
 	assert( n > 0 );
 	assert( elements );
 
- 	//TODO: Array_insert_n() with OpenMP pragma
+ 	//TODO: warray_insert_n() with OpenMP pragma
   	for ( size_t i = 0; i < n; i++ )
-		Array_insert( array, position+i, elements[i] );
+		warray_insert( array, position+i, elements[i] );
 
 	return array;
 }
 
 WArray*
-Array_set_n( WArray* array, size_t position, size_t n, void* const elements[n] )
+warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] )
 {
    	assert( array );
 	assert( n > 0 );
 	assert( elements );
 
- 	//TODO: Array_set_n() with OpenMP pragma
+ 	//TODO: warray_set_n() with OpenMP pragma
   	for ( size_t i = 0; i < n; i++ )
-		Array_set( array, position+i, elements[i] );
+		warray_set( array, position+i, elements[i] );
 
 	return array;
 }
@@ -316,7 +316,7 @@ Array_set_n( WArray* array, size_t position, size_t n, void* const elements[n] )
 //-------------------------------------------------------------------------------
 
 const void*
-Array_at( const WArray *self, size_t index )
+warray_at( const WArray *self, size_t index )
 {
 	assert( self );
 	assert( index < self->size && "Array access out of bounds." );
@@ -325,34 +325,34 @@ Array_at( const WArray *self, size_t index )
 }
 
 const void*
-Array_first( const WArray* array )
+warray_first( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_at( array, 0 );
+	return warray_at( array, 0 );
 }
 
 const void*
-Array_last( const WArray* array )
+warray_last( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_at( array, array->size-1 );
+	return warray_at( array, array->size-1 );
 }
 
 const void*
-Array_sample( const WArray* array )
+warray_sample( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_at( array, rand() % array->size );
+	return warray_at( array, rand() % array->size );
 }
 
 void*
-Array_cloneAt( const WArray* array, size_t position )
+warray_cloneAt( const WArray* array, size_t position )
 {
 	assert( array );
 	assert( position < array->size );
@@ -361,33 +361,33 @@ Array_cloneAt( const WArray* array, size_t position )
 }
 
 void*
-Array_cloneFirst( const WArray* array )
+warray_cloneFirst( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_cloneAt( array, 0 );
+	return warray_cloneAt( array, 0 );
 }
 
 void*
-Array_cloneLast( const WArray* array )
+warray_cloneLast( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_cloneAt( array, array->size-1 );
+	return warray_cloneAt( array, array->size-1 );
 }
 
 WArray*
-Array_slice( const WArray* array, size_t start, size_t end )
+warray_slice( const WArray* array, size_t start, size_t end )
 {
 	assert( array );
 	assert( start <= end );
 	assert( end < array->size );
 
 	size_t size = end-start+1;
-    WArray* slice = Array_new( size, array->type );
-	Array_append_n( slice, size, &array->data[start] );
+    WArray* slice = warray_new( size, array->type );
+	warray_append_n( slice, size, &array->data[start] );
 
 	assert( slice );
 	assert( slice->size == end-start+1 );
@@ -396,7 +396,7 @@ Array_slice( const WArray* array, size_t start, size_t end )
 }
 
 void*
-Array_stealAt( WArray* array, size_t position )
+warray_stealAt( WArray* array, size_t position )
 {
 	assert( array );
 	assert( position < array->size && "Array access out of bounds." );
@@ -412,37 +412,37 @@ Array_stealAt( WArray* array, size_t position )
 }
 
 void*
-Array_stealFirst( WArray* array )
+warray_stealFirst( WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_stealAt( array, 0 );
+	return warray_stealAt( array, 0 );
 }
 
 void*
-Array_stealLast( WArray* array )
+warray_stealLast( WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_stealAt( array, array->size-1 );
+	return warray_stealAt( array, array->size-1 );
 }
 
 void*
-Array_stealSample( WArray* array )
+warray_stealSample( WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_stealAt( array, rand() % array->size );
+	return warray_stealAt( array, rand() % array->size );
 }
 
 WArray*
-Array_removeAt( WArray* array, size_t position )
+warray_removeAt( WArray* array, size_t position )
 {
 	assert( array );
-	assert( position < Array_size( array ));
+	assert( position < warray_size( array ));
 
 	array->type->delete( &array->data[position] );
 
@@ -456,28 +456,28 @@ Array_removeAt( WArray* array, size_t position )
 }
 
 WArray*
-Array_removeFirst( WArray* array )
+warray_removeFirst( WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_removeAt( array, 0 );
+	return warray_removeAt( array, 0 );
 }
 
 WArray*
-Array_removeLast( WArray* array )
+warray_removeLast( WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 
-	return Array_removeAt( array, array->size-1 );
+	return warray_removeAt( array, array->size-1 );
 }
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
 void
-Array_foreach( const WArray* array, ElementForeach* foreach, void* foreachData )
+warray_foreach( const WArray* array, ElementForeach* foreach, void* foreachData )
 {
 	assert( array );
 	assert( foreach );
@@ -487,7 +487,7 @@ Array_foreach( const WArray* array, ElementForeach* foreach, void* foreachData )
 }
 
 void
-Array_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* foreachData )
+warray_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* foreachData )
 {
 	assert( array );
 	assert( foreach );
@@ -497,31 +497,31 @@ Array_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* for
 }
 
 WArray*
-Array_filter( const WArray* array, ElementFilter* filter, const void* filterData )
+warray_filter( const WArray* array, ElementFilter* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
 
-	WArray* xnewArray = (WArray*)Array_new( array->capacity, array->type );
+	WArray* xnewArray = (WArray*)warray_new( array->capacity, array->type );
 
-	//TODO: Array_filter() with OpenMP pragma???
+	//TODO: warray_filter() with OpenMP pragma???
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( filter( array->data[i], filterData ))
 			xnewArray->data[xnewArray->size++] = array->type->clone( array->data[i] );
     }
 
 	assert( xnewArray );
-	assert( Array_size( xnewArray ) <= Array_size( array ));
+	assert( warray_size( xnewArray ) <= warray_size( array ));
 	return xnewArray;
 }
 
 WArray*
-Array_reject( const WArray* array, ElementFilter* reject, const void* rejectData )
+warray_reject( const WArray* array, ElementFilter* reject, const void* rejectData )
 {
 	assert( array );
 	assert( reject );
 
-	WArray* xnewArray = (WArray*)Array_new( array->capacity, array->type );
+	WArray* xnewArray = (WArray*)warray_new( array->capacity, array->type );
 
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( not reject( array->data[i], rejectData ))
@@ -529,12 +529,12 @@ Array_reject( const WArray* array, ElementFilter* reject, const void* rejectData
     }
 
 	assert( xnewArray );
-	assert( Array_size( xnewArray ) <= Array_size( array ));
+	assert( warray_size( xnewArray ) <= warray_size( array ));
 	return xnewArray;
 }
 
 WArray*
-Array_select( WArray* array, ElementFilter* filter, const void* filterData )
+warray_select( WArray* array, ElementFilter* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -554,7 +554,7 @@ Array_select( WArray* array, ElementFilter* filter, const void* filterData )
 }
 
 WArray*
-Array_unselect( WArray* array, ElementFilter* filter, const void* filterData )
+warray_unselect( WArray* array, ElementFilter* filter, const void* filterData )
 {
 	assert( array );
 	assert( filter );
@@ -574,15 +574,15 @@ Array_unselect( WArray* array, ElementFilter* filter, const void* filterData )
 }
 
 WArray*
-Array_map( const WArray* array, ElementMap* map, const void* mapData, const ElementType* type )
+warray_map( const WArray* array, ElementMap* map, const void* mapData, const ElementType* type )
 {
 	assert( array );
 	assert( map );
 
 	if ( not type ) type = elementPtr;
-	WArray* newArray = Array_new( array->capacity, type );
+	WArray* newArray = warray_new( array->capacity, type );
 
-	//TODO: Array_map() with OpenMP pragma
+	//TODO: warray_map() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ )
 		newArray->data[i] = map( array->data[i], mapData );
 
@@ -595,7 +595,7 @@ Array_map( const WArray* array, ElementMap* map, const void* mapData, const Elem
 }
 
 void*
-Array_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const ElementType* type )
+warray_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const ElementType* type )
 {
 	assert( array );
 	assert( reduce );
@@ -617,7 +617,7 @@ Array_reduce( const WArray* array, ElementReduce* reduce, const void* startValue
 }
 
 size_t
-Array_count( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_count( const WArray* array, ElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -633,7 +633,7 @@ Array_count( const WArray* array, ElementCondition* condition, const void* condi
 }
 
 ssize_t
-Array_index( const WArray* array, const void* element )
+warray_index( const WArray* array, const void* element )
 {
 	assert( array );
 	assert( array->type->compare );
@@ -649,7 +649,7 @@ Array_index( const WArray* array, const void* element )
 }
 
 ssize_t
-Array_rindex( const WArray* array, const void* element )
+warray_rindex( const WArray* array, const void* element )
 {
 	assert( array );
 	assert( array->type->compare );
@@ -685,7 +685,7 @@ str_printf( const char* format, ... )
 }
 
 char*
-Array_toString( const WArray* array, const char delimiters[] )
+warray_toString( const WArray* array, const char delimiters[] )
 {
 	assert( array );
 	assert( delimiters );
@@ -709,19 +709,19 @@ Array_toString( const WArray* array, const char delimiters[] )
 }
 
 WArray*
-Array_fromString( const char string[], const char delimiters[] )
+warray_fromString( const char string[], const char delimiters[] )
 {
 	assert( string );
 	assert( delimiters and delimiters[0] );
 
-	WArray* array = Array_new( 0, elementStr );
+	WArray* array = warray_new( 0, elementStr );
 
 	char* newString = strdup( string );
 	char* context = NULL;
 	char* token = strtok_r( newString, delimiters, &context );
 
 	while ( token ) {
-		Array_append( array, token );
+		warray_append( array, token );
 		token = strtok_r( NULL, delimiters, &context );
 	}
 
@@ -732,7 +732,7 @@ Array_fromString( const char string[], const char delimiters[] )
 }
 
 int
-Array_compare( const WArray* array1, const WArray* array2 )
+warray_compare( const WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
@@ -758,10 +758,10 @@ Array_compare( const WArray* array1, const WArray* array2 )
 //-------------------------------------------------------------------------------
 
 const void*
-Array_min( const WArray* array )
+warray_min( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 	assert( array->type->compare );
 
 	ElementCompare* compare = array->type->compare;
@@ -776,10 +776,10 @@ Array_min( const WArray* array )
 }
 
 const void*
-Array_max( const WArray* array )
+warray_max( const WArray* array )
 {
 	assert( array );
-	assert( Array_nonEmpty( array ));
+	assert( warray_nonEmpty( array ));
 	assert( array->type->compare );
 
 	ElementCompare* compare = array->type->compare;
@@ -809,7 +809,7 @@ compareKeyWithElement( const void* key, const void* element )
 }
 
 ssize_t
-Array_bsearch( const WArray* array, ElementCompare* compare, const void* key )
+warray_bsearch( const WArray* array, ElementCompare* compare, const void* key )
 {
 	assert( array );
 	assert( compare );
@@ -830,7 +830,7 @@ Array_bsearch( const WArray* array, ElementCompare* compare, const void* key )
 //-------------------------------------------------------------------------------
 
 WArray*
-Array_reverse( WArray* array )
+warray_reverse( WArray* array )
 {
 	assert( array );
 
@@ -848,7 +848,7 @@ Array_reverse( WArray* array )
 }
 
 WArray*
-Array_shuffle( WArray* array )
+warray_shuffle( WArray* array )
 {
 	assert( array );
 
@@ -862,7 +862,7 @@ Array_shuffle( WArray* array )
 }
 
 WArray*
-Array_compact( WArray* array )
+warray_compact( WArray* array )
 {
 	assert( array );
 
@@ -888,7 +888,7 @@ compareTwoElements( const void* element1, const void* element2 )
 }
 
 WArray*
-Array_sort( WArray* array )
+warray_sort( WArray* array )
 {
    	assert( array );
    	assert( array->type->compare );
@@ -904,7 +904,7 @@ Array_sort( WArray* array )
 }
 
 WArray*
-Array_sortBy( WArray* array, ElementCompare* compare )
+warray_sortBy( WArray* array, ElementCompare* compare )
 {
 	assert( array );
 	assert( compare );
@@ -920,7 +920,7 @@ Array_sortBy( WArray* array, ElementCompare* compare )
 }
 
 WArray*
-Array_distinct( WArray* array)
+warray_distinct( WArray* array)
 {
 	assert( array );
    	assert( array->type->compare );
@@ -930,7 +930,7 @@ Array_distinct( WArray* array)
 	for ( size_t i = 0; i < array->size; i++ ) {
 		for ( size_t j = i+1; j < array->size; j++ ) {
 			if ( compare( array->data[i], array->data[j] ) == 0 ) {
-				Array_removeAt( array, i );
+				warray_removeAt( array, i );
 				i--;
 				break;
 			}
@@ -942,14 +942,14 @@ Array_distinct( WArray* array)
 }
 
 WArray*
-Array_concat( WArray* array1, const WArray* array2 )
+warray_concat( WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
 	assert( array1->type == array2->type && "Cannot concatenate arrays with different element types." );
 
 	for ( size_t i = 0; i < array2->size; i++ )
-		Array_append( array1, array2->data[i] );
+		warray_append( array1, array2->data[i] );
 
 	assert( array1 );
 	return array1;
@@ -960,7 +960,7 @@ Array_concat( WArray* array1, const WArray* array2 )
 
 
 WArray*
-Array_unite( const WArray* array1, const WArray* array2 )
+warray_unite( const WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
@@ -968,11 +968,11 @@ Array_unite( const WArray* array1, const WArray* array2 )
 	assert( array1->type->compare && "Need an element comparison method." );
 	assert( array2->type->compare && "Need an element comparison method." );
 
-	return Array_distinct( Array_concat( Array_clone( array1 ), array2 ));
+	return warray_distinct( warray_concat( warray_clone( array1 ), array2 ));
 }
 
 WArray*
-Array_intersect( const WArray* array1, const WArray* array2 )
+warray_intersect( const WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
@@ -980,23 +980,23 @@ Array_intersect( const WArray* array1, const WArray* array2 )
 	assert( array1->type->compare && "Need an element comparison method." );
 	assert( array2->type->compare && "Need an element comparison method." );
 
-	WArray* intersection = Array_new( array1->capacity, array1->type );
+	WArray* intersection = warray_new( array1->capacity, array1->type );
 	ElementCompare* compare = array1->type->compare;
 
 	for ( size_t i = 0; i < array1->size; i++ ) {
 		for ( size_t j = 0; j < array2->size; j++ ) {
 			if ( compare( array1->data[i], array2->data[j] ) == 0 ) {
-				Array_append( intersection, array1->data[i] );
+				warray_append( intersection, array1->data[i] );
 				break;
 			}
 		}
 	}
 
-	return Array_distinct( intersection );
+	return warray_distinct( intersection );
 }
 
 WArray*
-Array_symDiff( const WArray* array1, const WArray* array2 )
+warray_symDiff( const WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
@@ -1009,41 +1009,41 @@ Array_symDiff( const WArray* array1, const WArray* array2 )
 		return compare( element1, element2 ) == 0;
 	}
 
-	WArray* difference = Array_new( array1->capacity, array1->type );
+	WArray* difference = warray_new( array1->capacity, array1->type );
 
 	for ( size_t i = 0; i < array1->size; i++ ) {
-        if ( Array_none( array2, equals, array1->data[i] ))
-			Array_append( difference, array1->data[i] );
+        if ( warray_none( array2, equals, array1->data[i] ))
+			warray_append( difference, array1->data[i] );
 	}
 	for ( size_t i = 0; i < array2->size; i++ ) {
-        if ( Array_none( array1, equals, array2->data[i] ))
-			Array_append( difference, array2->data[i] );
+        if ( warray_none( array1, equals, array2->data[i] ))
+			warray_append( difference, array2->data[i] );
 	}
 
-	return Array_distinct( difference );
+	return warray_distinct( difference );
 }
 
 WArray*
-Array_addToSet( WArray* array, const void* element )
+warray_addToSet( WArray* array, const void* element )
 {
 	assert( array );
 
-	if ( Array_contains( array, element ))
+	if ( warray_contains( array, element ))
 		return array;
 
-	return Array_append( array, element );
+	return warray_append( array, element );
 }
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 
 bool
-Array_all( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_all( const WArray* array, ElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
 
-	//TODO: Array_all() with OpenMP pragma
+	//TODO: warray_all() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( not condition( array->data[i], conditionData ))
 			return false;
@@ -1053,12 +1053,12 @@ Array_all( const WArray* array, ElementCondition* condition, const void* conditi
 }
 
 bool
-Array_any( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_any( const WArray* array, ElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
 
-	//TODO: Array_any() with OpenMP pragma
+	//TODO: warray_any() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( condition( array->data[i], conditionData ))
 			return true;
@@ -1068,12 +1068,12 @@ Array_any( const WArray* array, ElementCondition* condition, const void* conditi
 }
 
 bool
-Array_none( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_none( const WArray* array, ElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
 
-	//TODO: Array_none() with OpenMP pragma
+	//TODO: warray_none() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( condition( array->data[i], conditionData ))
 			return false;
@@ -1083,7 +1083,7 @@ Array_none( const WArray* array, ElementCondition* condition, const void* condit
 }
 
 bool
-Array_one( const WArray* array, ElementCondition* condition, const void* conditionData )
+warray_one( const WArray* array, ElementCondition* condition, const void* conditionData )
 {
 	assert( array );
 	assert( condition );
@@ -1133,7 +1133,7 @@ ArrayIterator_next( Iterator* iterator )
 }
 
 Iterator*
-Array_iterator( const WArray* array )
+warray_iterator( const WArray* array )
 {
 	assert( array );
 
@@ -1149,7 +1149,7 @@ Array_iterator( const WArray* array )
 }
 
 Iterator*
-Array_iteratorReverse( const WArray* array )
+warray_iteratorReverse( const WArray* array )
 {
 	assert( array );
 
@@ -1168,7 +1168,7 @@ Array_iteratorReverse( const WArray* array )
 //-------------------------------------------------------------------------------
 
 void
-Array_print( const WArray* array )
+warray_print( const WArray* array )
 {
 	assert( array );
 
@@ -1192,7 +1192,7 @@ Array_print( const WArray* array )
 
 #if 0
 double
-Array_dmin( const WArray* array )
+warray_dmin( const WArray* array )
 {
 	preconditions {
 		assert( array );
@@ -1210,7 +1210,7 @@ Array_dmin( const WArray* array )
 }
 
 double
-Array_dmax( const WArray* array )
+warray_dmax( const WArray* array )
 {
 	preconditions {
 		assert( array );
@@ -1228,7 +1228,7 @@ Array_dmax( const WArray* array )
 }
 
 double
-Array_dsum( const WArray* array )
+warray_dsum( const WArray* array )
 {
 	preconditions {
 		assert( array );
@@ -1245,7 +1245,7 @@ Array_dsum( const WArray* array )
 }
 
 double
-Array_dmean( const WArray* array )
+warray_dmean( const WArray* array )
 {
 	preconditions {
 		assert( array );
@@ -1262,20 +1262,20 @@ Array_dmean( const WArray* array )
 }
 
 double
-Array_dmedian( const WArray* array )
+warray_dmedian( const WArray* array )
 {
-	return Array_dpercentile( array, 50 );
+	return warray_dpercentile( array, 50 );
 }
 
 double
-Array_ddeviation( const WArray* array )
+warray_ddeviation( const WArray* array )
 {
 	preconditions {
 		assert( array );
 		assert( array->type->clone == Element_cloneDouble, "Array must contain double elements." );
 	}
 
-    double mean = Array_dmean( array );
+    double mean = warray_dmean( array );
 	double sum = 0;
 
 	for ( size_t i = 0; i < array->size; i++ ) {
@@ -1287,16 +1287,16 @@ Array_ddeviation( const WArray* array )
 }
 
 double
-Array_dpercentile( const WArray* array, size_t n )
+warray_dpercentile( const WArray* array, size_t n )
 {
 	preconditions {
 		assert( array );
-		assert( Array_nonEmpty( array ));
+		assert( warray_nonEmpty( array ));
 		assert( array->type->clone == Element_cloneDouble, "Array must contain double elements." );
 		assert( n <= 100 );
 	}
 
-    autoWArray* sorted = Array_sort( Array_clone( array ));
+    autoWArray* sorted = warray_sort( warray_clone( array ));
 
 	const double epsilon = 0.1;
 	double indexDouble = n * array->size / 100.0;
@@ -1309,23 +1309,23 @@ Array_dpercentile( const WArray* array, size_t n )
 }
 
 WArray*
-Array_dquartileSummary( const WArray* array )
+warray_dquartileSummary( const WArray* array )
 {
 	preconditions {
 		assert( array );
-		assert( Array_nonEmpty( array ));
+		assert( warray_nonEmpty( array ));
 		assert( array->type->clone == Element_cloneDouble, "Array must contain double elements." );
 	}
 
-	WArray* summary = Array_new( 5, elementDouble );
+	WArray* summary = warray_new( 5, elementDouble );
 
 	//TODO: Make everything in this function to avoid multiple sorting and looping through the array.
-	//Call a function, assign the returned double to a temporary object and pass the object's address to Array_append().
-	Array_append( summary, &(double){ Array_dmin( array )});
-	Array_append( summary, &(double){ Array_dpercentile( array, 25 )});
-	Array_append( summary, &(double){ Array_dpercentile( array, 50 )});
-	Array_append( summary, &(double){ Array_dpercentile( array, 75 )});
-	Array_append( summary, &(double){ Array_dmax( array )});
+	//Call a function, assign the returned double to a temporary object and pass the object's address to warray_append().
+	warray_append( summary, &(double){ warray_dmin( array )});
+	warray_append( summary, &(double){ warray_dpercentile( array, 25 )});
+	warray_append( summary, &(double){ warray_dpercentile( array, 50 )});
+	warray_append( summary, &(double){ warray_dpercentile( array, 75 )});
+	warray_append( summary, &(double){ warray_dmax( array )});
 
 	return summary;
 }

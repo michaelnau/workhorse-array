@@ -63,7 +63,7 @@ typedef	void*	ElementReduce(const void* element, const void* intermediate);
 typedef bool	ElementCondition(const void* element, const void* conditionData);
 
 /**	Defines the essential behaviour and thus the type of a collection element.
-	It is passed to functions like Array_new().
+	It is passed to functions like warray_new().
 */
 typedef struct ElementType {
 	ElementClone*		clone;		///<Method to copy an element into the collection. Mandatory.
@@ -77,7 +77,7 @@ typedef struct ElementType {
 //	Predefined element types
 //---------------------------------------------------------------------------------
 
-/** Defines a collection ElementType for raw void* pointers. Can be passed to functions like Array_new().
+/** Defines a collection ElementType for raw void* pointers. Can be passed to functions like warray_new().
 
 	- clone = Element_clonePtr()
 	- delete = Element_deletePtr()
@@ -87,7 +87,7 @@ typedef struct ElementType {
 */
 extern const ElementType* elementPtr;
 
-/** Defines a collection ElementType for int values. Can be passed to functions like Array_new().
+/** Defines a collection ElementType for int values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneInt()
 	- delete = Element_deleteInt()
@@ -97,7 +97,7 @@ extern const ElementType* elementPtr;
 */
 extern const ElementType* elementInt;
 
-/** Defines a collection ElementType for char* values. Can be passed to functions like Array_new().
+/** Defines a collection ElementType for char* values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneStr()
 	- delete = Element_delete()
@@ -107,7 +107,7 @@ extern const ElementType* elementInt;
 */
 extern const ElementType* elementStr;
 
-/** Defines a collection ElementType for double values. Can be passed to functions like Array_new().
+/** Defines a collection ElementType for double values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneDouble()
 	- delete = Element_delete()

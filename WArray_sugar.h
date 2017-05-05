@@ -5,28 +5,28 @@
 
 //------------------------------------------------------------
 
-#define Array_append( array, ... )											\
+#define warray_append( array, ... )											\
 ({																			\
 	void* __elements[] = { __VA_ARGS__ };									\
-	Array_append_n( array, sizeof(__elements)/sizeof(void*), __elements );	\
+	warray_append_n( array, sizeof(__elements)/sizeof(void*), __elements );	\
 })
 
-#define Array_prepend( array, ... )											\
+#define warray_prepend( array, ... )											\
 ({																			\
 	void* __elements[] = { __VA_ARGS__ };									\
-	Array_prepend_n( array, sizeof(__elements)/sizeof(void*), __elements );	\
+	warray_prepend_n( array, sizeof(__elements)/sizeof(void*), __elements );	\
 })
 
-#define Array_set( array, position, ... )											\
+#define warray_set( array, position, ... )											\
 ({																					\
 	void* __elements[] = { __VA_ARGS__ };											\
-	Array_set_n( array, position, sizeof(__elements)/sizeof(void*), __elements );	\
+	warray_set_n( array, position, sizeof(__elements)/sizeof(void*), __elements );	\
 })
 
-#define Array_insert( array, position, ... )											\
+#define warray_insert( array, position, ... )											\
 ({																						\
 	void* __elements[] = { __VA_ARGS__ };												\
-	Array_insert_n( array, position, sizeof(__elements)/sizeof(void*), __elements );	\
+	warray_insert_n( array, position, sizeof(__elements)/sizeof(void*), __elements );	\
 })
 
 //------------------------------------------------------------

@@ -91,164 +91,164 @@ ElementType* personType = &(ElementType){
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_clone_ints()
+Test_warray_clone_ints()
 {
-	autoWArray *array = Array_new( 0, elementInt );
-	autoWArray *clone1 = Array_clone( array );
-	assert_true( Array_empty( clone1 ));
+	autoWArray *array = warray_new( 0, elementInt );
+	autoWArray *clone1 = warray_clone( array );
+	assert_true( warray_empty( clone1 ));
 
-	Array_append( array, (void*)1 );
-	autoWArray *clone2 = Array_clone( array );
-	assert_equal( Array_at( clone2, 0 ), 1 );
-	assert_true( Array_nonEmpty( clone2 ));
-	assert_equal( Array_size( clone2 ), 1 );
+	warray_append( array, (void*)1 );
+	autoWArray *clone2 = warray_clone( array );
+	assert_equal( warray_at( clone2, 0 ), 1 );
+	assert_true( warray_nonEmpty( clone2 ));
+	assert_equal( warray_size( clone2 ), 1 );
 
-	Array_append( array, (void*)2 );
-	Array_append( array, (void*)3 );
-	Array_append( array, (void*)4 );
-	Array_append( array, (void*)5 );
-	autoWArray *clone3 = Array_clone( array );
-	assert_equal( Array_at( clone3, 0 ), 1 );
-	assert_equal( Array_at( clone3, 1 ), 2 );
-	assert_equal( Array_at( clone3, 2 ), 3 );
-	assert_equal( Array_at( clone3, 3 ), 4 );
-	assert_equal( Array_at( clone3, 4 ), 5 );
-	assert_equal( Array_size( clone3 ), 5 );
+	warray_append( array, (void*)2 );
+	warray_append( array, (void*)3 );
+	warray_append( array, (void*)4 );
+	warray_append( array, (void*)5 );
+	autoWArray *clone3 = warray_clone( array );
+	assert_equal( warray_at( clone3, 0 ), 1 );
+	assert_equal( warray_at( clone3, 1 ), 2 );
+	assert_equal( warray_at( clone3, 2 ), 3 );
+	assert_equal( warray_at( clone3, 3 ), 4 );
+	assert_equal( warray_at( clone3, 4 ), 5 );
+	assert_equal( warray_size( clone3 ), 5 );
 }
 void
-Test_Array_clone_strings()
+Test_warray_clone_strings()
 {
-	autoWArray *array = Array_new( 0, elementStr );
-	autoWArray *clone1 = Array_clone( array );
-	assert_true( Array_empty( clone1 ));
+	autoWArray *array = warray_new( 0, elementStr );
+	autoWArray *clone1 = warray_clone( array );
+	assert_true( warray_empty( clone1 ));
 
-	Array_append( array, "cat" );
-	autoWArray *clone2 = Array_clone( array );
-	assert_strequal( Array_at( clone2, 0 ), "cat" );
-	assert_equal( Array_size( clone2 ), 1 );
+	warray_append( array, "cat" );
+	autoWArray *clone2 = warray_clone( array );
+	assert_strequal( warray_at( clone2, 0 ), "cat" );
+	assert_equal( warray_size( clone2 ), 1 );
 
-	Array_append( array, "dog" );
-	Array_append( array, "bird" );
-	Array_append( array, "hawk" );
-	autoWArray *clone3 = Array_clone( array );
-	assert_strequal( Array_at( clone3, 0 ), "cat" );
-	assert_strequal( Array_at( clone3, 1 ), "dog" );
-	assert_strequal( Array_at( clone3, 2 ), "bird" );
-	assert_strequal( Array_at( clone3, 3 ), "hawk" );
-	assert_equal( Array_size( clone3 ), 4 );
+	warray_append( array, "dog" );
+	warray_append( array, "bird" );
+	warray_append( array, "hawk" );
+	autoWArray *clone3 = warray_clone( array );
+	assert_strequal( warray_at( clone3, 0 ), "cat" );
+	assert_strequal( warray_at( clone3, 1 ), "dog" );
+	assert_strequal( warray_at( clone3, 2 ), "bird" );
+	assert_strequal( warray_at( clone3, 3 ), "hawk" );
+	assert_equal( warray_size( clone3 ), 4 );
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_append_ints()
+Test_warray_append_ints()
 {
-	autoWArray *array = Array_new( 0, elementInt );
-	assert_equal( Array_size( array ), 0 );
+	autoWArray *array = warray_new( 0, elementInt );
+	assert_equal( warray_size( array ), 0 );
 
-	Array_append( array, (void*)1 );
-	assert_equal( Array_at( array, 0 ), 1 );
-	assert_equal( Array_size( array ), 1 );
+	warray_append( array, (void*)1 );
+	assert_equal( warray_at( array, 0 ), 1 );
+	assert_equal( warray_size( array ), 1 );
 
-	Array_append( array, (void*)2 );
-	assert_equal( Array_at( array, 0 ), 1 );
-	assert_equal( Array_at( array, 1 ), 2 );
-	assert_equal( Array_size( array ), 2 );
+	warray_append( array, (void*)2 );
+	assert_equal( warray_at( array, 0 ), 1 );
+	assert_equal( warray_at( array, 1 ), 2 );
+	assert_equal( warray_size( array ), 2 );
 
-	Array_append( array, (void*)3 );
-	Array_append( array, (void*)4 );
+	warray_append( array, (void*)3 );
+	warray_append( array, (void*)4 );
 
-	Array_append( array, (void*)5 );
-	assert_equal( Array_at( array, 0 ), 1 );
-	assert_equal( Array_at( array, 1 ), 2 );
-	assert_equal( Array_at( array, 2 ), 3 );
-	assert_equal( Array_at( array, 3 ), 4 );
-	assert_equal( Array_at( array, 4 ), 5 );
-	assert_equal( Array_size( array ), 5 );
+	warray_append( array, (void*)5 );
+	assert_equal( warray_at( array, 0 ), 1 );
+	assert_equal( warray_at( array, 1 ), 2 );
+	assert_equal( warray_at( array, 2 ), 3 );
+	assert_equal( warray_at( array, 3 ), 4 );
+	assert_equal( warray_at( array, 4 ), 5 );
+	assert_equal( warray_size( array ), 5 );
 }
 void
-Test_Array_append_strings()
+Test_warray_append_strings()
 {
 	autoWArray *array = a.new( 0, elementStr );
 
-	Array_append( array, "cat" );
-	const char* string1 = Array_at( array, 0 );
+	warray_append( array, "cat" );
+	const char* string1 = warray_at( array, 0 );
 	assert_strequal( string1, "cat" );
-	assert_equal( Array_size( array ), 1 );
+	assert_equal( warray_size( array ), 1 );
 
-	Array_append( array, "cow" );
-	Array_append( array, "dog" );
-	Array_append( array, "horse" );
-	const char* string2 = Array_at( array, 0 );
+	warray_append( array, "cow" );
+	warray_append( array, "dog" );
+	warray_append( array, "horse" );
+	const char* string2 = warray_at( array, 0 );
 	assert_strequal( string2, "cat" );
-	const char* string3 = Array_at( array, 1 );
+	const char* string3 = warray_at( array, 1 );
 	assert_strequal( string3, "cow" );
-	const char* string4 = Array_at( array, 2 );
+	const char* string4 = warray_at( array, 2 );
 	assert_strequal( string4, "dog" );
-	const char* string5 = Array_at( array, 3 );
+	const char* string5 = warray_at( array, 3 );
 	assert_strequal( string5, "horse" );
-	assert_equal( Array_size( array ), 4 );
+	assert_equal( warray_size( array ), 4 );
 }
 void
-Test_Array_prepend_strings()
+Test_warray_prepend_strings()
 {
 	autoWArray *array = a.new( 3, elementStr );
 
-	Array_prepend( array, "cat" );
-	const char*string1 = Array_at( array, 0 );
+	warray_prepend( array, "cat" );
+	const char*string1 = warray_at( array, 0 );
 	assert_strequal( string1, "cat" );
-	assert_equal( Array_size( array ), 1 );
+	assert_equal( warray_size( array ), 1 );
 
-	Array_prepend( array, "cow" );
-	Array_prepend( array, "dog" );
-	Array_prepend( array, "horse" );
-	assert_strequal( Array_at( array, 0 ), "horse" );
-	assert_strequal( Array_at( array, 1 ), "dog" );
-	assert_strequal( Array_at( array, 2 ), "cow" );
-	assert_strequal( Array_at( array, 3 ), "cat" );
-	assert_equal( Array_size( array ), 4 );
+	warray_prepend( array, "cow" );
+	warray_prepend( array, "dog" );
+	warray_prepend( array, "horse" );
+	assert_strequal( warray_at( array, 0 ), "horse" );
+	assert_strequal( warray_at( array, 1 ), "dog" );
+	assert_strequal( warray_at( array, 2 ), "cow" );
+	assert_strequal( warray_at( array, 3 ), "cat" );
+	assert_equal( warray_size( array ), 4 );
 }
 void
-Test_Array_insert_strings()
+Test_warray_insert_strings()
 {
 	autoWArray *array = a.new( 3, elementStr );
 
 	//Insert 1st element
-	Array_insert( array, 0, "cat" );
-	assert_strequal( Array_at( array, 0 ), "cat" );
-	assert_equal( Array_size( array ), 1 );
+	warray_insert( array, 0, "cat" );
+	assert_strequal( warray_at( array, 0 ), "cat" );
+	assert_equal( warray_size( array ), 1 );
 
 	//Insert before all other elements
-	Array_insert( array, 0, "cow" );
-	assert_strequal( Array_at( array, 0 ), "cow" );
-	assert_equal( Array_size( array ), 2 );
+	warray_insert( array, 0, "cow" );
+	assert_strequal( warray_at( array, 0 ), "cow" );
+	assert_equal( warray_size( array ), 2 );
 
 //	//Insert as last element
-	Array_insert( array, 2, "fish" );
-	assert_strequal( Array_at( array, 2 ), "fish" );
-	assert_equal( Array_size( array ), 3 );
+	warray_insert( array, 2, "fish" );
+	assert_strequal( warray_at( array, 2 ), "fish" );
+	assert_equal( warray_size( array ), 3 );
 
 //	//Insert after all elements leaving a gap
-	Array_insert( array, 4, "dog" );
-	Array_insert( array, 5, "wolf" );
-	Array_insert( array, 8, "bird" );
-	assert_strequal( Array_at( array, 0 ), "cow" );
-	assert_strequal( Array_at( array, 1 ), "cat" );
-	assert_strequal( Array_at( array, 2 ), "fish" );
-	assert_null( Array_at( array, 3 ));
-	assert_strequal( Array_at( array, 4 ), "dog" );
-	assert_strequal( Array_at( array, 5 ), "wolf" );
-	assert_null( Array_at( array, 6 ));
-	assert_null( Array_at( array, 7 ));
-	assert_strequal( Array_at( array, 8 ), "bird" );
-	assert_equal( Array_size( array ), 9 );
+	warray_insert( array, 4, "dog" );
+	warray_insert( array, 5, "wolf" );
+	warray_insert( array, 8, "bird" );
+	assert_strequal( warray_at( array, 0 ), "cow" );
+	assert_strequal( warray_at( array, 1 ), "cat" );
+	assert_strequal( warray_at( array, 2 ), "fish" );
+	assert_null( warray_at( array, 3 ));
+	assert_strequal( warray_at( array, 4 ), "dog" );
+	assert_strequal( warray_at( array, 5 ), "wolf" );
+	assert_null( warray_at( array, 6 ));
+	assert_null( warray_at( array, 7 ));
+	assert_strequal( warray_at( array, 8 ), "bird" );
+	assert_equal( warray_size( array ), 9 );
 }
 void
-Test_Array_insertSorted()
+Test_warray_insertSorted()
 {
-	autoWArray* array = Array_new( 0, elementStr );
+	autoWArray* array = warray_new( 0, elementStr );
 
-    Array_insertSorted( array, "lion" );
+    warray_insertSorted( array, "lion" );
     assert_equal( array->size, 1 );
 	assert_strequal( a.at( array, 0 ), "lion" );
 
@@ -288,7 +288,7 @@ Test_Array_insertSorted()
 	assert_strequal( a.at( array, 5 ), "zebra" );
 }
 void
-Test_Array_set()
+Test_warray_set()
 {
 	autoWArray *array = a.new( 0, elementStr );
 
@@ -296,35 +296,35 @@ Test_Array_set()
 	assert_equal( a.size( array ), 1 );
 	assert_strequal( a.at( array, 0 ), "cat" );
 
-	Array_append( array, "dog" );
-	Array_append( array, "bird" );
+	warray_append( array, "dog" );
+	warray_append( array, "bird" );
 
 	a.set( array, 0, "tiger" );
-	assert_strequal( Array_at( array, 0 ), "tiger" );
-	assert_strequal( Array_at( array, 1 ), "dog" );
-	assert_strequal( Array_at( array, 2 ), "bird" );
-	assert_equal( Array_size( array ), 3 );
+	assert_strequal( warray_at( array, 0 ), "tiger" );
+	assert_strequal( warray_at( array, 1 ), "dog" );
+	assert_strequal( warray_at( array, 2 ), "bird" );
+	assert_equal( warray_size( array ), 3 );
 
-	Array_set( array, 2, "hawk" );
-	assert_equal( Array_size( array ), 3 );
+	warray_set( array, 2, "hawk" );
+	assert_equal( warray_size( array ), 3 );
 
-	Array_set( array, 4, "mongoose" );
-	assert_strequal( Array_at( array, 0 ), "tiger" );
-	assert_strequal( Array_at( array, 1 ), "dog" );
-	assert_strequal( Array_at( array, 2 ), "hawk" );
-	assert_null( Array_at( array, 3 ));
-	assert_strequal( Array_at( array, 4 ), "mongoose" );
-	assert_equal( Array_size( array ), 5 );
+	warray_set( array, 4, "mongoose" );
+	assert_strequal( warray_at( array, 0 ), "tiger" );
+	assert_strequal( warray_at( array, 1 ), "dog" );
+	assert_strequal( warray_at( array, 2 ), "hawk" );
+	assert_null( warray_at( array, 3 ));
+	assert_strequal( warray_at( array, 4 ), "mongoose" );
+	assert_equal( warray_size( array ), 5 );
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_append_n()
+Test_warray_append_n()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	Array_append_n( array, 1, (void*[]){ "cat" });
+	warray_append_n( array, 1, (void*[]){ "cat" });
 	assert_strequal( a.at( array, 0 ), "cat" );
 	assert_equal( a.size( array ), 1 );
 
@@ -343,11 +343,11 @@ Test_Array_append_n()
 	assert_equal( a.size( array ), 5 );
 }
 void
-Test_Array_prepend_n()
+Test_warray_prepend_n()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	Array_prepend_n( array, 1, (void*[]){ "cat" });
+	warray_prepend_n( array, 1, (void*[]){ "cat" });
 	assert_strequal( a.at( array, 0 ), "cat" );
 	assert_equal( a.size( array ), 1 );
 
@@ -369,68 +369,68 @@ Test_Array_prepend_n()
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_firstLastEmptyNonEmpty()
+Test_warray_firstLastEmptyNonEmpty()
 {
 	autoWArray *array = a.new( 0, elementStr );
-	assert_true( Array_empty( array ));
-	assert_false( Array_nonEmpty( array ));
+	assert_true( warray_empty( array ));
+	assert_false( warray_nonEmpty( array ));
 
-	Array_append( array, "cat" );
-	assert_false( Array_empty( array ));
-	assert_true( Array_nonEmpty( array ));
-	assert_strequal( Array_first( array ), "cat" );
-	assert_strequal( Array_last( array ), "cat" );
+	warray_append( array, "cat" );
+	assert_false( warray_empty( array ));
+	assert_true( warray_nonEmpty( array ));
+	assert_strequal( warray_first( array ), "cat" );
+	assert_strequal( warray_last( array ), "cat" );
 
-	Array_append( array, "dog" );
-	assert_false( Array_empty( array ));
-	assert_true( Array_nonEmpty( array ));
-	assert_strequal( Array_first( array ), "cat" );
-	assert_strequal( Array_last( array ), "dog" );
+	warray_append( array, "dog" );
+	assert_false( warray_empty( array ));
+	assert_true( warray_nonEmpty( array ));
+	assert_strequal( warray_first( array ), "cat" );
+	assert_strequal( warray_last( array ), "dog" );
 
-	Array_insert( array, 15, "tiger" );
-	assert_false( Array_empty( array ));
-	assert_true( Array_nonEmpty( array ));
-	assert_strequal( Array_first( array ), "cat" );
-	assert_strequal( Array_last( array ), "tiger" );
+	warray_insert( array, 15, "tiger" );
+	assert_false( warray_empty( array ));
+	assert_true( warray_nonEmpty( array ));
+	assert_strequal( warray_first( array ), "cat" );
+	assert_strequal( warray_last( array ), "tiger" );
 }
 void
-Test_Array_steal()
+Test_warray_steal()
 {
 	autoWArray *array = a.new( 0, elementStr );
 
 	//Steal the only element.
-	Array_append( array, "cat" );
-	autoChar* cat = Array_stealAt( array, 0 );
+	warray_append( array, "cat" );
+	autoChar* cat = warray_stealAt( array, 0 );
 	assert_strequal( cat, "cat" );
 	assert_equal( array->size, 0 );
 
 	//Steal the last element.
-	Array_append( array, "dog" );
-	Array_append( array, "tiger" );
-	autoChar* tiger = Array_stealAt( array, 1 );
+	warray_append( array, "dog" );
+	warray_append( array, "tiger" );
+	autoChar* tiger = warray_stealAt( array, 1 );
 	assert_strequal( tiger, "tiger" );
-	assert_strequal( Array_at( array, 0 ), "dog" );
+	assert_strequal( warray_at( array, 0 ), "dog" );
 	assert_equal( array->size, 1 );
 
 	//Steal the middle element.
-	Array_append( array, "bird" );
-	Array_append( array, "bear" );
-	autoChar* bird = Array_stealAt( array, 1 );
+	warray_append( array, "bird" );
+	warray_append( array, "bear" );
+	autoChar* bird = warray_stealAt( array, 1 );
 	assert_strequal( bird, "bird" );
-	assert_strequal( Array_at( array, 0 ), "dog" );
-	assert_strequal( Array_at( array, 1 ), "bear" );
+	assert_strequal( warray_at( array, 0 ), "dog" );
+	assert_strequal( warray_at( array, 1 ), "bear" );
 	assert_equal( array->size, 2 );
 
 	//Steal a sample element.
-	Array_append( array, "hawk" );
-	autoChar* sample1 = Array_stealSample( array );
-	autoChar* sample2 = Array_stealSample( array );
-	autoChar* sample3 = Array_stealSample( array );
+	warray_append( array, "hawk" );
+	autoChar* sample1 = warray_stealSample( array );
+	autoChar* sample2 = warray_stealSample( array );
+	autoChar* sample3 = warray_stealSample( array );
 	assert_true( sample1 != sample2 and sample2 != sample3 );
 	assert_equal( array->size, 0 );
 }
 void
-Test_Array_stealFirstLast()
+Test_warray_stealFirstLast()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
@@ -457,13 +457,13 @@ Test_Array_stealFirstLast()
 }
 
 void
-Test_Array_removeAt()
+Test_warray_removeAt()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
 	//Remove the only element.
 	a.append( array, "cat" );
-	Array_removeAt( array, 0 );
+	warray_removeAt( array, 0 );
 	assert_equal( array->size, 0 );
 
 	//Remove the last element.
@@ -483,19 +483,19 @@ Test_Array_removeAt()
 
 	//Remove the first element.
 	a.append( array, "cat" );
-	Array_removeAt( array, 0 );
+	warray_removeAt( array, 0 );
 	assert_strequal( a.at( array, 0 ), "bear" );
 	assert_strequal( a.at( array, 1 ), "cat" );
 	assert_equal( array->size, 2 );
 
 }
 void
-Test_Array_removeFirst()
+Test_warray_removeFirst()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
 	a.append( array, "cat" );
-	Array_removeFirst( array );
+	warray_removeFirst( array );
 	assert_equal( array->size, 0 );
 
 	a.append( array, "dog" );
@@ -513,7 +513,7 @@ Test_Array_removeFirst()
 	assert_equal( array->size, 2 );
 }
 void
-Test_Array_removeLast()
+Test_warray_removeLast()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
@@ -542,41 +542,41 @@ static void
 append( const void* element, void* data )
 {
 	WArray* array = data;
-	Array_append( array, element );
+	warray_append( array, element );
 }
 
 
 void
-Test_Array_foreachForeachIndex()
+Test_warray_foreachForeachIndex()
 {
 	autoWArray* array = a.new( 0, elementStr );
 	autoWArray* copy = a.new( 0, elementStr );
 
-	Array_foreach( array, append, copy );
-	assert_true( Array_empty( copy ));
+	warray_foreach( array, append, copy );
+	assert_true( warray_empty( copy ));
 
-	Array_append( array, "cat" );
-	Array_foreach( array, append, copy );
-	assert_strequal( Array_first( copy ), "cat" );
-	assert_equal( Array_size( copy ), 1 );
+	warray_append( array, "cat" );
+	warray_foreach( array, append, copy );
+	assert_strequal( warray_first( copy ), "cat" );
+	assert_equal( warray_size( copy ), 1 );
 
-	Array_clear( copy );
-	Array_append( array, "dog" );
-	Array_foreach( array, append, copy );
-	assert_strequal( Array_first( copy ), "cat" );
-	assert_strequal( Array_at( copy, 1 ), "dog" );
-	assert_equal( Array_size( copy ), 2 );
+	warray_clear( copy );
+	warray_append( array, "dog" );
+	warray_foreach( array, append, copy );
+	assert_strequal( warray_first( copy ), "cat" );
+	assert_strequal( warray_at( copy, 1 ), "dog" );
+	assert_equal( warray_size( copy ), 2 );
 
-	Array_clear( copy );
-	Array_append( array, "mouse" );
-	Array_foreach( array, append, copy );
-	assert_strequal( Array_first( copy ), "cat" );
-	assert_strequal( Array_at( copy, 1 ), "dog" );
-	assert_strequal( Array_at( copy, 2 ), "mouse" );
-	assert_equal( Array_size( copy ), 3 );
+	warray_clear( copy );
+	warray_append( array, "mouse" );
+	warray_foreach( array, append, copy );
+	assert_strequal( warray_first( copy ), "cat" );
+	assert_strequal( warray_at( copy, 1 ), "dog" );
+	assert_strequal( warray_at( copy, 2 ), "mouse" );
+	assert_equal( warray_size( copy ), 3 );
 }
 void
-Test_Array_filterReject()
+Test_warray_filterReject()
 {
 	bool isLongWord( const void* element, const void* unused ) {
 		(void) unused;
@@ -585,25 +585,25 @@ Test_Array_filterReject()
 
 	autoWArray *array = a.new( 0, elementStr );
 
-	autoWArray* newArray1 = Array_filter( array, isLongWord, NULL );
+	autoWArray* newArray1 = warray_filter( array, isLongWord, NULL );
 	assert_equal( newArray1->size, 0 );
 
-	autoWArray* newArray1b = Array_reject( array, isLongWord, NULL );
+	autoWArray* newArray1b = warray_reject( array, isLongWord, NULL );
 	assert_equal( newArray1b->size, 0 );
 
-	Array_append( array, "cat" );
-	Array_append( array, "dog" );
-	Array_append( array, "sea-hawk" );
-	Array_append( array, "chimpanzee" );
+	warray_append( array, "cat" );
+	warray_append( array, "dog" );
+	warray_append( array, "sea-hawk" );
+	warray_append( array, "chimpanzee" );
 
-    autoWArray* newArray2 = Array_filter( array, isLongWord, NULL );
-    assert_strequal( Array_at( newArray2, 0 ), "sea-hawk" );
-    assert_strequal( Array_at( newArray2, 1 ), "chimpanzee" );
+    autoWArray* newArray2 = warray_filter( array, isLongWord, NULL );
+    assert_strequal( warray_at( newArray2, 0 ), "sea-hawk" );
+    assert_strequal( warray_at( newArray2, 1 ), "chimpanzee" );
     assert_equal( newArray2->size, 2 );
 
-    autoWArray* newArray2b = Array_reject( array, isLongWord, NULL );
-    assert_strequal( Array_at( newArray2b, 0 ), "cat" );
-    assert_strequal( Array_at( newArray2b, 1 ), "dog" );
+    autoWArray* newArray2b = warray_reject( array, isLongWord, NULL );
+    assert_strequal( warray_at( newArray2b, 0 ), "cat" );
+    assert_strequal( warray_at( newArray2b, 1 ), "dog" );
     assert_equal( newArray2b->size, 2 );
 }
 static void*
@@ -612,24 +612,24 @@ makeItGood( const void* element, const void* mapData )
 	return str_printf( "My %s is %s.", (char*)element, (char*)mapData );
 }
 void
-Test_Array_map()
+Test_warray_map()
 {
 
 	autoWArray *array = a.new( 0, elementStr );
 
-	autoWArray* newArray1 = Array_map( array, makeItGood, "good", elementStr );
+	autoWArray* newArray1 = warray_map( array, makeItGood, "good", elementStr );
 	assert_equal( newArray1->size, 0 );
 
-	Array_append( array, "cat" );
-	Array_append( array, "dog" );
-	Array_append( array, "sea-hawk" );
-	Array_append( array, "chimpanzee" );
+	warray_append( array, "cat" );
+	warray_append( array, "dog" );
+	warray_append( array, "sea-hawk" );
+	warray_append( array, "chimpanzee" );
 
-    autoWArray* newArray2 = Array_map( array, makeItGood, "good", elementStr );
-    assert_strequal( Array_at( newArray2, 0 ), "My cat is good." );
-    assert_strequal( Array_at( newArray2, 1 ), "My dog is good." );
-    assert_strequal( Array_at( newArray2, 2 ), "My sea-hawk is good." );
-    assert_strequal( Array_at( newArray2, 3 ), "My chimpanzee is good." );
+    autoWArray* newArray2 = warray_map( array, makeItGood, "good", elementStr );
+    assert_strequal( warray_at( newArray2, 0 ), "My cat is good." );
+    assert_strequal( warray_at( newArray2, 1 ), "My dog is good." );
+    assert_strequal( warray_at( newArray2, 2 ), "My sea-hawk is good." );
+    assert_strequal( warray_at( newArray2, 3 ), "My chimpanzee is good." );
     assert_equal( newArray2->size, 4 );
 }
 static void*
@@ -637,26 +637,26 @@ joinAnimals( const void* element, const void* reduction ) {
 	return str_printf( "%s and %s", (char*)reduction, (char*)element );
 }
 void
-Test_Array_reduce()
+Test_warray_reduce()
 {
 	autoWArray *array = a.new( 0, elementStr );
 
-	autoChar* string1 = Array_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
+	autoChar* string1 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
 	assert_strequal( string1, "My favorite animals are turtle");
 
-	Array_append( array, "cat" );
-	Array_append( array, "dog" );
-	Array_append( array, "sea-hawk" );
-	Array_append( array, "chimpanzee" );
+	warray_append( array, "cat" );
+	warray_append( array, "dog" );
+	warray_append( array, "sea-hawk" );
+	warray_append( array, "chimpanzee" );
 
-    autoChar* string2 = Array_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
+    autoChar* string2 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", elementStr );
     assert_strequal( string2, "My favorite animals are turtle and cat and dog and sea-hawk and chimpanzee" );
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_minMax()
+Test_warray_minMax()
 {
 //	int compareStrings( const void* element1, const void* element2 ) {
 //		return strcmp( element1, element2 );
@@ -664,28 +664,28 @@ Test_Array_minMax()
 
 	autoWArray *array = a.new( 0, elementStr );
 
-	Array_append( array, "cat" );
-	assert_strequal( Array_min( array ), "cat" );
-	assert_strequal( Array_max( array ), "cat" );
+	warray_append( array, "cat" );
+	assert_strequal( warray_min( array ), "cat" );
+	assert_strequal( warray_max( array ), "cat" );
 
-	Array_append( array, "dog" );
-	assert_strequal( Array_min( array ), "cat" );
-	assert_strequal( Array_max( array ), "dog" );
+	warray_append( array, "dog" );
+	assert_strequal( warray_min( array ), "cat" );
+	assert_strequal( warray_max( array ), "dog" );
 
-	Array_append( array, "sea-hawk" );
-	assert_strequal( Array_min( array ), "cat" );
-	assert_strequal( Array_max( array ), "sea-hawk" );
+	warray_append( array, "sea-hawk" );
+	assert_strequal( warray_min( array ), "cat" );
+	assert_strequal( warray_max( array ), "sea-hawk" );
 
-	Array_append( array, "chimpanzee" );
-	assert_strequal( Array_min( array ), "cat" );
-	assert_strequal( Array_max( array ), "sea-hawk" );
+	warray_append( array, "chimpanzee" );
+	assert_strequal( warray_min( array ), "cat" );
+	assert_strequal( warray_max( array ), "sea-hawk" );
 
-	Array_append( array, "ape" );
-	assert_strequal( Array_min( array ), "ape" );
-	assert_strequal( Array_max( array ), "sea-hawk" );
+	warray_append( array, "ape" );
+	assert_strequal( warray_min( array ), "ape" );
+	assert_strequal( warray_max( array ), "sea-hawk" );
 }
 void
-Test_Array_indexRindex()
+Test_warray_indexRindex()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
@@ -731,11 +731,11 @@ Test_Array_indexRindex()
 	assert_equal( a.rindex( array, "dog" ), 5 );
 }
 void
-Test_Array_count()
+Test_warray_count()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	assert_equal( Array_count( array, Element_conditionStrEquals, NULL ), 0 );
+	assert_equal( warray_count( array, Element_conditionStrEquals, NULL ), 0 );
 	assert_equal( a.count( array, Element_conditionStrEquals, "Test" ), 0 );
 
 	a.append( array, "cat" );
@@ -760,58 +760,58 @@ Test_Array_count()
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_toStringFromString()
+Test_warray_toStringFromString()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	autoChar* joined1 = Array_toString( array, ", " );
+	autoChar* joined1 = warray_toString( array, ", " );
 	assert_strequal( joined1, "" );
 
-	autoWArray* split1 = Array_fromString( joined1, ", " );
-	assert_equal( Array_size( split1 ), 0 );
+	autoWArray* split1 = warray_fromString( joined1, ", " );
+	assert_equal( warray_size( split1 ), 0 );
 
-    Array_append( array, "cat" );
-	autoChar* joined2 = Array_toString( array, ", " );
+    warray_append( array, "cat" );
+	autoChar* joined2 = warray_toString( array, ", " );
 	assert_strequal( joined2, "cat" );
 
-	autoWArray* split2 = Array_fromString( joined2, ", " );
-	assert_strequal( Array_first( split2 ), "cat" );
-	assert_equal( Array_size( split2 ), 1 );
+	autoWArray* split2 = warray_fromString( joined2, ", " );
+	assert_strequal( warray_first( split2 ), "cat" );
+	assert_equal( warray_size( split2 ), 1 );
 
-    Array_append( array, "dog" );
-	autoChar* joined3 = Array_toString( array, ", " );
+    warray_append( array, "dog" );
+	autoChar* joined3 = warray_toString( array, ", " );
 	assert_strequal( joined3, "cat, dog" );
 
-	autoWArray* split3 = Array_fromString( joined3, ", " );
-	assert_strequal( Array_first( split3 ), "cat" );
-	assert_strequal( Array_at( split3, 1 ), "dog" );
-	assert_equal( Array_size( split3 ), 2 );
+	autoWArray* split3 = warray_fromString( joined3, ", " );
+	assert_strequal( warray_first( split3 ), "cat" );
+	assert_strequal( warray_at( split3, 1 ), "dog" );
+	assert_equal( warray_size( split3 ), 2 );
 
-	autoWArray* split3b = Array_fromString( joined3, "/" );
-	assert_strequal( Array_first( split3b ), "cat, dog" );
-	assert_equal( Array_size( split3b ), 1 );
+	autoWArray* split3b = warray_fromString( joined3, "/" );
+	assert_strequal( warray_first( split3b ), "cat, dog" );
+	assert_equal( warray_size( split3b ), 1 );
 
-    Array_append( array, "mouse" );
-	autoChar* joined4 = Array_toString( array, ", " );
+    warray_append( array, "mouse" );
+	autoChar* joined4 = warray_toString( array, ", " );
 	assert_strequal( joined4, "cat, dog, mouse" );
 
-	autoWArray* split4 = Array_fromString( joined4, ", " );
-	assert_strequal( Array_first( split4 ), "cat" );
-	assert_strequal( Array_at( split4, 1 ), "dog" );
-	assert_strequal( Array_at( split4, 2 ), "mouse" );
-	assert_equal( Array_size( split4 ), 3 );
+	autoWArray* split4 = warray_fromString( joined4, ", " );
+	assert_strequal( warray_first( split4 ), "cat" );
+	assert_strequal( warray_at( split4, 1 ), "dog" );
+	assert_strequal( warray_at( split4, 2 ), "mouse" );
+	assert_equal( warray_size( split4 ), 3 );
 
-	autoWArray* split4b = Array_fromString( joined4, "," );
-	assert_strequal( Array_first( split4b ), "cat" );
-	assert_strequal( Array_at( split4b, 1 ), " dog" );
-	assert_strequal( Array_at( split4b, 2 ), " mouse" );
-	assert_equal( Array_size( split4b ), 3 );
+	autoWArray* split4b = warray_fromString( joined4, "," );
+	assert_strequal( warray_first( split4b ), "cat" );
+	assert_strequal( warray_at( split4b, 1 ), " dog" );
+	assert_strequal( warray_at( split4b, 2 ), " mouse" );
+	assert_equal( warray_size( split4b ), 3 );
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_allAnyOneNone()
+Test_warray_allAnyOneNone()
 {
 	bool equals( const void* element1, const void* element2 ) {
 		return strcmp( element1, element2 ) == 0;
@@ -819,88 +819,88 @@ Test_Array_allAnyOneNone()
 
 	autoWArray* array = a.new( 0, elementStr );
 
-	assert_true( Array_all( array, equals, "foo" ));
-	assert_false( Array_any( array, equals, "foo" ));
-	assert_false( Array_one( array, equals, "foo" ));
-	assert_true( Array_none( array, equals, "foo" ));
+	assert_true( warray_all( array, equals, "foo" ));
+	assert_false( warray_any( array, equals, "foo" ));
+	assert_false( warray_one( array, equals, "foo" ));
+	assert_true( warray_none( array, equals, "foo" ));
 
-    Array_append( array, "cat" );
-	assert_true( not Array_all( array, equals, "foo" ));
-	assert_true( Array_all( array, equals, "cat" ));
-	assert_true( not Array_any( array, equals, "foo" ));
-	assert_true( Array_any( array, equals, "cat" ));
-	assert_true( not Array_one( array, equals, "foo" ));
-	assert_true( Array_one( array, equals, "cat" ));
-	assert_true( Array_none( array, equals, "foo" ));
-	assert_true( not Array_none( array, equals, "cat" ));
+    warray_append( array, "cat" );
+	assert_true( not warray_all( array, equals, "foo" ));
+	assert_true( warray_all( array, equals, "cat" ));
+	assert_true( not warray_any( array, equals, "foo" ));
+	assert_true( warray_any( array, equals, "cat" ));
+	assert_true( not warray_one( array, equals, "foo" ));
+	assert_true( warray_one( array, equals, "cat" ));
+	assert_true( warray_none( array, equals, "foo" ));
+	assert_true( not warray_none( array, equals, "cat" ));
 
-    Array_append( array, "cat" );
-	assert_true( not Array_all( array, equals, "foo" ));
-	assert_true( Array_all( array, equals, "cat" ));
-	assert_true( not Array_any( array, equals, "foo" ));
-	assert_true( Array_any( array, equals, "cat" ));
-	assert_true( not Array_one( array, equals, "foo" ));
-	assert_true( not Array_one( array, equals, "cat" ));
-	assert_true( Array_none( array, equals, "foo" ));
-	assert_true( not Array_none( array, equals, "cat" ));
+    warray_append( array, "cat" );
+	assert_true( not warray_all( array, equals, "foo" ));
+	assert_true( warray_all( array, equals, "cat" ));
+	assert_true( not warray_any( array, equals, "foo" ));
+	assert_true( warray_any( array, equals, "cat" ));
+	assert_true( not warray_one( array, equals, "foo" ));
+	assert_true( not warray_one( array, equals, "cat" ));
+	assert_true( warray_none( array, equals, "foo" ));
+	assert_true( not warray_none( array, equals, "cat" ));
 
-    Array_append( array, "mouse" );
-    Array_append( array, "cow" );
-	assert_true( not Array_all( array, equals, "foo" ));
-	assert_true( not Array_all( array, equals, "cat" ));
-	assert_true( not Array_any( array, equals, "foo" ));
-	assert_true( Array_any( array, equals, "mouse" ));
-	assert_true( not Array_one( array, equals, "foo" ));
-	assert_true( not Array_one( array, equals, "cat" ));
-	assert_true( Array_one( array, equals, "mouse" ));
-	assert_true( Array_one( array, equals, "cow" ));
-	assert_true( Array_none( array, equals, "foo" ));
-	assert_true( not Array_none( array, equals, "mouse" ));
-	assert_true( not Array_none( array, equals, "cow" ));
+    warray_append( array, "mouse" );
+    warray_append( array, "cow" );
+	assert_true( not warray_all( array, equals, "foo" ));
+	assert_true( not warray_all( array, equals, "cat" ));
+	assert_true( not warray_any( array, equals, "foo" ));
+	assert_true( warray_any( array, equals, "mouse" ));
+	assert_true( not warray_one( array, equals, "foo" ));
+	assert_true( not warray_one( array, equals, "cat" ));
+	assert_true( warray_one( array, equals, "mouse" ));
+	assert_true( warray_one( array, equals, "cow" ));
+	assert_true( warray_none( array, equals, "foo" ));
+	assert_true( not warray_none( array, equals, "mouse" ));
+	assert_true( not warray_none( array, equals, "cow" ));
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_sort()
+Test_warray_sort()
 {
 	WArray* array = a.new( 0, elementStr );
 
-	Array_sort( array );
-    assert_true( Array_empty( array ));
+	warray_sort( array );
+    assert_true( warray_empty( array ));
 
-	Array_append( array, "cat" );
-	Array_sort( array );
-    assert_strequal( Array_first( array ), "cat" );
-    assert_equal( Array_size( array ), 1 );
+	warray_append( array, "cat" );
+	warray_sort( array );
+    assert_strequal( warray_first( array ), "cat" );
+    assert_equal( warray_size( array ), 1 );
 
-	Array_append( array, "ape" );
-	Array_sort( array );
-    assert_strequal( Array_first( array ), "ape" );
-    assert_strequal( Array_at( array, 1 ), "cat" );
-    assert_equal( Array_size( array ), 2 );
+	warray_append( array, "ape" );
+	warray_sort( array );
+    assert_strequal( warray_first( array ), "ape" );
+    assert_strequal( warray_at( array, 1 ), "cat" );
+    assert_equal( warray_size( array ), 2 );
 
-	Array_append_n( array, 5, (void*[]){ "mongoose", "dolphin", "lion", "bird", "yak" });
-	Array_sort( array );
-    assert_strequal( Array_first( array ), "ape");
-    assert_strequal( Array_at( array, 1 ), "bird");
-    assert_strequal( Array_at( array, 2 ), "cat");
-    assert_strequal( Array_at( array, 3 ), "dolphin");
-    assert_strequal( Array_at( array, 4 ), "lion");
-    assert_strequal( Array_at( array, 5 ), "mongoose");
-    assert_strequal( Array_at( array, 6 ), "yak");
-    assert_equal( Array_size( array ), 7 );
+	warray_append_n( array, 5, (void*[]){ "mongoose", "dolphin", "lion", "bird", "yak" });
+	warray_sort( array );
+    assert_strequal( warray_first( array ), "ape");
+    assert_strequal( warray_at( array, 1 ), "bird");
+    assert_strequal( warray_at( array, 2 ), "cat");
+    assert_strequal( warray_at( array, 3 ), "dolphin");
+    assert_strequal( warray_at( array, 4 ), "lion");
+    assert_strequal( warray_at( array, 5 ), "mongoose");
+    assert_strequal( warray_at( array, 6 ), "yak");
+    assert_equal( warray_size( array ), 7 );
 }
 void
-Test_Array_compact()
+Test_warray_compact()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	Array_compact( array );
+	warray_compact( array );
 	assert_true( a.empty( array ));
 
 	a.append( array, NULL );
-	Array_compact( array );
+	warray_compact( array );
 	assert_true( a.empty( array ));
 
 	a.set( array, 0, "cat" );
@@ -918,20 +918,20 @@ Test_Array_compact()
 	assert_strequal( a.at( array, 2 ), "bird" );
 }
 void
-Test_Array_distinct()
+Test_warray_distinct()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	Array_distinct( array );
+	warray_distinct( array );
 	assert_true( a.empty( array ));
 
 	a.append( array, "cat" );
-	Array_distinct( array );
+	warray_distinct( array );
 	assert_equal( a.size( array ), 1 );
 	assert_strequal( a.first( array ), "cat" );
 
 	a.append( array, "dog" );
-	Array_distinct( array );
+	warray_distinct( array );
 	assert_equal( a.size( array ), 2 );
 	assert_strequal( a.at( array, 0 ), "cat" );
 	assert_strequal( a.at( array, 1 ), "dog" );
@@ -939,24 +939,24 @@ Test_Array_distinct()
 	a.append( array, "dog" );
 	a.append( array, "dog" );
 	a.append( array, "dog" );
-	Array_distinct( array );
+	warray_distinct( array );
 	assert_equal( a.size( array ), 2 );
 	assert_strequal( a.at( array, 0 ), "cat" );
 	assert_strequal( a.at( array, 1 ), "dog" );
 
 	a.set( array, 10, "dog" );
-	Array_distinct( array );
+	warray_distinct( array );
 	assert_equal( a.size( array ), 3 );
-	assert_true( Array_one( array, Element_conditionStrEquals, "cat" ));
-	assert_true( Array_one( array, Element_conditionStrEquals, "dog" ));
-	assert_true( Array_one( array, Element_conditionStrEquals, NULL ));
+	assert_true( warray_one( array, Element_conditionStrEquals, "cat" ));
+	assert_true( warray_one( array, Element_conditionStrEquals, "dog" ));
+	assert_true( warray_one( array, Element_conditionStrEquals, NULL ));
 }
 void
-Test_Array_reverse()
+Test_warray_reverse()
 {
 	autoWArray* array = a.new( 0, elementStr );
 
-	Array_reverse( array );
+	warray_reverse( array );
 	assert_true( a.empty( array ));
 
 	a.append( array, "cat" );
@@ -988,78 +988,78 @@ Test_Array_reverse()
 	assert_strequal( a.at( array, 5 ), "bird" );
 }
 void
-Test_Array_concat()
+Test_warray_concat()
 {
 	autoWArray* array1 = a.new( 0, elementStr );
 	autoWArray* array2 = a.new( 0, elementStr );
 
-	autoWArray* concat1 = Array_concat( Array_clone( array1 ), array2 );
-    assert_true( Array_empty( concat1 ));
+	autoWArray* concat1 = warray_concat( warray_clone( array1 ), array2 );
+    assert_true( warray_empty( concat1 ));
 
-	Array_append( array1, "cat" );
-	autoWArray* concat2 = Array_concat( Array_clone( array1 ), array2 );
-	assert_strequal( Array_first( concat2 ), "cat" );
+	warray_append( array1, "cat" );
+	autoWArray* concat2 = warray_concat( warray_clone( array1 ), array2 );
+	assert_strequal( warray_first( concat2 ), "cat" );
 	assert_equal( concat2->size, 1 );
-	autoWArray* concat3 = Array_concat( Array_clone( array2 ), array1 );
-	assert_strequal( Array_first( concat3 ), "cat" );
+	autoWArray* concat3 = warray_concat( warray_clone( array2 ), array1 );
+	assert_strequal( warray_first( concat3 ), "cat" );
 	assert_equal( concat3->size, 1 );
 
-	Array_append( array2, "dog" );
-	autoWArray* concat4 = Array_concat( Array_clone( array1 ), array2 );
-	assert_strequal( Array_at( concat4, 0 ), "cat" );
-	assert_strequal( Array_at( concat4, 1 ), "dog" );
+	warray_append( array2, "dog" );
+	autoWArray* concat4 = warray_concat( warray_clone( array1 ), array2 );
+	assert_strequal( warray_at( concat4, 0 ), "cat" );
+	assert_strequal( warray_at( concat4, 1 ), "dog" );
 	assert_equal( concat4->size, 2 );
 
-	Array_append( array1, "mouse" );
-	Array_append( array1, "bird" );
-	Array_append( array2, "dolphin" );
-	Array_append( array2, "wolf" );
-	autoWArray* concat5 = Array_concat( Array_clone( array1 ), array2 );
-	assert_strequal( Array_at( concat5, 0 ), "cat" );
-	assert_strequal( Array_at( concat5, 1 ), "mouse" );
-	assert_strequal( Array_at( concat5, 2 ), "bird" );
-	assert_strequal( Array_at( concat5, 3 ), "dog" );
-	assert_strequal( Array_at( concat5, 4 ), "dolphin" );
-	assert_strequal( Array_at( concat5, 5 ), "wolf" );
+	warray_append( array1, "mouse" );
+	warray_append( array1, "bird" );
+	warray_append( array2, "dolphin" );
+	warray_append( array2, "wolf" );
+	autoWArray* concat5 = warray_concat( warray_clone( array1 ), array2 );
+	assert_strequal( warray_at( concat5, 0 ), "cat" );
+	assert_strequal( warray_at( concat5, 1 ), "mouse" );
+	assert_strequal( warray_at( concat5, 2 ), "bird" );
+	assert_strequal( warray_at( concat5, 3 ), "dog" );
+	assert_strequal( warray_at( concat5, 4 ), "dolphin" );
+	assert_strequal( warray_at( concat5, 5 ), "wolf" );
 	assert_equal( concat5->size, 6 );
 }
 
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_union()
+Test_warray_union()
 {
 	autoWArray* array1 = a.new( 0, elementStr );
 	autoWArray* array2 = a.new( 0, elementStr );
 
-	autoWArray* union1 = Array_unite( array1, array2 );
+	autoWArray* union1 = warray_unite( array1, array2 );
 	assert_equal( union1->size, 0 );
 
 	a.append( array1, "cat" );
-	autoWArray* union2 = Array_unite( array1, array2 );
+	autoWArray* union2 = warray_unite( array1, array2 );
 	assert_equal( union2->size, 1 );
 	assert_strequal( a.at( union2, 0 ), "cat" );
 
 	a.append( array2, "dog" );
-	autoWArray* union3 = Array_unite( array1, array2 );
+	autoWArray* union3 = warray_unite( array1, array2 );
 	assert_equal( union3->size, 2 );
 	assert_true( a.index( union3, "cat" ) >= 0 );
 	assert_true( a.index( union3, "dog" ) >= 0 );
 
 	a.append( array1, "dog" );
-	autoWArray* union4 = Array_unite( array1, array2 );
+	autoWArray* union4 = warray_unite( array1, array2 );
 	assert_equal( union4->size, 2 );
 	assert_true( a.index( union4, "cat" ) >= 0 );
 	assert_true( a.index( union4, "dog" ) >= 0 );
 
 	a.append( array2, "dog" );
-	autoWArray* union5 = Array_unite( array1, array2 );
+	autoWArray* union5 = warray_unite( array1, array2 );
 	assert_equal( union5->size, 2 );
 	assert_true( a.index( union5, "cat" ) >= 0 );
 	assert_true( a.index( union5, "dog" ) >= 0 );
 
 	a.append( array2, "cat" );
-	autoWArray* union6 = Array_unite( array1, array2 );
+	autoWArray* union6 = warray_unite( array1, array2 );
 	assert_equal( union6->size, 2 );
 	assert_true( a.index( union6, "cat" ) >= 0 );
 	assert_true( a.index( union6, "dog" ) >= 0 );
@@ -1068,10 +1068,10 @@ Test_Array_union()
 	autoWArray* array4 = a.new( 0, elementStr );
 	a.append_n( array3, 5, (void*[]){ "cat", "", "dog", "cat", "elephant" });
 	a.append_n( array4, 6, (void*[]){ "bird", NULL, NULL, "dog", "bird", "mouse" });
-	autoWArray* union7 = Array_unite( array3, array4 );
+	autoWArray* union7 = warray_unite( array3, array4 );
 	assert_equal( union7->size, 7 );
-	assert_true( Array_contains( union7, "cat" ));
-	assert_true( Array_contains( union7, "" ));
+	assert_true( warray_contains( union7, "cat" ));
+	assert_true( warray_contains( union7, "" ));
 	assert_true( a.contains( union7, "dog" ));
 	assert_true( a.contains( union7, "elephant" ));
 	assert_true( a.contains( union7, "bird" ));
@@ -1079,12 +1079,12 @@ Test_Array_union()
 	assert_true( a.contains( union7, "mouse" ));
 }
 void
-Test_Array_intersect()
+Test_warray_intersect()
 {
 	autoWArray* array1 = a.new( 0, elementStr );
 	autoWArray* array2 = a.new( 0, elementStr );
 
-	autoWArray* inter1 = Array_intersect( array1, array2 );
+	autoWArray* inter1 = warray_intersect( array1, array2 );
 	assert_equal( inter1->size, 0 );
 
 	a.append( array1, "cat" );
@@ -1122,12 +1122,12 @@ Test_Array_intersect()
 	assert_equal( a.count( inter6, Element_conditionStrEquals, "bird" ), 1 );
 }
 void
-Test_Array_symDiff()
+Test_warray_symDiff()
 {
 	autoWArray* array1 = a.new( 0, elementStr );
 	autoWArray* array2 = a.new( 0, elementStr );
 
-	autoWArray* sym1 = Array_symDiff( array1, array2 );
+	autoWArray* sym1 = warray_symDiff( array1, array2 );
 	assert_equal( sym1->size, 0 );
 
 	a.append( array1, "cat" );
@@ -1163,35 +1163,35 @@ Test_Array_symDiff()
 	assert_equal( a.count( sym6, Element_conditionStrEquals, "" ), 1 );
 }
 void
-Test_Array_addToSet()
+Test_warray_addToSet()
 {
 	autoWArray* set = a.new( 0, elementStr );
 
-	Array_addToSet( set, "cat" );
+	warray_addToSet( set, "cat" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 
-	Array_addToSet( set, "cat" );
+	warray_addToSet( set, "cat" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 
-	Array_addToSet( set, "cat" );
+	warray_addToSet( set, "cat" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 
-	Array_addToSet( set, "" );
-	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( set, Element_conditionStrEquals, "" ), 1 );
-
-	Array_addToSet( set, "" );
+	warray_addToSet( set, "" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 	assert_equal( a.count( set, Element_conditionStrEquals, "" ), 1 );
 
-	Array_addToSet( set, "cat" );
+	warray_addToSet( set, "" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 	assert_equal( a.count( set, Element_conditionStrEquals, "" ), 1 );
 
-	Array_addToSet( set, NULL );
-	Array_addToSet( set, "dog" );
-	Array_addToSet( set, NULL );
-	Array_addToSet( set, "dog" );
+	warray_addToSet( set, "cat" );
+	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, Element_conditionStrEquals, "" ), 1 );
+
+	warray_addToSet( set, NULL );
+	warray_addToSet( set, "dog" );
+	warray_addToSet( set, NULL );
+	warray_addToSet( set, "dog" );
 	assert_equal( a.count( set, Element_conditionStrEquals, "cat" ), 1 );
 	assert_equal( a.count( set, Element_conditionStrEquals, "" ), 1 );
 	assert_equal( a.count( set, Element_conditionStrEquals, NULL ), 1 );
@@ -1201,27 +1201,27 @@ Test_Array_addToSet()
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_compare()
+Test_warray_compare()
 {
     autoWArray* array1 = a.new( 0, elementStr );
     autoWArray* array2 = a.new( 0, elementStr );
 
-    assert_equal( Array_compare( array1, array2 ), 0 );
+    assert_equal( warray_compare( array1, array2 ), 0 );
 
     a.append( array1, NULL );
-    assert_equal( Array_compare( array1, array2 ), 1 );
+    assert_equal( warray_compare( array1, array2 ), 1 );
 
     a.append( array2, NULL );
-    assert_equal( Array_compare( array1, array2 ), 0 );
+    assert_equal( warray_compare( array1, array2 ), 0 );
 
     a.append( array2, "mouse" );
-    assert_equal( Array_compare( array1, array2 ), -1 );
+    assert_equal( warray_compare( array1, array2 ), -1 );
 
     a.append( array1, "lion" );
-    assert_equal( Array_compare( array1, array2 ), -1 );
+    assert_equal( warray_compare( array1, array2 ), -1 );
 
     a.append( array1, "elephant" );
-    assert_equal( Array_compare( array1, array2 ), -1 );
+    assert_equal( warray_compare( array1, array2 ), -1 );
 
     a.prepend( array1, "cat" );
     a.prepend( array2, "" );
@@ -1248,11 +1248,11 @@ comparePerson( const void* key, const void* element )
 	return strcmp( key, person->name );
 }
 void
-Test_Array_bsearch()
+Test_warray_bsearch()
 {
 	autoWArray* array1 = a.new( 0, elementStr );
 	a.append_n( array1, 5, (void*[]){ "cat", "dog", "lion", "mouse", "zebra" });
-	assert_equal( Array_bsearch( array1, Element_compareStr, "cat" ), 0 );
+	assert_equal( warray_bsearch( array1, Element_compareStr, "cat" ), 0 );
 	assert_equal( a.bsearch( array1, Element_compareStr, "dog" ), 1 );
 	assert_equal( a.bsearch( array1, Element_compareStr, "lion" ), 2 );
 	assert_equal( a.bsearch( array1, Element_compareStr, "mouse" ), 3 );
@@ -1277,7 +1277,7 @@ Test_Array_bsearch()
 //--------------------------------------------------------------------------------
 
 void
-Test_Array_iterator()
+Test_warray_iterator()
 {
 	autoWArray* ar = a.new( 0, elementStr );
 	autoIterator* iter1a = a.iterator( ar );
@@ -1310,15 +1310,15 @@ Test_Array_iterator()
 	assert_false( it.hasNext( iter3b ));
 }
 void
-Test_Array_iteratorFullExample()
+Test_warray_iteratorFullExample()
 {
 	autoWArray* ar1 = a.new( 0, elementStr );
 	autoWArray* ar2 = a.new( 0, elementStr );
 
 	a.append_n( ar1, 3, (void*[]){ "1.", "2.", "3." });
 	a.append_n( ar2, 3, (void*[]){ "cat", "dog", "lion" });
-	autoIterator* iter1 = Array_iterator( ar1 );
-	autoIterator* iter2 = Array_iterator( ar2 );
+	autoIterator* iter1 = warray_iterator( ar1 );
+	autoIterator* iter2 = warray_iterator( ar2 );
 
 	WArray* ar3 = a.new( 0, elementStr );
 	while ( Iterator_hasNext( iter1 ) and Iterator_hasNext( iter2 )) {
@@ -1341,52 +1341,52 @@ Test_Array_iteratorFullExample()
 int main() {
 	printf( "\n" );
 
-	testsuite( Test_Array_clone_ints );
-	testsuite( Test_Array_clone_strings );
+	testsuite( Test_warray_clone_ints );
+	testsuite( Test_warray_clone_strings );
 
-	testsuite( Test_Array_append_ints );
-	testsuite( Test_Array_append_strings );
-	testsuite( Test_Array_prepend_strings );
-	testsuite( Test_Array_insert_strings );
-	testsuite( Test_Array_insertSorted );
-	testsuite( Test_Array_set );
-	testsuite( Test_Array_append_n );
-	testsuite( Test_Array_prepend_n );
+	testsuite( Test_warray_append_ints );
+	testsuite( Test_warray_append_strings );
+	testsuite( Test_warray_prepend_strings );
+	testsuite( Test_warray_insert_strings );
+	testsuite( Test_warray_insertSorted );
+	testsuite( Test_warray_set );
+	testsuite( Test_warray_append_n );
+	testsuite( Test_warray_prepend_n );
 
-	testsuite( Test_Array_firstLastEmptyNonEmpty );
-	testsuite( Test_Array_steal );
-	testsuite( Test_Array_stealFirstLast );
-	testsuite( Test_Array_removeAt );
-	testsuite( Test_Array_removeFirst );
-	testsuite( Test_Array_removeLast );
-	testsuite( Test_Array_filterReject );
-	testsuite( Test_Array_map );
-	testsuite( Test_Array_reduce );
+	testsuite( Test_warray_firstLastEmptyNonEmpty );
+	testsuite( Test_warray_steal );
+	testsuite( Test_warray_stealFirstLast );
+	testsuite( Test_warray_removeAt );
+	testsuite( Test_warray_removeFirst );
+	testsuite( Test_warray_removeLast );
+	testsuite( Test_warray_filterReject );
+	testsuite( Test_warray_map );
+	testsuite( Test_warray_reduce );
 
-	testsuite( Test_Array_minMax );
-	testsuite( Test_Array_indexRindex );
-	testsuite( Test_Array_count );
+	testsuite( Test_warray_minMax );
+	testsuite( Test_warray_indexRindex );
+	testsuite( Test_warray_count );
 
-	testsuite( Test_Array_toStringFromString );
-	testsuite( Test_Array_foreachForeachIndex );
-	testsuite( Test_Array_allAnyOneNone );
+	testsuite( Test_warray_toStringFromString );
+	testsuite( Test_warray_foreachForeachIndex );
+	testsuite( Test_warray_allAnyOneNone );
 
-	testsuite( Test_Array_sort );
-	testsuite( Test_Array_compact );
-	testsuite( Test_Array_distinct );
-	testsuite( Test_Array_reverse );
-	testsuite( Test_Array_concat );
+	testsuite( Test_warray_sort );
+	testsuite( Test_warray_compact );
+	testsuite( Test_warray_distinct );
+	testsuite( Test_warray_reverse );
+	testsuite( Test_warray_concat );
 
-	testsuite( Test_Array_union );
-	testsuite( Test_Array_intersect );
-	testsuite( Test_Array_symDiff );
-	testsuite( Test_Array_addToSet );
+	testsuite( Test_warray_union );
+	testsuite( Test_warray_intersect );
+	testsuite( Test_warray_symDiff );
+	testsuite( Test_warray_addToSet );
 
-	testsuite( Test_Array_compare );
-	testsuite( Test_Array_bsearch );
+	testsuite( Test_warray_compare );
+	testsuite( Test_warray_bsearch );
 
-	testsuite( Test_Array_iterator );
-	testsuite( Test_Array_iteratorFullExample );
+	testsuite( Test_warray_iterator );
+	testsuite( Test_warray_iteratorFullExample );
 
 	printf( "\n" );
 	printf( "----------------------------\n" );
