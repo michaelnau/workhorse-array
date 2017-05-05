@@ -115,12 +115,12 @@
 /**	The array type. Access it only through the Array_xyz() functions except
 	reading the explicitly public fields.
 */
-typedef struct Array {
+typedef struct WArray {
 	size_t				size;			///<Public read-only, the actual number of elements
 	size_t				capacity;		///<Public read-only, the maximum number of elements before the array must grow
 	const ElementType*	type;			///<Public read only, pointer to the element methods
 	void**				data;			//Private, do not directly access it.
-}Array;
+}WArray;
 
 /** Pointer to a struct describing methods for elements that are arrays themselves.
 	Can be passed to Array_new().
@@ -136,7 +136,7 @@ extern const ElementType* arrayElement;
 /**	When declared as autoArray, an array gets automatically destroyed when
 	leaving scope.
 */
-#define autoArray __attribute__(( cleanup( Array_delete ))) Array
+#define autoWArray __attribute__(( cleanup( Array_delete ))) WArray
 
 //------------------------------------------------------------
 //	Array namespace
@@ -157,86 +157,86 @@ extern const ElementType* arrayElement;
     printf( "%s", a.toString( array ));		//->"dog", "cat"
 	\endcode
 */
-typedef struct ArrayNamespace {
-	Array* 		(*new)		(size_t capacity, const ElementType* type);
-    Array* 		(*clone)	(const Array* array);
-	void		(*delete)	(Array** array);
-	Array*		(*clear)	(Array* array);
+typedef struct WArrayNamespace {
+	WArray* 	(*new)		(size_t capacity, const ElementType* type);
+    WArray* 	(*clone)	(const WArray* array);
+	void		(*delete)	(WArray** array);
+	WArray*		(*clear)	(WArray* array);
 
-	Array* 		(*append)	(Array* array, const void* element);
-	Array* 		(*prepend)	(Array* array, const void* element);
-	Array* 		(*set)		(Array* array, size_t, const void* element);
-	Array* 		(*insert)	(Array* array, size_t, const void* element);
-	Array*		(*insertSorted)(Array* array, const void* element);
-	Array*		(*addToSet)	(Array* array, const void* element);
+	WArray* 	(*append)	(WArray* array, const void* element);
+	WArray* 	(*prepend)	(WArray* array, const void* element);
+	WArray* 	(*set)		(WArray* array, size_t, const void* element);
+	WArray* 	(*insert)	(WArray* array, size_t, const void* element);
+	WArray*		(*insertSorted)(WArray* array, const void* element);
+	WArray*		(*addToSet)	(WArray* array, const void* element);
 
-	Array*		(*append_n)	(Array* array, size_t n, void* const elements[n]);
-	Array*		(*prepend_n)(Array* array, size_t n, void* const elements[n]);
-	Array*		(*set_n)	(Array* array, size_t position, size_t n, void* const elements[n]);
-	Array*		(*insert_n)	(Array* array, size_t position, size_t n, void* const elements[n]);
+	WArray*		(*append_n)	(WArray* array, size_t n, void* const elements[n]);
+	WArray*		(*prepend_n)(WArray* array, size_t n, void* const elements[n]);
+	WArray*		(*set_n)	(WArray* array, size_t position, size_t n, void* const elements[n]);
+	WArray*		(*insert_n)	(WArray* array, size_t position, size_t n, void* const elements[n]);
 
-	const void* (*at)		(const Array* array, size_t position);
-	const void* (*first)	(const Array* array);
-	const void* (*last)		(const Array* array);
+	const void* (*at)		(const WArray* array, size_t position);
+	const void* (*first)	(const WArray* array);
+	const void* (*last)		(const WArray* array);
 
-	void* 		(*stealAt)	(Array* array, size_t position);
-	void* 		(*stealFirst)(Array* array);
-	void* 		(*stealLast)(Array* array);
-	void* 		(*stealSample)(Array* array);
+	void* 		(*stealAt)	(WArray* array, size_t position);
+	void* 		(*stealFirst)(WArray* array);
+	void* 		(*stealLast)(WArray* array);
+	void* 		(*stealSample)(WArray* array);
 
-	Array*		(*removeAt)	(Array* array, size_t position);
-	Array*		(*removeFirst)(Array* array);
-	Array*		(*removeLast)(Array* array);
+	WArray*		(*removeAt)	(WArray* array, size_t position);
+	WArray*		(*removeFirst)(WArray* array);
+	WArray*		(*removeLast)(WArray* array);
 
-	size_t		(*size)		(const Array* array);
-	bool		(*empty)	(const Array* array);
-	bool		(*nonEmpty)	(const Array* array);
+	size_t		(*size)		(const WArray* array);
+	bool		(*empty)	(const WArray* array);
+	bool		(*nonEmpty)	(const WArray* array);
 
-	bool		(*all)		(const Array* array, ElementCondition* condition, const void* conditionData);
-	bool		(*any)		(const Array* array, ElementCondition* condition, const void* conditionData);
-	bool		(*none)		(const Array* array, ElementCondition* condition, const void* conditionData);
-	bool		(*one)		(const Array* array, ElementCondition* condition, const void* conditionData);
+	bool		(*all)		(const WArray* array, ElementCondition* condition, const void* conditionData);
+	bool		(*any)		(const WArray* array, ElementCondition* condition, const void* conditionData);
+	bool		(*none)		(const WArray* array, ElementCondition* condition, const void* conditionData);
+	bool		(*one)		(const WArray* array, ElementCondition* condition, const void* conditionData);
 
-	Array* 		(*filter)	(const Array* array, ElementFilter* filter, const void* filterData );
-	Array* 		(*reject)	(const Array* array, ElementFilter* filter, const void* filterData );
-	Array* 		(*map)		(const Array* array, ElementMap*, const void*, const ElementType* type );
-	void*		(*reduce)	(const Array* array, ElementReduce*, const void*, const ElementType* type );
+	WArray* 	(*filter)	(const WArray* array, ElementFilter* filter, const void* filterData );
+	WArray* 	(*reject)	(const WArray* array, ElementFilter* filter, const void* filterData );
+	WArray* 	(*map)		(const WArray* array, ElementMap*, const void*, const ElementType* type );
+	void*		(*reduce)	(const WArray* array, ElementReduce*, const void*, const ElementType* type );
 
-	void		(*foreach)	(const Array* array, ElementForeach* foreach, void* foreachData);
-	void		(*foreachIndex)(const Array* array, ElementForeachIndex* foreach, void* foreachData);
+	void		(*foreach)	(const WArray* array, ElementForeach* foreach, void* foreachData);
+	void		(*foreachIndex)(const WArray* array, ElementForeachIndex* foreach, void* foreachData);
 
 //TODO: a.min() and a.max() disturbed by min() and max() macros
 //	const void*	(*min)		(const Array*);
 //	const void*	(*max)		(const Array*);
-	ssize_t		(*index)	(const Array* array, const void* element);
-	ssize_t		(*rindex)	(const Array* array, const void* element);
-	ssize_t		(*bsearch)	(const Array* array, ElementCompare* compare, const void* key);
-	bool		(*contains)	(const Array* array, const void* element);
-	size_t		(*count)	(const Array* array, ElementCondition*, const void* conditionData);
+	ssize_t		(*index)	(const WArray* array, const void* element);
+	ssize_t		(*rindex)	(const WArray* array, const void* element);
+	ssize_t		(*bsearch)	(const WArray* array, ElementCompare* compare, const void* key);
+	bool		(*contains)	(const WArray* array, const void* element);
+	size_t		(*count)	(const WArray* array, ElementCondition*, const void* conditionData);
 
-	Array*		(*reverse)	(Array* array);
-	Array*		(*compact)	(Array* array);
-	Array*		(*sort)		(Array* array);
-	Array*		(*sortBy)	(Array* array, ElementCompare* compare);
-	Array*		(*distinct)	(Array* array);
-	Array*		(*shuffle)	(Array* array);
+	WArray*		(*reverse)	(WArray* array);
+	WArray*		(*compact)	(WArray* array);
+	WArray*		(*sort)		(WArray* array);
+	WArray*		(*sortBy)	(WArray* array, ElementCompare* compare);
+	WArray*		(*distinct)	(WArray* array);
+	WArray*		(*shuffle)	(WArray* array);
 
-	char*		(*toString)	(const Array* array, const char delimiters[]);
-	Array*		(*fromString)(const char string[], const char delimiters[]);
-	int			(*compare) 	(const Array* array1, const Array* array2);
-	bool		(*equal)	(const Array* array1, const Array* array2);
+	char*		(*toString)	(const WArray* array, const char delimiters[]);
+	WArray*		(*fromString)(const char string[], const char delimiters[]);
+	int			(*compare) 	(const WArray* array1, const WArray* array2);
+	bool		(*equal)	(const WArray* array1, const WArray* array2);
 
-	Array*		(*unite)	(const Array* array1, const Array* array2);
-	Array*		(*intersect)(const Array* array1, const Array* array2);
-	Array*		(*symDiff)	(const Array* array1, const Array* array2);
+	WArray*		(*unite)	(const WArray* array1, const WArray* array2);
+	WArray*		(*intersect)(const WArray* array1, const WArray* array2);
+	WArray*		(*symDiff)	(const WArray* array1, const WArray* array2);
 
-	Iterator*	(*iterator)	(const Array* array);
-	Iterator*	(*iteratorReverse)(const Array* array);
-}ArrayNamespace;
+	Iterator*	(*iterator)	(const WArray* array);
+	Iterator*	(*iteratorReverse)(const WArray* array);
+}WArrayNamespace;
 
 /**	Predefined value for ArrayNamespace variables
 */
-#define arrayNamespace					\
+#define warrayNamespace					\
 {										\
 	.new = Array_new,					\
 	.clone = Array_clone,				\
@@ -341,7 +341,7 @@ typedef struct ArrayNamespace {
 	Array* a5 = Array_new( 0, &carType );
 	\endcode
 */
-Array*
+WArray*
 Array_new( size_t capacity, const ElementType* type );
 
 /**	Clone the given array by cloning the elements with the array->type->clone() method.
@@ -350,8 +350,8 @@ Array_new( size_t capacity, const ElementType* type );
 	@return The new array
 	@pre array != NULL
 */
-Array*
-Array_clone( const Array* array );
+WArray*
+Array_clone( const WArray* array );
 
 /**	Delete the array and all elements.
 
@@ -361,7 +361,7 @@ Array_clone( const Array* array );
 	@return
 */
 void
-Array_delete( Array** array );
+Array_delete( WArray** array );
 
 /**	Delete all elements but leave the array itself intact.
 
@@ -369,8 +369,8 @@ Array_delete( Array** array );
 
 	@param array
 */
-Array*
-Array_clear( Array* array );
+WArray*
+Array_clear( WArray* array );
 
 /**	Delete an array and assign another array to its pointer.
 
@@ -381,7 +381,7 @@ Array_clear( Array* array );
 	@pre array->type == other->type
 */
 void
-Array_assign( Array** array, Array *other );
+Array_assign( WArray** array, WArray *other );
 
 //------------------------------------------------------------
 //	Put one element in the array.
@@ -396,8 +396,8 @@ Array_assign( Array** array, Array *other );
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
-Array*
-Array_append( Array* array, const void* element );
+WArray*
+Array_append( WArray* array, const void* element );
 
 /**	Prepend an element to the array.
 
@@ -408,8 +408,8 @@ Array_append( Array* array, const void* element );
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
-Array*
-Array_prepend( Array* array, const void* element );
+WArray*
+Array_prepend( WArray* array, const void* element );
 
 /**	Set or update the element at the given position.
 
@@ -423,8 +423,8 @@ Array_prepend( Array* array, const void* element );
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
-Array*
-Array_set( Array* array, size_t position, const void* element );
+WArray*
+Array_set( WArray* array, size_t position, const void* element );
 
 /**	Insert an element into the array.
 
@@ -438,8 +438,8 @@ Array_set( Array* array, size_t position, const void* element );
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
-Array*
-Array_insert( Array* array, size_t position, const void* element );
+WArray*
+Array_insert( WArray* array, size_t position, const void* element );
 
 /**	Insert an element into the array, so that it keeps the ascending element order
 	according to the array->type->compare() method.
@@ -452,8 +452,8 @@ Array_insert( Array* array, size_t position, const void* element );
 	@pre array != NULL
 	@pre array->type->compare != NULL
 */
-Array*
-Array_insertSorted( Array* array, const void* element );
+WArray*
+Array_insertSorted( WArray* array, const void* element );
 
 //------------------------------------------------------------
 //	Put several elements in the array.
@@ -473,8 +473,8 @@ Array_insertSorted( Array* array, const void* element );
 	@pre elements != NULL
 
 */
-Array*
-Array_append_n( Array* array, size_t n, void* const elements[n] );
+WArray*
+Array_append_n( WArray* array, size_t n, void* const elements[n] );
 
 /**	Prepend one or several elements to the array.
 
@@ -489,8 +489,8 @@ Array_append_n( Array* array, size_t n, void* const elements[n] );
 	@pre n > 0
 	@pre elements != NULL
 */
-Array*
-Array_prepend_n( Array* array, size_t n, void* const elements[n] );
+WArray*
+Array_prepend_n( WArray* array, size_t n, void* const elements[n] );
 
 /*	Set or update one or several elements in the array.
 
@@ -508,8 +508,8 @@ Array_prepend_n( Array* array, size_t n, void* const elements[n] );
 	@pre n > 0
 	@pre elements != NULL
 */
-Array*
-Array_set_n( Array* array, size_t position, size_t n, void* const elements[n] );
+WArray*
+Array_set_n( WArray* array, size_t position, size_t n, void* const elements[n] );
 
 /**	Insert one or several elements to the array.
 
@@ -527,8 +527,8 @@ Array_set_n( Array* array, size_t position, size_t n, void* const elements[n] );
 	@pre n > 0
 	@pre elements != NULL
 */
-Array*
-Array_insert_n( Array* array, size_t position, size_t n, void* const elements[n] );
+WArray*
+Array_insert_n( WArray* array, size_t position, size_t n, void* const elements[n] );
 
 //------------------------------------------------------------
 //	Read and delete elements from the array.
@@ -540,7 +540,7 @@ Array_insert_n( Array* array, size_t position, size_t n, void* const elements[n]
 	@pre position < array->size
 */
 const void*
-Array_at( const Array* array, size_t position );
+Array_at( const WArray* array, size_t position );
 
 /**	Return the first element.
 
@@ -548,7 +548,7 @@ Array_at( const Array* array, size_t position );
 	@pre Array_nonEmpty( array )
 */
 const void*
-Array_first( const Array* array );
+Array_first( const WArray* array );
 
 /**	Return the last element.
 
@@ -556,7 +556,7 @@ Array_first( const Array* array );
 	@pre Array_nonEmpty( array )
 */
 const void*
-Array_last( const Array* array );
+Array_last( const WArray* array );
 
 /**	Return a random element.
 
@@ -564,22 +564,22 @@ Array_last( const Array* array );
 	@pre Array_nonEmpty( array )
 */
 const void*
-Array_sample( const Array* array );
+Array_sample( const WArray* array );
 
 /*	Clone the element at the given position.
 */
 void*
-Array_cloneAt( const Array* array, size_t position );
+Array_cloneAt( const WArray* array, size_t position );
 
 /*	Clone the first element.
 */
 void*
-Array_cloneFirst( const Array* array );
+Array_cloneFirst( const WArray* array );
 
 /*	Clone the last element.
 */
 void*
-Array_cloneLast( const Array* array );
+Array_cloneLast( const WArray* array );
 
 /**	Remove the element at the array position and return it.
 
@@ -590,7 +590,7 @@ Array_cloneLast( const Array* array );
 	@pre position < array->size
 */
 void*
-Array_stealAt( Array* array, size_t position );
+Array_stealAt( WArray* array, size_t position );
 
 /**	Remove the first element and return it.
 
@@ -600,7 +600,7 @@ Array_stealAt( Array* array, size_t position );
 	@pre Array_nonEmpty( array )
 */
 void*
-Array_stealFirst( Array* array );
+Array_stealFirst( WArray* array );
 
 /**	Remove the last element and return it.
 
@@ -610,7 +610,7 @@ Array_stealFirst( Array* array );
 	@pre Array_nonEmpty( array )
 */
 void*
-Array_stealLast( Array* array );
+Array_stealLast( WArray* array );
 
 /**	Remove a random element and return it.
 
@@ -620,7 +620,7 @@ Array_stealLast( Array* array );
 	@pre Array_nonEmpty( array )
 */
 void*
-Array_stealSample( Array* array );
+Array_stealSample( WArray* array );
 
 /**	Remove and delete the element at the given position.
 
@@ -630,8 +630,8 @@ Array_stealSample( Array* array );
 	@pre array != NULL
 	@pre position < Array_size( array )
 */
-Array*
-Array_removeAt( Array* array, size_t position );
+WArray*
+Array_removeAt( WArray* array, size_t position );
 
 /**	Remove and delete the first element.
 
@@ -640,8 +640,8 @@ Array_removeAt( Array* array, size_t position );
 	@pre array != NULL
 	@pre Array_nonEmpty( array )
 */
-Array*
-Array_removeFirst( Array* array );
+WArray*
+Array_removeFirst( WArray* array );
 
 /**	Remove and delete the last element.
 
@@ -650,8 +650,8 @@ Array_removeFirst( Array* array );
 	@pre array != NULL
 	@pre Array_nonEmpty( array )
 */
-Array*
-Array_removeLast( Array* array );
+WArray*
+Array_removeLast( WArray* array );
 
 /*	Return several cloned elements at the given position.
 
@@ -664,8 +664,8 @@ Array_removeLast( Array* array );
 	@post returnValue != NULL
 	@post returnValue->size == end-start+1
 */
-Array*
-Array_slice( const Array* array, size_t start, size_t end );
+WArray*
+Array_slice( const WArray* array, size_t start, size_t end );
 
 //------------------------------------------------------------
 //	Search the array
@@ -680,7 +680,7 @@ Array_slice( const Array* array, size_t start, size_t end );
 	@pre array->type->compare != NULL
 */
 const void*
-Array_min( const Array* array );
+Array_min( const WArray* array );
 
 /**	Return the maximum element.
 
@@ -691,7 +691,7 @@ Array_min( const Array* array );
 	@pre array->type->compare != NULL
 */
 const void*
-Array_max( const Array* array );
+Array_max( const WArray* array );
 
 /**	Search the array for the given element. The given element is compared
 	with the array elements using the array compare() method.
@@ -703,7 +703,7 @@ Array_max( const Array* array );
 	@pre array->type->compare != NULL
 */
 ssize_t
-Array_index( const Array* array, const void* element );
+Array_index( const WArray* array, const void* element );
 
 /**	Search the array backwards for the given element. The given element is compared
 	with the array elements using the array compare() method.
@@ -715,7 +715,7 @@ Array_index( const Array* array, const void* element );
 	@pre array->type->compare != NULL
 */
 ssize_t
-Array_rindex( const Array* array, const void* element );
+Array_rindex( const WArray* array, const void* element );
 
 /**	Search an element in a sorted array.
 
@@ -728,7 +728,7 @@ Array_rindex( const Array* array, const void* element );
 	@pre compare != NULL
 */
 ssize_t
-Array_bsearch( const Array* array, ElementCompare* compare, const void* key );
+Array_bsearch( const WArray* array, ElementCompare* compare, const void* key );
 
 /**	Search the array for the given element. The given element is compared
 	with the array elements using the array compare() method.
@@ -740,7 +740,7 @@ Array_bsearch( const Array* array, ElementCompare* compare, const void* key );
 	@pre array->type->compare != NULL
 */
 static inline bool
-Array_contains( const Array* array, const void* element ) { return Array_index( array, element ) >= 0; }
+Array_contains( const WArray* array, const void* element ) { return Array_index( array, element ) >= 0; }
 
 /**	Count how many elements meet a condition.
 
@@ -752,7 +752,7 @@ Array_contains( const Array* array, const void* element ) { return Array_index( 
 	@pre condition != NULL
 */
 size_t
-Array_count( const Array* array, ElementCondition* condition, const void* conditionData );
+Array_count( const WArray* array, ElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
 //	Comparing arrays
@@ -773,7 +773,7 @@ Array_count( const Array* array, ElementCondition* condition, const void* condit
 	@pre array1->type->compare != NULL
 */
 int
-Array_compare( const Array* array1, const Array* array2 );
+Array_compare( const WArray* array1, const WArray* array2 );
 
 /**	Check if two arrays are equal.
 
@@ -790,7 +790,7 @@ Array_compare( const Array* array1, const Array* array2 );
 	@pre array1->type->compare != NULL
 */
 static inline bool
-Array_equal( const Array* array1, const Array* array2 ){ return Array_compare( array1, array2 ) == 0; }
+Array_equal( const WArray* array1, const WArray* array2 ){ return Array_compare( array1, array2 ) == 0; }
 
 //------------------------------------------------------------
 //	Array --> string --> Array
@@ -808,7 +808,7 @@ Array_equal( const Array* array1, const Array* array2 ){ return Array_compare( a
 	@pre array->type->toString != NULL
 */
 char*
-Array_toString( const Array* array, const char delimiters[] );
+Array_toString( const WArray* array, const char delimiters[] );
 
 /**	Split the string in elements separated by one of the given delimiters and create an array
 	with the string elements.
@@ -819,7 +819,7 @@ Array_toString( const Array* array, const char delimiters[] );
 	@pre string != NULL
 	@pre delimiters != NULL and delimiters[0] != 0
 */
-Array*
+WArray*
 Array_fromString( const char string[], const char delimiters[] );
 
 //------------------------------------------------------------
@@ -832,7 +832,7 @@ Array_fromString( const char string[], const char delimiters[] );
 	@return size
 */
 inline static size_t
-Array_size( const Array* array ) { return array->size; }
+Array_size( const WArray* array ) { return array->size; }
 
 /**	Return true if the array has no elements.
 
@@ -840,7 +840,7 @@ Array_size( const Array* array ) { return array->size; }
 	@return (bool)
 */
 inline static bool
-Array_empty( const Array* array ) { return array->size == 0; }
+Array_empty( const WArray* array ) { return array->size == 0; }
 
 /**	Return true if the array has elements.
 
@@ -848,7 +848,7 @@ Array_empty( const Array* array ) { return array->size == 0; }
 	@return (bool)
 */
 inline static bool
-Array_nonEmpty( const Array* array ) { return array->size > 0; }
+Array_nonEmpty( const WArray* array ) { return array->size > 0; }
 
 //------------------------------------------------------------
 //	Functions iterating the array elements
@@ -863,7 +863,7 @@ Array_nonEmpty( const Array* array ) { return array->size > 0; }
 	@pre foreach != NULL
 */
 void
-Array_foreach( const Array* array, ElementForeach* foreach, void* foreachData  );
+Array_foreach( const WArray* array, ElementForeach* foreach, void* foreachData  );
 
 /*	Apply a read-only function to all elements and their indexes.
 
@@ -871,23 +871,23 @@ Array_foreach( const Array* array, ElementForeach* foreach, void* foreachData  )
 	@pre foreach != NULL
 */
 void
-Array_foreachIndex( const Array* array, ElementForeachIndex* foreach, void* foreachData );
+Array_foreachIndex( const WArray* array, ElementForeachIndex* foreach, void* foreachData );
 
 /**	Take all elements meeting a filter criterion and put them in a new array.
 
 	@pre array != NULL
 	@pre filter != NULL
 */
-Array*
-Array_filter( const Array* array, ElementFilter* filter, const void* filterData );
+WArray*
+Array_filter( const WArray* array, ElementFilter* filter, const void* filterData );
 
 /**	Reject all elements meeting a criterion and put the rest in a new array.
 
 	@pre array != NULL
 	@pre reject != NULL
 */
-Array*
-Array_reject( const Array* array, ElementFilter* reject, const void* rejectData );
+WArray*
+Array_reject( const WArray* array, ElementFilter* reject, const void* rejectData );
 
 /**	Map each element to a new element of a specified type and put them all in a new array.
 
@@ -929,8 +929,8 @@ Array_reject( const Array* array, ElementFilter* reject, const void* rejectData 
 	Array* numbers = Array_map( array, toIntPlusX, (void*)1, elementInt );
 	\endcode
 */
-Array*
-Array_map( const Array* array, ElementMap* map, const void* mapData, const ElementType* type );
+WArray*
+Array_map( const WArray* array, ElementMap* map, const void* mapData, const ElementType* type );
 
 /**	Reduce all elements to a single return value of an arbitrary type.
 
@@ -943,7 +943,7 @@ Array_map( const Array* array, ElementMap* map, const void* mapData, const Eleme
 	@pre reduce != NULL
 */
 void*
-Array_reduce( const Array* array, ElementReduce* reduce, const void* startValue, const ElementType* type );
+Array_reduce( const WArray* array, ElementReduce* reduce, const void* startValue, const ElementType* type );
 
 /**	Keep all elements meeting a filter criterion and delete the rest.
 
@@ -954,8 +954,8 @@ Array_reduce( const Array* array, ElementReduce* reduce, const void* startValue,
 	@pre array != NULL
 	@pre filter != NULL
 */
-Array*
-Array_select( Array* array, ElementFilter* filter, const void* filterData );
+WArray*
+Array_select( WArray* array, ElementFilter* filter, const void* filterData );
 
 /**	Delete all elements meeting a filter criterion and keep the rest.
 
@@ -966,8 +966,8 @@ Array_select( Array* array, ElementFilter* filter, const void* filterData );
 	@pre array != NULL
 	@pre filter != NULL
 */
-Array*
-Array_unselect( Array* array, ElementFilter* filter, const void* filterData );
+WArray*
+Array_unselect( WArray* array, ElementFilter* filter, const void* filterData );
 
 //------------------------------------------------------------
 //	Do stuff with the elements.
@@ -979,15 +979,15 @@ Array_unselect( Array* array, ElementFilter* filter, const void* filterData );
 	@return The modified array
 	@pre array != NULL
 */
-Array*
-Array_reverse( Array* array );
+WArray*
+Array_reverse( WArray* array );
 
 /*	Return the array with the elements in random order.
 
 	@pre array != NULL
 */
-Array*
-Array_shuffle( Array* array );
+WArray*
+Array_shuffle( WArray* array );
 
 /**	Remove all NULL elements.
 
@@ -995,8 +995,8 @@ Array_shuffle( Array* array );
 	@return The modified array
 	@pre array != NULL
 */
-Array*
-Array_compact( Array* array );
+WArray*
+Array_compact( WArray* array );
 
 /**	Sort the array elements in place using qsort() with the array comparison function.
 
@@ -1005,8 +1005,8 @@ Array_compact( Array* array );
 	@pre array != NULL
 	@pre array->type->compare != NULL
 */
-Array*
-Array_sort( Array* array );
+WArray*
+Array_sort( WArray* array );
 
 /**	Sort the array elements in place using qsort() with the given comparison function.
 
@@ -1016,8 +1016,8 @@ Array_sort( Array* array );
 	@pre array != NULL
 	@pre compare != NULL
 */
-Array*
-Array_sortBy( Array* array, ElementCompare* compare );
+WArray*
+Array_sortBy( WArray* array, ElementCompare* compare );
 
 /** Remove all identical elements using the comparison function from the
 	element type. It is undefined which of the duplicate elements remains afterwards.
@@ -1028,8 +1028,8 @@ Array_sortBy( Array* array, ElementCompare* compare );
 	@pre array != NULL
 	@pre array->type->compare != NULL
 */
-Array*
-Array_distinct( Array* array );
+WArray*
+Array_distinct( WArray* array );
 
 /**	Append the elements of an array to another array.
 
@@ -1040,8 +1040,8 @@ Array_distinct( Array* array );
 	@pre array2 != NULL
 	@pre array1->type == array2->type
 */
-Array*
-Array_concat( Array* array1, const Array* array2 );
+WArray*
+Array_concat( WArray* array1, const WArray* array2 );
 
 //------------------------------------------------------------
 //	Check properties of the elements
@@ -1057,7 +1057,7 @@ Array_concat( Array* array1, const Array* array2 );
 	@pre condition != NULL
 */
 bool
-Array_all( const Array* array, ElementCondition* condition, const void* conditionData );
+Array_all( const WArray* array, ElementCondition* condition, const void* conditionData );
 
 /**	Return true if at least one element meets a condition.
 
@@ -1068,7 +1068,7 @@ Array_all( const Array* array, ElementCondition* condition, const void* conditio
 	@pre condition != NULL
 */
 bool
-Array_any( const Array* array, ElementCondition* condition, const void* conditionData );
+Array_any( const WArray* array, ElementCondition* condition, const void* conditionData );
 
 /**	Return true if no element meets a condition.
 
@@ -1079,7 +1079,7 @@ Array_any( const Array* array, ElementCondition* condition, const void* conditio
 	@pre condition != NULL
 */
 bool
-Array_none( const Array* array, ElementCondition* condition, const void* conditionData );
+Array_none( const WArray* array, ElementCondition* condition, const void* conditionData );
 
 /**	Return true if exactly one element meets a condition.
 
@@ -1090,7 +1090,7 @@ Array_none( const Array* array, ElementCondition* condition, const void* conditi
 	@pre condition != NULL
 */
 bool
-Array_one( const Array* array, ElementCondition* condition, const void* conditionData );
+Array_one( const WArray* array, ElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
 //	Common set operations
@@ -1106,8 +1106,8 @@ Array_one( const Array* array, ElementCondition* condition, const void* conditio
 	@pre array1->type->compare != NULL
 	@pre array2->type->compare != NULL
 */
-Array*
-Array_unite( const Array* array1, const Array* array2 );
+WArray*
+Array_unite( const WArray* array1, const WArray* array2 );
 
 /**	Return an array with elements that are both in array1 and array2 without duplicates.
 
@@ -1119,8 +1119,8 @@ Array_unite( const Array* array1, const Array* array2 );
 	@pre array1->type->compare != NULL
 	@pre array2->type->compare != NULL
 */
-Array*
-Array_intersect( const Array* array1, const Array* array2 );
+WArray*
+Array_intersect( const WArray* array1, const WArray* array2 );
 
 /**	Return an array with elements that are either in array1 or array2 without duplicates.
 
@@ -1134,11 +1134,11 @@ Array_intersect( const Array* array1, const Array* array2 );
 	@pre array1->type->compare != NULL
 	@pre array2->type->compare != NULL
 */
-Array*
-Array_symDiff( const Array* array1, const Array* array2 );
+WArray*
+Array_symDiff( const WArray* array1, const WArray* array2 );
 
-Array*
-Array_diff( const Array* array1, const Array* array2 );
+WArray*
+Array_diff( const WArray* array1, const WArray* array2 );
 
 /**	Append the element to the array, if it is not there already.
 
@@ -1148,8 +1148,8 @@ Array_diff( const Array* array1, const Array* array2 );
 	@pre array != NULL
 	@pre array->type->compare != NULL
 */
-Array*
-Array_addToSet( Array* array, const void* element );
+WArray*
+Array_addToSet( WArray* array, const void* element );
 
 #if 0
 //------------------------------------------------------------
@@ -1159,43 +1159,43 @@ Array_addToSet( Array* array, const void* element );
 /*	Calculate the minimum element.
 */
 double
-Array_dmin( const Array* array );
+Array_dmin( const WArray* array );
 
 /*	Calculate the maximum element.
 */
 double
-Array_dmax( const Array* array );
+Array_dmax( const WArray* array );
 
 /*	Calculate the sum of all elements.
 */
 double
-Array_dsum( const Array* array );
+Array_dsum( const WArray* array );
 
 /*	Calculate the mean of the elements.
 */
 double
-Array_dmean( const Array* array );
+Array_dmean( const WArray* array );
 
 /*	Calculate the median.
 */
 double
-Array_dmedian( const Array* array );
+Array_dmedian( const WArray* array );
 
 double
-Array_dvariance( const Array* array );
+Array_dvariance( const WArray* array );
 
 double
-Array_dcovariance( const Array* array );
+Array_dcovariance( const WArray* array );
 
 /*	Calculate the standard deviation of the elements.
 */
 double
-Array_ddeviation( const Array* array );
+Array_ddeviation( const WArray* array );
 
 /*	Return the nth percentile.
 */
 double
-Array_dpercentile( const Array* array, unsigned n );
+Array_dpercentile( const WArray* array, unsigned n );
 #endif // 0
 
 //------------------------------------------------------------
@@ -1208,7 +1208,7 @@ Array_dpercentile( const Array* array, unsigned n );
 	@return
 */
 Iterator*
-Array_iterator( const Array* array );
+Array_iterator( const WArray* array );
 
 /** Return an iterator capable of traversing the array in reverse direction.
 
@@ -1216,12 +1216,12 @@ Array_iterator( const Array* array );
 	@return
 */
 Iterator*
-Array_iteratorReverse( const Array* array );
+Array_iteratorReverse( const WArray* array );
 
 //------------------------------------------------------------
 
 void
-Array_print( const Array* array );
+Array_print( const WArray* array );
 
 //------------------------------------------------------------
 

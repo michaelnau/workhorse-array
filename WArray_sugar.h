@@ -1,7 +1,7 @@
 #ifndef ARRAY_SUGAR_H_INCLUDED
 #define ARRAY_SUGAR_H_INCLUDED
 
-#include "Array.h"
+#include "WArray.h"
 
 //------------------------------------------------------------
 
