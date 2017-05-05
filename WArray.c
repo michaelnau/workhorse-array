@@ -1,12 +1,14 @@
 #define _GNU_SOURCE
 #include "WArray.h"
-//#include "Contract.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not
 #include <string.h>	//memmove, memset, strdup, strtok_r
 #include <stdarg.h>	//va_list
 #include <stdio.h>	//printf, fflush
 #include <stdlib.h>	//malloc, realloc
+
+//TODO: Remove dependency from _GNU_SOURCE.
+//TODO: Remove GNU C nested functions.
 
 //-------------------------------------------------------------------------------
 //	Helpers
