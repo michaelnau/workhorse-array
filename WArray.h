@@ -1151,53 +1151,6 @@ warray_diff( const WArray* array1, const WArray* array2 );
 WArray*
 warray_addToSet( WArray* array, const void* element );
 
-#if 0
-//------------------------------------------------------------
-//	TODO: Extract statistical functions in separate module
-//------------------------------------------------------------
-
-/*	Calculate the minimum element.
-*/
-double
-warray_dmin( const WArray* array );
-
-/*	Calculate the maximum element.
-*/
-double
-warray_dmax( const WArray* array );
-
-/*	Calculate the sum of all elements.
-*/
-double
-warray_dsum( const WArray* array );
-
-/*	Calculate the mean of the elements.
-*/
-double
-warray_dmean( const WArray* array );
-
-/*	Calculate the median.
-*/
-double
-warray_dmedian( const WArray* array );
-
-double
-warray_dvariance( const WArray* array );
-
-double
-warray_dcovariance( const WArray* array );
-
-/*	Calculate the standard deviation of the elements.
-*/
-double
-warray_ddeviation( const WArray* array );
-
-/*	Return the nth percentile.
-*/
-double
-warray_dpercentile( const WArray* array, unsigned n );
-#endif // 0
-
 //------------------------------------------------------------
 //	Iterator functions
 //------------------------------------------------------------
