@@ -8,13 +8,8 @@
 #include <stdlib.h>
 
 //---------------------------------------------------------------------------------
-
-static void
-die( const char* text )
-{
-	fprintf( stderr, "Failed: %s", text );
-	abort();
-}
+//	Helper functions
+//---------------------------------------------------------------------------------
 
 static void*
 xmalloc( size_t size )
@@ -37,112 +32,112 @@ const void* WElementNotFound = &welementNotFound;
 //	Raw void* type
 //---------------------------------------------------------------------------------
 
-void* WElement_clonePtr( const void* element ) {
+void* welement_clonePtr( const void* element ) {
 	return (void*)element;
 }
 
-void WElement_deletePtr( void** wtypePtr ) {
+void welement_deletePtr( void** wtypePtr ) {
 	(void)wtypePtr;
 }
 
-int WElement_comparePtr( const void* e1, const void* e2 ) {
+int welement_comparePtr( const void* e1, const void* e2 ) {
 	return (long)e1 - (long)e2;
 }
 
 const WType* wtypePtr = &(WType) {
-	.clone = WElement_clonePtr,
-	.delete = WElement_deletePtr,
-	.compare = WElement_comparePtr,
+	.clone = welement_clonePtr,
+	.delete = welement_deletePtr,
+	.compare = welement_comparePtr,
 };
 
 //---------------------------------------------------------------------------------
 //	int type
 //---------------------------------------------------------------------------------
 
-void* WElement_cloneInt( const void* element ) {
+void* welement_cloneInt( const void* element ) {
 	return (void*)element;
 }
 
-void WElement_deleteInt( void** wtypePtr ) {
+void welement_deleteInt( void** wtypePtr ) {
 	(void)wtypePtr;
 }
 
-int WElement_compareInt( const void* e1, const void* e2 ) {
+int welement_compareInt( const void* e1, const void* e2 ) {
 	return (long)e1 - (long)e2;
 }
 
-void* WElement_fromStringInt( const char* string ) {
+void* welement_fromStringInt( const char* string ) {
 	assert( string );
 
 	return (void*)strtol( string, NULL, 0 );
 }
 
-char* WElement_toStringInt( const void* element ) {
+char* welement_toStringInt( const void* element ) {
 	char* string = NULL;
     return asprintf( &string, "%ld", (long)element ) >= 0 ? string : strdup( "" );
 }
 
 const WType* wtypeInt = &(WType) {
-	.clone = WElement_cloneInt,
-	.delete = WElement_deleteInt,
-	.compare = WElement_compareInt,
-	.fromString = WElement_fromStringInt,
-	.toString = WElement_toStringInt
+	.clone = welement_cloneInt,
+	.delete = welement_deleteInt,
+	.compare = welement_compareInt,
+	.fromString = welement_fromStringInt,
+	.toString = welement_toStringInt
 };
 
 //---------------------------------------------------------------------------------
 //	char* type
 //---------------------------------------------------------------------------------
 
-void* WElement_cloneStr( const void* element ) {
+void* welement_cloneStr( const void* element ) {
 	return element ? strdup( element ) : NULL;
 }
 
-void WElement_delete( void** wtypePtr ) {
+void welement_delete( void** wtypePtr ) {
 	if ( not wtypePtr ) return;
 
 	free( *wtypePtr );
 	*wtypePtr = NULL;
 }
 
-int WElement_compareStr( const void* e1, const void* e2 ) {
+int welement_compareStr( const void* e1, const void* e2 ) {
 	if ( e1 and e2 ) return strcmp( e1, e2 );
 	if ( not e1 and not e2 ) return 0;
 	return e1 ? 1 : -1;
 }
 
-void* WElement_fromStringStr( const char* string ) {
+void* welement_fromStringStr( const char* string ) {
 	return string ? strdup( string ) : strdup( "" );
 }
 
-char* WElement_toStringStr( const void* element ) {
+char* welement_toStringStr( const void* element ) {
 	return element ? strdup( element ) : strdup( "" );
 }
 
 const WType* wtypeStr = &(WType) {
-	.clone = WElement_cloneStr,
-	.delete = WElement_delete,
-	.compare = WElement_compareStr,
-	.fromString = WElement_fromStringStr,
-	.toString = WElement_toStringStr
+	.clone = welement_cloneStr,
+	.delete = welement_delete,
+	.compare = welement_compareStr,
+	.fromString = welement_fromStringStr,
+	.toString = welement_toStringStr
 };
 
 //---------------------------------------------------------------------------------
 //	double type
 //---------------------------------------------------------------------------------
 
-void* WElement_cloneDouble( const void* element ) {
+void* welement_cloneDouble( const void* element ) {
 	double* clone = xmalloc( sizeof( double ));
 	*clone = *(double*)element;
 	return clone;
 }
 
-int WElement_compareDouble( const void* e1, const void* e2 ) {
+int welement_compareDouble( const void* e1, const void* e2 ) {
 	return (e1 and e2) ? *(double*)e1 - *(double*)e2 :
 			e1 ? +1 : -1;	//NULL values are considered to be less than every double value
 }
 
-void* WElement_fromStringDouble( const char* string ) {
+void* welement_fromStringDouble( const char* string ) {
 	assert( string );
 
 	double* element = xmalloc( sizeof( double ));
@@ -150,7 +145,7 @@ void* WElement_fromStringDouble( const char* string ) {
 	return element;
 }
 
-char* WElement_toStringDouble( const void* element ) {
+char* welement_toStringDouble( const void* element ) {
 	char* string = NULL;
     return not element ?									strdup("") :	//NULL element
 		asprintf( &string, "%lf", *(double*)element ) < 0 ?	strdup("") :	//Problems in stringifying double
@@ -158,14 +153,14 @@ char* WElement_toStringDouble( const void* element ) {
 }
 
 const WType* wtypeDouble = &(WType) {
-	.clone = WElement_cloneDouble,
-	.delete = WElement_delete,
-	.compare = WElement_compareDouble,
-	.fromString = WElement_fromStringDouble,
-	.toString = WElement_toStringDouble
+	.clone = welement_cloneDouble,
+	.delete = welement_delete,
+	.compare = welement_compareDouble,
+	.fromString = welement_fromStringDouble,
+	.toString = welement_toStringDouble
 };
 
-//---------------------------------------------------------------------------------
+#if 0
 
 //---------------------------------------------------------------------------------
 //	Stubs for elements not implementing methods
@@ -199,17 +194,18 @@ char* Element_toStringUndefined( const void* element ) {
 	die( "The toString() method is undefined for this element type." );
 	return NULL;
 }
+#endif // 0
 
 //---------------------------------------------------------------------------------
 //	Condition functions
 //---------------------------------------------------------------------------------
 
-bool WElement_conditionStrEquals( const void* e1, const void* e2 ) {
+bool welement_conditionStrEquals( const void* e1, const void* e2 ) {
 	if ( e1 and e2 ) return strcmp( e1, e2 ) == 0;
 	return e1 == e2;
 }
 
-bool WElement_conditionStrEmpty( const void* element, const void* conditionData ) {
+bool welement_conditionStrEmpty( const void* element, const void* conditionData ) {
 	(void)conditionData;
 	if ( element ) return ((char*)element)[0] == 0;
 	return true;
@@ -219,11 +215,11 @@ bool WElement_conditionStrEmpty( const void* element, const void* conditionData 
 //	Foreach functions
 //---------------------------------------------------------------------------------
 
-void WElement_foreachStrPrint( const void* element, const void* foreachData ) {
+void welement_foreachStrPrint( const void* element, const void* foreachData ) {
 	printf( "%s%s", (char*)element, foreachData ? (char*)foreachData : "" );
 }
 
-void WElement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData ) {
+void welement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData ) {
 	printf( "%u/%s%s", index, (char*)element, foreachData ? (char*)foreachData : "" );
 }
 
@@ -232,7 +228,7 @@ void WElement_foreachIndexStrPrint( const void* element, size_t index, const voi
 //---------------------------------------------------------------------------------
 
 void
-WIterator_delete( WIterator** iterator )
+witerator_delete( WIterator** iterator )
 {
 	if ( not iterator ) return;
 

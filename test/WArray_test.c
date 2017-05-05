@@ -734,26 +734,26 @@ Test_warray_count()
 {
 	autoWArray* array = a.new( 0, wtypeStr );
 
-	assert_equal( warray_count( array, WElement_conditionStrEquals, NULL ), 0 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "Test" ), 0 );
+	assert_equal( warray_count( array, welement_conditionStrEquals, NULL ), 0 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "Test" ), 0 );
 
 	a.append( array, "cat" );
-	assert_equal( a.count( array, WElement_conditionStrEquals, NULL ), 0 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "Test" ), 0 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, NULL ), 0 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "Test" ), 0 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "cat" ), 1 );
 
 	a.append( array, "dog" );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "dog" ), 1 );
 
 	a.set( array, 5, "dog" );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "dog" ), 2 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "dog" ), 2 );
 
 	a.set( array, 55, "" );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "dog" ), 2 );
-	assert_equal( a.count( array, WElement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "dog" ), 2 );
+	assert_equal( a.count( array, welement_conditionStrEquals, "" ), 1 );
 }
 
 //--------------------------------------------------------------------------------
@@ -946,9 +946,9 @@ Test_warray_distinct()
 	a.set( array, 10, "dog" );
 	warray_distinct( array );
 	assert_equal( a.size( array ), 3 );
-	assert_true( warray_one( array, WElement_conditionStrEquals, "cat" ));
-	assert_true( warray_one( array, WElement_conditionStrEquals, "dog" ));
-	assert_true( warray_one( array, WElement_conditionStrEquals, NULL ));
+	assert_true( warray_one( array, welement_conditionStrEquals, "cat" ));
+	assert_true( warray_one( array, welement_conditionStrEquals, "dog" ));
+	assert_true( warray_one( array, welement_conditionStrEquals, NULL ));
 }
 void
 Test_warray_reverse()
@@ -1089,25 +1089,25 @@ Test_warray_intersect()
 	a.append( array1, "cat" );
 	autoWArray* inter2 = a.intersect( array1, array2 );
 	assert_equal( inter2->size, 0 );
-	assert_equal( a.count( inter2, WElement_conditionStrEquals, "cat" ), 0 );
+	assert_equal( a.count( inter2, welement_conditionStrEquals, "cat" ), 0 );
 
 	a.append( array2, "dog" );
 	autoWArray* inter3 = a.intersect( array1, array2 );
 	assert_equal( inter3->size, 0 );
-	assert_equal( a.count( inter3, WElement_conditionStrEquals, "cat" ), 0 );
-	assert_equal( a.count( inter3, WElement_conditionStrEquals, "dog" ), 0 );
+	assert_equal( a.count( inter3, welement_conditionStrEquals, "cat" ), 0 );
+	assert_equal( a.count( inter3, welement_conditionStrEquals, "dog" ), 0 );
 
 	a.append( array1, "dog" );
 	autoWArray* inter4 = a.intersect( array1, array2 );
 	assert_equal( inter4->size, 1 );
-	assert_equal( a.count( inter4, WElement_conditionStrEquals, "cat" ), 0 );
-	assert_equal( a.count( inter4, WElement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( inter4, welement_conditionStrEquals, "cat" ), 0 );
+	assert_equal( a.count( inter4, welement_conditionStrEquals, "dog" ), 1 );
 
 	a.append( array2, "cat" );
 	autoWArray* inter5 = a.intersect( array1, array2 );
 	assert_equal( inter5->size, 2 );
-	assert_equal( a.count( inter5, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( inter5, WElement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( inter5, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( inter5, welement_conditionStrEquals, "dog" ), 1 );
 
 	autoWArray* array3 = a.new( 0, wtypeStr );
 	autoWArray* array4 = a.new( 0, wtypeStr );
@@ -1115,10 +1115,10 @@ Test_warray_intersect()
 	a.append_n( array4, 6, (void*[]){ "dog", "mouse", NULL, "bird", "crocodile", "", "" });
 	autoWArray* inter6 = a.intersect( array3, array4 );
 	assert_equal( inter6->size, 4 );
-	assert_equal( a.count( inter6, WElement_conditionStrEquals, "dog" ), 1 );
-	assert_equal( a.count( inter6, WElement_conditionStrEquals, NULL ), 1 );
-	assert_equal( a.count( inter6, WElement_conditionStrEquals, "" ), 1 );
-	assert_equal( a.count( inter6, WElement_conditionStrEquals, "bird" ), 1 );
+	assert_equal( a.count( inter6, welement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( inter6, welement_conditionStrEquals, NULL ), 1 );
+	assert_equal( a.count( inter6, welement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( inter6, welement_conditionStrEquals, "bird" ), 1 );
 }
 void
 Test_warray_symDiff()
@@ -1132,18 +1132,18 @@ Test_warray_symDiff()
 	a.append( array1, "cat" );
 	autoWArray* sym2 = a.symDiff( array1, array2 );
 	assert_equal( sym2->size, 1 );
-	assert_equal( a.count( sym2, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( sym2, welement_conditionStrEquals, "cat" ), 1 );
 
 	a.append( array2, "dog" );
 	autoWArray* sym3 = a.symDiff( array1, array2 );
 	assert_equal( sym3->size, 2 );
-	assert_equal( a.count( sym3, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( sym3, WElement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( sym3, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( sym3, welement_conditionStrEquals, "dog" ), 1 );
 
 	a.append( array1, "dog" );
 	autoWArray* sym4 = a.symDiff( array1, array2 );
 	assert_equal( sym4->size, 1 );
-	assert_equal( a.count( sym4, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( sym4, welement_conditionStrEquals, "cat" ), 1 );
 
 	a.append( array2, "cat" );
 	autoWArray* sym5 = a.symDiff( array1, array2 );
@@ -1155,11 +1155,11 @@ Test_warray_symDiff()
 	a.append_n( array4, 7, (void*[]){ "dog", "mouse", NULL, "bird", "crocodile", "", "" });
 	autoWArray* sym6 = a.symDiff( array3, array4 );
 	assert_equal( sym6->size, 5 );
-	assert_equal( a.count( sym6, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( sym6, WElement_conditionStrEquals, "elephant" ), 1 );
-	assert_equal( a.count( sym6, WElement_conditionStrEquals, "mouse" ), 1 );
-	assert_equal( a.count( sym6, WElement_conditionStrEquals, "crocodile" ), 1 );
-	assert_equal( a.count( sym6, WElement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( sym6, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( sym6, welement_conditionStrEquals, "elephant" ), 1 );
+	assert_equal( a.count( sym6, welement_conditionStrEquals, "mouse" ), 1 );
+	assert_equal( a.count( sym6, welement_conditionStrEquals, "crocodile" ), 1 );
+	assert_equal( a.count( sym6, welement_conditionStrEquals, "" ), 1 );
 }
 void
 Test_warray_addToSet()
@@ -1167,34 +1167,34 @@ Test_warray_addToSet()
 	autoWArray* set = a.new( 0, wtypeStr );
 
 	warray_addToSet( set, "cat" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
 
 	warray_addToSet( set, "cat" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
 
 	warray_addToSet( set, "cat" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
 
 	warray_addToSet( set, "" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "" ), 1 );
 
 	warray_addToSet( set, "" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "" ), 1 );
 
 	warray_addToSet( set, "cat" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "" ), 1 );
 
 	warray_addToSet( set, NULL );
 	warray_addToSet( set, "dog" );
 	warray_addToSet( set, NULL );
 	warray_addToSet( set, "dog" );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "cat" ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "" ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, NULL ), 1 );
-	assert_equal( a.count( set, WElement_conditionStrEquals, "dog" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "cat" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "" ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, NULL ), 1 );
+	assert_equal( a.count( set, welement_conditionStrEquals, "dog" ), 1 );
 }
 
 //--------------------------------------------------------------------------------
@@ -1251,12 +1251,12 @@ Test_warray_bsearch()
 {
 	autoWArray* array1 = a.new( 0, wtypeStr );
 	a.append_n( array1, 5, (void*[]){ "cat", "dog", "lion", "mouse", "zebra" });
-	assert_equal( warray_bsearch( array1, WElement_compareStr, "cat" ), 0 );
-	assert_equal( a.bsearch( array1, WElement_compareStr, "dog" ), 1 );
-	assert_equal( a.bsearch( array1, WElement_compareStr, "lion" ), 2 );
-	assert_equal( a.bsearch( array1, WElement_compareStr, "mouse" ), 3 );
-	assert_equal( a.bsearch( array1, WElement_compareStr, "zebra" ), 4 );
-	assert_equal( a.bsearch( array1, WElement_compareStr, "wolpertinger" ), -1 );
+	assert_equal( warray_bsearch( array1, welement_compareStr, "cat" ), 0 );
+	assert_equal( a.bsearch( array1, welement_compareStr, "dog" ), 1 );
+	assert_equal( a.bsearch( array1, welement_compareStr, "lion" ), 2 );
+	assert_equal( a.bsearch( array1, welement_compareStr, "mouse" ), 3 );
+	assert_equal( a.bsearch( array1, welement_compareStr, "zebra" ), 4 );
+	assert_equal( a.bsearch( array1, welement_compareStr, "wolpertinger" ), -1 );
 
 	autoWArray* array2 = a.new( 0, personType );
 	a.append_n( array2, 5, (void*[]){
@@ -1320,13 +1320,13 @@ Test_warray_iteratorFullExample()
 	autoWIterator* iter2 = warray_iterator( ar2 );
 
 	WArray* ar3 = a.new( 0, wtypeStr );
-	while ( WIterator_hasNext( iter1 ) and WIterator_hasNext( iter2 )) {
-		a.append( ar3, WIterator_next( iter1 ));
-		a.append( ar3, WIterator_next( iter2 ));
+	while ( witerator_hasNext( iter1 ) and witerator_hasNext( iter2 )) {
+		a.append( ar3, witerator_next( iter1 ));
+		a.append( ar3, witerator_next( iter2 ));
 	}
 
-	assert_false( WIterator_hasNext( iter1 ));
-	assert_false( WIterator_hasNext( iter2 ));
+	assert_false( witerator_hasNext( iter1 ));
+	assert_false( witerator_hasNext( iter2 ));
     assert_strequal( a.at( ar3, 0 ), "1." );
     assert_strequal( a.at( ar3, 1 ), "cat" );
     assert_strequal( a.at( ar3, 2 ), "2." );
@@ -1419,7 +1419,7 @@ isSorted( const WArray* array )
 static bool
 isCompact( const WArray* array )
 {
-	return a.none( array, WElement_conditionStrEquals, NULL );
+	return a.none( array, welement_conditionStrEquals, NULL );
 }
 
 static bool

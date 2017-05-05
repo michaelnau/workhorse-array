@@ -127,19 +127,19 @@ extern const WType* wtypeDouble;
 	@return
 */
 void*
-WElement_clonePtr( const void* element );
+welement_clonePtr( const void* element );
 
 /**	Does nothing and especially does not free the element.
 
 	@param elementPtr
 */
 void
-WElement_deletePtr( void** element );
+welement_deletePtr( void** element );
 
 /**
 */
 int
-WElement_comparePtr( const void* element1, const void* element2 );
+welement_comparePtr( const void* element1, const void* element2 );
 
 //---------------------------------------------------------------------------------
 //	int element methods
@@ -153,7 +153,7 @@ WElement_comparePtr( const void* element1, const void* element2 );
 	@return
 */
 void*
-WElement_cloneInt( const void* element );
+welement_cloneInt( const void* element );
 
 /**	Do nothing with the element.
 
@@ -162,22 +162,22 @@ WElement_cloneInt( const void* element );
 	@param elementPtr The pointer to the element
 */
 void
-WElement_deleteInt( void** element );
+welement_deleteInt( void** element );
 
 /**	Compare the pointer values directly.
 */
 int
-WElement_compareInt( const void* element1, const void* element2 );
+welement_compareInt( const void* element1, const void* element2 );
 
 /**	Convert the string with strtol() to a number.
 */
 void*
-WElement_fromStringInt( const char* str );
+welement_fromStringInt( const char* str );
 
 /**	Convert the pointer value to a string.
 */
 char*
-WElement_toStringInt( const void* element );
+welement_toStringInt( const void* element );
 
 //---------------------------------------------------------------------------------
 //	char* element methods
@@ -189,22 +189,22 @@ WElement_toStringInt( const void* element );
 	@return The cloned string.
 */
 void*
-WElement_cloneStr( const void* element );
+welement_cloneStr( const void* element );
 
 /**	Free the string and set the pointer to NULL.
 
 	@param elementPointer The pointer to the element
 */
-#define WElement_deleteStr WElement_delete
+#define welement_deleteStr welement_delete
 
 int
-WElement_compareStr( const void* element1, const void* element2 );
+welement_compareStr( const void* element1, const void* element2 );
 
 void*
-WElement_fromStringStr( const char* str );
+welement_fromStringStr( const char* str );
 
 char*
-WElement_toStringStr( const void* element );
+welement_toStringStr( const void* element );
 
 //---------------------------------------------------------------------------------
 //	double element methods
@@ -216,18 +216,18 @@ WElement_toStringStr( const void* element );
 	@return The cloned double.
 */
 void*
-WElement_cloneDouble( const void* element );
+welement_cloneDouble( const void* element );
 
-#define WElement_deleteDouble( ... ) WElement_delete( __VA_ARGS__ )
+#define welement_deleteDouble( ... ) welement_delete( __VA_ARGS__ )
 
 int
-WElement_compareDouble( const void* element1, const void* element2 );
+welement_compareDouble( const void* element1, const void* element2 );
 
 void*
-WElement_fromStringDouble( const char* str );
+welement_fromStringDouble( const char* str );
 
 char*
-WElement_toStringDouble( const void* element );
+welement_toStringDouble( const void* element );
 
 //---------------------------------------------------------------------------------
 //	Other element methods
@@ -236,27 +236,27 @@ WElement_toStringDouble( const void* element );
 /**	Generic delete method, freeing the element and NULLing the pointer
 */
 void
-WElement_delete( void** element );
+welement_delete( void** element );
 
 //---------------------------------------------------------------------------------
 //	Condition functions
 //---------------------------------------------------------------------------------
 
 bool
-WElement_conditionStrEquals( const void* element1, const void* element2 );
+welement_conditionStrEquals( const void* element1, const void* element2 );
 
 bool
-WElement_conditionStrEmpty( const void* element, const void* conditionData );
+welement_conditionStrEmpty( const void* element, const void* conditionData );
 
 //---------------------------------------------------------------------------------
 //	Foreach functions
 //---------------------------------------------------------------------------------
 
 void
-WElement_foreachStrPrint( const void* element, const void* foreachData );
+welement_foreachStrPrint( const void* element, const void* foreachData );
 
 void
-WElement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData );
+welement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData );
 
 //---------------------------------------------------------------------------------
 //	Iterators
@@ -274,7 +274,7 @@ typedef struct WIterator {
 /**	When declared as autoIterator, an iterator gets automatically destroyed when
 	leaving scope.
 */
-#define autoWIterator __attribute__(( cleanup( WIterator_delete ))) WIterator
+#define autoWIterator __attribute__(( cleanup( witerator_delete ))) WIterator
 
 //---------------------------------------------------------------------------------
 
@@ -289,9 +289,9 @@ typedef struct WIteratorNamespace {
 /**
 */
 #define witeratorNamespace {		\
-	.delete = WIterator_delete,		\
-	.hasNext = WIterator_hasNext,	\
-	.next = WIterator_next,			\
+	.delete = witerator_delete,		\
+	.hasNext = witerator_hasNext,	\
+	.next = witerator_next,			\
 }
 
 /**	Delete the iterator and free its memory.
@@ -299,7 +299,7 @@ typedef struct WIteratorNamespace {
 	@param iterator
 */
 void
-WIterator_delete( WIterator** iterator );
+witerator_delete( WIterator** iterator );
 
 /**	Check if there are more elements in the iterator.
 
@@ -307,7 +307,7 @@ WIterator_delete( WIterator** iterator );
 	@return
 */
 static inline bool
-WIterator_hasNext( const WIterator* iterator ) { return iterator->hasNext( iterator ); }
+witerator_hasNext( const WIterator* iterator ) { return iterator->hasNext( iterator ); }
 
 /**	Return the next element in the iterator.
 
@@ -318,7 +318,7 @@ WIterator_hasNext( const WIterator* iterator ) { return iterator->hasNext( itera
 		clone of it.
 */
 static inline const void*
-WIterator_next( WIterator* iterator ) { return iterator->next( iterator ); }
+witerator_next( WIterator* iterator ) { return iterator->next( iterator ); }
 
 //---------------------------------------------------------------------------------
 

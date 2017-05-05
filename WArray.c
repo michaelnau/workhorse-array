@@ -1121,7 +1121,7 @@ static const void*
 ArrayIterator_next( WIterator* iterator )
 {
 	assert( iterator );
-	assert( WIterator_hasNext( iterator ));
+	assert( witerator_hasNext( iterator ));
 
 	ArrayIterator* ai = (ArrayIterator*)iterator;
 	const WArray* array = ai->base.collection;
