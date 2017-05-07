@@ -1,5 +1,5 @@
 #define _GNU_SOURCE
-#include "WArray.h"
+#include "WArray_sugar.h"
 #define TEST_IMPLEMENTATION
 #include "Testing.h"
 #include <assert.h>
