@@ -1,5 +1,6 @@
 /**@file
-	A dynamic growing array of arbitrary elements.
+	A dynamic growing array of void* elements supporting many common operations and automatic
+	element cloning and deletion.
 
 	Features
 	--------
@@ -61,24 +62,38 @@
 	Put elements in the array
 	-------------------------
 
-	Read and remove elements from the array
-	---------------------------------------
+	|                        | 1 element | n elements
+	|------------------------|:---------:|:----------:|
+	| warray_append()        | x         |
+	| warray_prepend()       | x         |
+	| warray_set()       	 | x         |
+	| warray_insert()        | x         |
+	| warray_insertSorted()  | x         |
+	| warray_append_n()      |           | x
+	| warray_prepend_n()     |           | x
+	| warray_set_n()       	 |           | x
+	| warray_insert_n()      |           | x
 
-	|                     | Read element  | Remove element |
-	|---------------------|:-------------:|:--------------:|
-	| warray_at()          | x             |                |
-	| warray_first()       | x             |                |
-	| warray_last()        | x             |                |
-	| warray_sample()      | x             |                |
-	| warray_min()         | x             |                |
-	| warray_max()         | x             |                |
-	| warray_stealAt()     | x             | x              |
-	| warray_stealFirst()  | x             | x              |
-	| warray_stealLast()   | x             | x              |
-	| warray_stealSample() | x             | x              |
-	| warray_removeAt()    |               | x              |
-	| warray_removeFirst() |               | x              |
-	| warray_removeLast()  |               | x              |
+
+	Get elements from the array
+	---------------------------
+
+	|                      | Borrow element | Take element   | Delete element |
+	|----------------------|:--------------:|:--------------:|:--------------:|
+	| warray_at()          | x              |                |
+	| warray_first()       | x              |                |
+	| warray_last()        | x              |                |
+	| warray_sample()      | x              |                |
+	| warray_cloneAt()     |                | x              |
+	| warray_cloneFirst()  |                | x              |
+	| warray_cloneLast()   |                | x              |
+	| warray_stealAt()     |                | x              | x
+	| warray_stealFirst()  |                | x              | x
+	| warray_stealLast()   |                | x              | x
+	| warray_removeAt()    |                |                | x
+	| warray_removeFirst() |                |                | x
+	| warray_removeLast()  |                |                | x
+	| warray_slice()       |                | x              |
 
 	Manipulate array elements
 	-------------------------
@@ -97,9 +112,6 @@
 
     Set operations
     --------------
-
-	Statistics operations for double elements
-    -----------------------------------------
 */
 #ifndef WARRAY_H_INCLUDED
 #define WARRAY_H_INCLUDED
@@ -398,7 +410,7 @@ warray_cloneAt( const WArray* array, size_t position );
 void*
 warray_cloneFirst( const WArray* array );
 
-/*	Clone the last element.
+/**	Clone the last element.
 */
 void*
 warray_cloneLast( const WArray* array );
@@ -977,7 +989,7 @@ warray_addToSet( WArray* array, const void* element );
 //	Iterator functions
 //------------------------------------------------------------
 
-/** Return an iterator for traversing the array in normal direction.
+/** Return an iterator for traversing the array.
 
 	@param array
 	@return
