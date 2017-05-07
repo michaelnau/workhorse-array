@@ -666,6 +666,7 @@ warray_rindex( const WArray* array, const void* element )
 	return -1;
 }
 
+#if 0
 static char*
 str_printf( const char* format, ... )
 {
@@ -685,6 +686,29 @@ str_printf( const char* format, ... )
 	assert( string );
 	return string;
 }
+#endif // 0
+
+//Helper for warray_toString()
+static char*
+str_cat3( const char* str1, const char* str2, const char* str3 )
+{
+	assert( str1 );
+	assert( str2 );
+	assert( str3 );
+
+    size_t size1 = strlen( str1 );
+    size_t size2 = strlen( str2 );
+    size_t size3 = strlen( str3 );
+
+	char* newStr = xmalloc( size1 + size2 + size3 + 1 );
+
+	memcpy( newStr,				str1, size1 );
+	memcpy( newStr+size1,		str2, size2 );
+	memcpy( newStr+size1+size2, str3, size3 );
+
+	newStr[size1+size2+size3] = 0;
+	return newStr;
+}
 
 char*
 warray_toString( const WArray* array, const char delimiters[] )
@@ -697,13 +721,15 @@ warray_toString( const WArray* array, const char delimiters[] )
 
 	WElementToString* toString = array->type->toString;
 	char* string = toString( array->data[0] );		//The first element without delimiters
+	assert( string );
 
 	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiters and next element.
-		char* wtypeStr = toString( array->data[i] );
-		char* tempString = str_printf( "%s%s%s", string, delimiters, wtypeStr );
+		char* elementStr = toString( array->data[i] );
+		assert( elementStr );
+		char* temp = str_cat3( string, delimiters, elementStr );
 		free( string );
-		free( wtypeStr );
-		string = tempString;
+		free( elementStr );
+		string = temp;
 	}
 
 	assert( string );

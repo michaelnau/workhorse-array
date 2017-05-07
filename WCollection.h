@@ -35,6 +35,9 @@ typedef int		WElementCompare(const void* element1, const void* element2);
 typedef void*	WElementFromString(const char* wtypeStr);
 
 /**	Function prototype for converting an element to a string.
+
+	@param element
+	@return The returned string. May not be NULL!
 */
 typedef char*	WElementToString(const void* element);
 
