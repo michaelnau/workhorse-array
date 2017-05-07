@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _POSIX_C_SOURCE 200809L
 #include "WCollection.h"
 
 #include <assert.h>		//assert()
@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//TODO: Remove dependency from _GNU_SOURCE.
+//TODO: Remove dependency from _POSIX_C_SOURCE.
 
 //---------------------------------------------------------------------------------
 //	Helper functions

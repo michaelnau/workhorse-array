@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _POSIX_C_SOURCE 200809L
 #include "WArray.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not
@@ -7,7 +7,7 @@
 #include <stdio.h>	//printf, fflush
 #include <stdlib.h>	//malloc, realloc
 
-//TODO: Remove dependency from _GNU_SOURCE.
+//TODO: Remove dependency from _POSIX_C_SOURCE.
 //TODO: Remove GNU C nested functions.
 
 //-------------------------------------------------------------------------------

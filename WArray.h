@@ -240,66 +240,66 @@ typedef struct WArrayNamespace {
 {										\
 	.new = warray_new,					\
 	.clone = warray_clone,				\
-	.delete = warray_delete,				\
+	.delete = warray_delete,			\
 	.clear = warray_clear,				\
 \
-	.append = warray_append,				\
+	.append = warray_append,			\
 	.prepend = warray_prepend,			\
 	.set = warray_set,					\
-	.insert = warray_insert,				\
-	.insertSorted = warray_insertSorted,	\
-	.addToSet = warray_addToSet,			\
+	.insert = warray_insert,			\
+	.insertSorted = warray_insertSorted,\
+	.addToSet = warray_addToSet,		\
 \
-	.append_n = warray_append_n,			\
+	.append_n = warray_append_n,		\
 	.prepend_n = warray_prepend_n,		\
 	.set_n = warray_set_n,				\
-	.insert_n = warray_insert_n,			\
+	.insert_n = warray_insert_n,		\
 \
-	.at = warray_at,						\
+	.at = warray_at,					\
 	.first = warray_first,				\
-	.last = warray_last,					\
+	.last = warray_last,				\
 \
 	.stealAt = warray_stealAt,			\
-	.stealFirst = warray_stealFirst,		\
+	.stealFirst = warray_stealFirst,	\
 	.stealLast = warray_stealLast,		\
 	.stealSample = warray_stealSample,	\
 \
-	.removeAt = warray_removeAt,			\
+	.removeAt = warray_removeAt,		\
 	.removeFirst = warray_removeFirst,	\
-	.removeLast = warray_removeLast,		\
+	.removeLast = warray_removeLast,	\
 \
-	.size = warray_size,					\
+	.size = warray_size,				\
 	.empty = warray_empty,				\
-	.nonEmpty = warray_nonEmpty,			\
+	.nonEmpty = warray_nonEmpty,		\
 \
 	.all = warray_all,					\
 	.any = warray_any,					\
-	.none = warray_none,					\
+	.none = warray_none,				\
 	.one = warray_one,					\
 \
-	.filter = warray_filter,				\
-	.reject = warray_reject,				\
+	.filter = warray_filter,			\
+	.reject = warray_reject,			\
 	.map = warray_map,					\
-	.reduce = warray_reduce,				\
+	.reduce = warray_reduce,			\
 \
 	.foreach = warray_foreach,			\
-	.foreachIndex = warray_foreachIndex,	\
+	.foreachIndex = warray_foreachIndex,\
 \
 	.index = warray_index,				\
-	.rindex = warray_rindex,				\
+	.rindex = warray_rindex,			\
 	.bsearch = warray_bsearch,			\
-	.contains = warray_contains,			\
+	.contains = warray_contains,		\
 	.count = warray_count,				\
 \
 	.reverse = warray_reverse,			\
 	.compact = warray_compact,			\
-	.sort = warray_sort,					\
-	.sortBy = warray_sortBy,				\
-	.distinct = warray_distinct,			\
+	.sort = warray_sort,				\
+	.sortBy = warray_sortBy,			\
+	.distinct = warray_distinct,		\
 	.shuffle = warray_shuffle,			\
 \
-	.toString = warray_toString,			\
-	.fromString = warray_fromString,		\
+	.toString = warray_toString,		\
+	.fromString = warray_fromString,	\
 	.compare = warray_compare,			\
 	.equal = warray_equal,				\
 \
@@ -307,7 +307,7 @@ typedef struct WArrayNamespace {
 	.intersect = warray_intersect,		\
 	.symDiff = warray_symDiff,			\
 \
-	.iterator = warray_iterator,			\
+	.iterator = warray_iterator,		\
 	.iteratorReverse = warray_iteratorReverse,	\
 }
 
@@ -492,7 +492,7 @@ warray_append_n( WArray* array, size_t n, void* const elements[n] );
 WArray*
 warray_prepend_n( WArray* array, size_t n, void* const elements[n] );
 
-/*	Set or update one or several elements in the array.
+/**	Set or update one or several elements in the array.
 
 	@param array The array to be modified in place.
 	@param position May be greater than the current size. A possible gap
@@ -566,12 +566,12 @@ warray_last( const WArray* array );
 const void*
 warray_sample( const WArray* array );
 
-/*	Clone the element at the given position.
+/**	Clone the element at the given position.
 */
 void*
 warray_cloneAt( const WArray* array, size_t position );
 
-/*	Clone the first element.
+/**	Clone the first element.
 */
 void*
 warray_cloneFirst( const WArray* array );
@@ -653,7 +653,7 @@ warray_removeFirst( WArray* array );
 WArray*
 warray_removeLast( WArray* array );
 
-/*	Return several cloned elements at the given position.
+/**	Return several cloned elements at the given position.
 
 	@param array
 	@param start
@@ -865,7 +865,7 @@ warray_nonEmpty( const WArray* array ) { return array->size > 0; }
 void
 warray_foreach( const WArray* array, WElementForeach* foreach, void* foreachData  );
 
-/*	Apply a read-only function to all elements and their indexes.
+/**	Apply a read-only function to all elements and their indexes.
 
 	@pre array != NULL
 	@pre foreach != NULL
@@ -982,7 +982,7 @@ warray_unselect( WArray* array, WElementCondition* filter, const void* filterDat
 WArray*
 warray_reverse( WArray* array );
 
-/*	Return the array with the elements in random order.
+/**	Return the array with the elements in random order.
 
 	@pre array != NULL
 */
@@ -1155,7 +1155,7 @@ warray_addToSet( WArray* array, const void* element );
 //	Iterator functions
 //------------------------------------------------------------
 
-/** Return an iterator capable of traversing the array in normal direction.
+/** Return an iterator for traversing the array in normal direction.
 
 	@param array
 	@return
@@ -1163,7 +1163,7 @@ warray_addToSet( WArray* array, const void* element );
 WIterator*
 warray_iterator( const WArray* array );
 
-/** Return an iterator capable of traversing the array in reverse direction.
+/** Return an iterator for traversing the array in reverse direction.
 
 	@param array
 	@return
