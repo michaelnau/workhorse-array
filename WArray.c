@@ -7,7 +7,7 @@
 #include <stdio.h>	//printf, fflush
 #include <stdlib.h>	//malloc, realloc
 
-//TODO: Remove dependency from _POSIX_C_SOURCE.
+//TODO: Remove dependency from _POSIX_C_SOURCE (strtok_r).
 //TODO: Remove GNU C nested functions.
 
 //-------------------------------------------------------------------------------
@@ -25,42 +25,6 @@ checkArray( const WArray* array ) {
 
 	return (WArray*)array;
 }
-
-static void*
-xmalloc( size_t size )
-{
-	void* ptr = malloc( size );
-	if ( !ptr ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
-
-	return ptr;
-}
-
-static void*
-xrealloc( void* pointer, size_t size )
-{
-	void* ptr = realloc( pointer, size );
-	if ( !ptr ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
-
-	return ptr;
-}
-
-#define xnew( type, ... )		\
-	memcpy( xmalloc( sizeof( type )), &(type){ __VA_ARGS__ }, sizeof(type) )
-
-#define max( x, y )	((x) > (y) ? (x) : (y))
-
-#define swapPtr( var1, var2 )	\
-do {							\
-	void* __temp = var2;		\
-	var2 = var1;				\
-	var1 = __temp;				\
-}while(0)
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
@@ -87,11 +51,11 @@ warray_new( size_t capacity, const WType* type )
 	assert( not type or type->clone );
 	assert( not type or type->delete );
 
-	WArray *array = xnew( WArray,
+	WArray *array = __wxnew( WArray,
 		.capacity	= capacity ? capacity : ArrayDefaultCapacity,
 		.type	= type ? type : wtypePtr,
 	);
-	array->data = xmalloc( array->capacity * sizeof( void* ));
+	array->data = __wxmalloc( array->capacity * sizeof( void* ));
 
 	assert( array );
 	return checkArray( array );
@@ -102,10 +66,10 @@ warray_clone( const WArray *self )
 {
 	assert( self );
 
-	WArray *copy = xnew( WArray,
+	WArray *copy = __wxnew( WArray,
 		.size		= self->size,
 		.capacity	= self->capacity,
-		.data		= xmalloc( sizeof( void* ) * self->capacity ),
+		.data		= __wxmalloc( sizeof( void* ) * self->capacity ),
 		.type	= self->type
 	);
 
@@ -170,8 +134,8 @@ resize( WArray* array, size_t newSize )
 {
 	if ( newSize <= array->capacity ) return;
 
-	array->capacity = max( newSize, array->capacity * ArrayGrowthRate );
-	array->data = xrealloc( array->data, array->capacity * sizeof(void*));
+	array->capacity = __wmax( newSize, array->capacity * ArrayGrowthRate );
+	array->data = __wxrealloc( array->data, array->capacity * sizeof(void*));
 	assert( array->capacity >= newSize );
 }
 
@@ -182,7 +146,7 @@ put( WArray* array, size_t position, const void* element )
 	assert( position < array->capacity );
 
 	array->data[position] = array->type->clone( element );
-	array->size = max( array->size+1, position+1 );
+	array->size = __wmax( array->size+1, position+1 );
 
 	return array;
 }
@@ -213,7 +177,7 @@ warray_set( WArray* array, size_t position, const void* element )
 {
 	assert( array );
 
-	resize( array, max( array->size, position+1 ));
+	resize( array, __wmax( array->size, position+1 ));
 
 	if ( position < array->size )	//Delete the old element.
 		array->type->delete( &array->data[position] );
@@ -232,7 +196,7 @@ warray_insert( WArray* array, size_t position, const void* element )
 {
 	assert( array );
 
-	resize( array, max( array->size+1, position+1 ));
+	resize( array, __wmax( array->size+1, position+1 ));
 
 	if ( position < array->size )	//Make room for the new element.
 		memmove( &array->data[position+1], &array->data[position], (array->size-position) * sizeof(void*));
@@ -678,7 +642,7 @@ str_cat3( const char* str1, const char* str2, const char* str3 )
     size_t size2 = strlen( str2 );
     size_t size3 = strlen( str3 );
 
-	char* newStr = xmalloc( size1 + size2 + size3 + 1 );
+	char* newStr = __wxmalloc( size1 + size2 + size3 + 1 );
 
 	memcpy( newStr,				str1, size1 );
 	memcpy( newStr+size1,		str2, size2 );
@@ -695,7 +659,7 @@ warray_toString( const WArray* array, const char delimiters[] )
 	assert( delimiters );
 	assert( array->type->toString );
 
-	if ( not array->size ) return strdup( "" );
+	if ( not array->size ) return __wstr_dup( "" );
 
 	WElementToString* toString = array->type->toString;
 	char* string = toString( array->data[0] );		//The first element without delimiters
@@ -722,7 +686,7 @@ warray_fromString( const char string[], const char delimiters[] )
 
 	WArray* array = warray_new( 0, wtypeStr );
 
-	char* newString = strdup( string );
+	char* newString = __wstr_dup( string );
 	char* context = NULL;
 	char* token = strtok_r( newString, delimiters, &context );
 
@@ -844,7 +808,7 @@ warray_reverse( WArray* array )
 	ssize_t back = array->size-1;
 
 	while ( front < back ) {
-		swapPtr( array->data[front], array->data[back] );
+		__wswapPtr( array->data[front], array->data[back] );
 		front++;
 		back--;
 	}
@@ -860,7 +824,7 @@ warray_shuffle( WArray* array )
 
 	for ( size_t i = 0; i < array->size; i++ ) {
         size_t position = rand() % array->size;
-        swapPtr( array->data[i], array->data[position] );
+        __wswapPtr( array->data[i], array->data[position] );
 	}
 
 	assert( array );

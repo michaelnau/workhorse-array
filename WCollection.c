@@ -1,6 +1,4 @@
-#define _POSIX_C_SOURCE 200809L
 #include "WCollection.h"
-
 #include <assert.h>		//assert()
 #include <iso646.h>		//and, or, not
 #include <string.h>
@@ -8,14 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//TODO: Remove dependency from _strdup()
-
 //---------------------------------------------------------------------------------
 //	Helper functions
 //---------------------------------------------------------------------------------
 
-static void*
-xmalloc( size_t size )
+void*
+__wxmalloc( size_t size )
 {
 	void* ptr = malloc( size );
 	if ( !ptr ) {
@@ -26,8 +22,19 @@ xmalloc( size_t size )
 	return ptr;
 }
 
-//TODO: Integrate vasprintf() in str_printf().
-//TODO: Move all common helpers to WCollection and give it a "w" prefix.
+void*
+__wxrealloc( void* pointer, size_t size )
+{
+	void* ptr = realloc( pointer, size );
+	if ( !ptr ) {
+		fputs( "Out of memory.", stderr );
+		exit( EXIT_FAILURE );
+	}
+
+	return ptr;
+}
+
+//TODO: Integrate vasprintf() in __wstr_printf().
 
 //Taken from ccan/asprintf, then modified
 static int
@@ -40,29 +47,43 @@ vasprintf( char **strp, const char *fmt, va_list ap )
 	len = vsnprintf( NULL, 0, fmt, ap_copy );
 	va_end( ap_copy );
 
-	if ( len < 0 )
-		return -1;
+	if ( len >= 0 ) {
+		*strp = __wxmalloc( len+1 );
+		len = vsprintf( *strp, fmt, ap );
+	}
 
-	*strp = malloc( len+1 );
-	if ( !*strp )
-		return -1;
-
-	return vsprintf( *strp, fmt, ap );
+	return len;
 }
 
 //Taken from ccan/asprintf, then modified
-static char*
-str_printf( const char *fmt, ... )
+char*
+__wstr_printf( const char* fmt, ... )
 {
 	va_list ap;
-	char* ptr;
+	char* string;
 
 	va_start( ap, fmt );
-	if ( vasprintf( &ptr, fmt, ap ) < 0 )
-		abort();
+	if ( vasprintf( &string, fmt, ap ) < 0 ) {
+		fputs( "Out of memory.", stderr );
+		exit( EXIT_FAILURE );
+	}
 	va_end( ap );
 
-	return ptr;
+	assert( string );
+	return string;
+}
+
+char*
+__wstr_dup( const char* string )
+{
+	if ( not string ) string = "";
+
+	size_t size = strlen( string ) + 1;
+	char* copy = __wxmalloc( size );
+    memcpy( copy, string, size );
+
+    assert( copy );
+    return copy;
 }
 
 //---------------------------------------------------------------------------------
@@ -115,7 +136,7 @@ void* welement_fromStringInt( const char* string ) {
 }
 
 char* welement_toStringInt( const void* element ) {
-    return str_printf( "%ld", (long)element );
+    return __wstr_printf( "%ld", (long)element );
 }
 
 const WType* wtypeInt = &(WType) {
@@ -131,7 +152,7 @@ const WType* wtypeInt = &(WType) {
 //---------------------------------------------------------------------------------
 
 void* welement_cloneStr( const void* element ) {
-	return element ? strdup( element ) : NULL;
+	return element ? __wstr_dup( element ) : NULL;
 }
 
 void welement_delete( void** wtypePtr ) {
@@ -148,11 +169,11 @@ int welement_compareStr( const void* e1, const void* e2 ) {
 }
 
 void* welement_fromStringStr( const char* string ) {
-	return string ? strdup( string ) : strdup( "" );
+	return __wstr_dup( string );
 }
 
 char* welement_toStringStr( const void* element ) {
-	return element ? strdup( element ) : strdup( "" );
+	return __wstr_dup( element );
 }
 
 const WType* wtypeStr = &(WType) {
@@ -168,7 +189,7 @@ const WType* wtypeStr = &(WType) {
 //---------------------------------------------------------------------------------
 
 void* welement_cloneDouble( const void* element ) {
-	double* clone = xmalloc( sizeof( double ));
+	double* clone = __wxmalloc( sizeof( double ));
 	*clone = *(double*)element;
 	return clone;
 }
@@ -181,15 +202,15 @@ int welement_compareDouble( const void* e1, const void* e2 ) {
 void* welement_fromStringDouble( const char* string ) {
 	assert( string );
 
-	double* element = xmalloc( sizeof( double ));
+	double* element = __wxmalloc( sizeof( double ));
 	*element = strtod( string, NULL );
 	return element;
 }
 
 char* welement_toStringDouble( const void* element ) {
     return element ?
-		str_printf( "%lf", *(double*)element ) :
-		strdup("");
+		__wstr_printf( "%lf", *(double*)element ) :
+		__wstr_dup( "" );
 }
 
 const WType* wtypeDouble = &(WType) {

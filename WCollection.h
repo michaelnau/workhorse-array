@@ -262,5 +262,40 @@ void
 welement_foreachIndexStrPrint( const void* element, size_t index, const void* foreachData );
 
 //---------------------------------------------------------------------------------
+//	Common helpers
+//---------------------------------------------------------------------------------
+
+//Not part of the public API, do not use: malloc wrapper
+void*
+__wxmalloc( size_t size );
+
+//Not part of the public API, do not use: realloc wrapper
+void*
+__wxrealloc( void* pointer, size_t size );
+
+//Not part of the public API, do not use: convenient object allocation
+#define __wxnew( type, ... )	\
+	memcpy( __wxmalloc( sizeof( type )), &(type){ __VA_ARGS__ }, sizeof(type) )
+
+//Not part of the public API, do not use: formatted string creation
+char*
+__wstr_printf( const char* fmt, ... );
+
+//Not part of the public API, do not use: strdup() replacement
+char*
+__wstr_dup( const char* string );
+
+//Not part of the public API, do not use: max() macro
+#define __wmax( x, y )	((x) > (y) ? (x) : (y))
+
+//Not part of the public API, do not use: swap() macro
+#define __wswapPtr( var1, var2 )\
+do {							\
+	void* __temp = var2;		\
+	var2 = var1;				\
+	var1 = __temp;				\
+}while(0)
+
+//---------------------------------------------------------------------------------
 
 #endif // WCOLLECTION_H_INCLUDED
