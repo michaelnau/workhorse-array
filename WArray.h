@@ -927,65 +927,6 @@ bool
 warray_one( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
-//	Common set operations
-//------------------------------------------------------------
-
-/**	Return an array with elements that are in one or both of the given arrays without duplicates.
-
-	@param array1
-	@param array2
-	@pre array1 != NULL
-	@pre array2 != NULL
-	@pre array1->type == array2->type
-	@pre array1->type->compare != NULL
-	@pre array2->type->compare != NULL
-*/
-WArray*
-warray_unite( const WArray* array1, const WArray* array2 );
-
-/**	Return an array with elements that are both in array1 and array2 without duplicates.
-
-	@param array1
-	@param array2
-	@pre array1 != NULL
-	@pre array2 != NULL
-	@pre array1->type == array2->type
-	@pre array1->type->compare != NULL
-	@pre array2->type->compare != NULL
-*/
-WArray*
-warray_intersect( const WArray* array1, const WArray* array2 );
-
-/**	Return an array with elements that are either in array1 or array2 without duplicates.
-
-	The result contains only unique elements.
-
-	@param array1
-	@param array2
-	@pre array1 != NULL
-	@pre array2 != NULL
-	@pre array1->type == array2->type
-	@pre array1->type->compare != NULL
-	@pre array2->type->compare != NULL
-*/
-WArray*
-warray_symDiff( const WArray* array1, const WArray* array2 );
-
-WArray*
-warray_diff( const WArray* array1, const WArray* array2 );
-
-/**	Append the element to the array, if it is not there already.
-
-	@param array
-	@param element
-	@return
-	@pre array != NULL
-	@pre array->type->compare != NULL
-*/
-WArray*
-warray_addToSet( WArray* array, const void* element );
-
-//------------------------------------------------------------
 //	Iterator functions
 //------------------------------------------------------------
 

@@ -105,10 +105,6 @@ typedef struct WArrayNamespace {
 	int			(*compare) 	(const WArray* array1, const WArray* array2);
 	bool		(*equal)	(const WArray* array1, const WArray* array2);
 
-	WArray*		(*unite)	(const WArray* array1, const WArray* array2);
-	WArray*		(*intersect)(const WArray* array1, const WArray* array2);
-	WArray*		(*symDiff)	(const WArray* array1, const WArray* array2);
-
 	WIterator*	(*iterator)	(const WArray* array);
 	WIterator*	(*iteratorReverse)(const WArray* array);
 }WArrayNamespace;
@@ -127,7 +123,6 @@ typedef struct WArrayNamespace {
 	.set = warray_set,					\
 	.insert = warray_insert,			\
 	.insertSorted = warray_insertSorted,\
-	.addToSet = warray_addToSet,		\
 \
 	.append_n = warray_append_n,		\
 	.prepend_n = warray_prepend_n,		\
@@ -181,10 +176,6 @@ typedef struct WArrayNamespace {
 	.fromString = warray_fromString,	\
 	.compare = warray_compare,			\
 	.equal = warray_equal,				\
-\
-	.unite = warray_unite,				\
-	.intersect = warray_intersect,		\
-	.symDiff = warray_symDiff,			\
 \
 	.iterator = warray_iterator,		\
 	.iteratorReverse = warray_iteratorReverse,	\
