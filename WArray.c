@@ -1,17 +1,15 @@
-#define _POSIX_C_SOURCE 200809L
 #include "WArray.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not
-#include <string.h>	//memmove, memset, strdup, strtok_r
+#include <string.h>	//memmove, memset, strdup
 #include <stdarg.h>	//va_list
 #include <stdio.h>	//printf, fflush
 #include <stdlib.h>	//malloc, realloc
 
-//TODO: Remove dependency from _POSIX_C_SOURCE (strtok_r).
 //TODO: Remove GNU C nested functions.
 
 //-------------------------------------------------------------------------------
-//	Helpers
+//	Check invariants
 //-------------------------------------------------------------------------------
 
 static WArray*
@@ -24,6 +22,34 @@ checkArray( const WArray* array ) {
 	assert( array->type->delete );
 
 	return (WArray*)array;
+}
+
+//-------------------------------------------------------------------------------
+//	Helpers
+//-------------------------------------------------------------------------------
+
+//Taken from http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 via Stackoverflow, Public Domain, then modified
+static char*
+__wstrtok_r( char *str, const char* delim, char** nextp )
+{
+    if ( not str )
+        str = *nextp;
+
+    str += strspn( str, delim );
+
+    if (*str == '\0')
+        return NULL;
+
+    char* ret = str;
+
+    str += strcspn( str, delim );
+
+    if (*str)
+        *str++ = '\0';
+
+    *nextp = str;
+
+    return ret;
 }
 
 //-------------------------------------------------------------------------------
@@ -688,11 +714,11 @@ warray_fromString( const char string[], const char delimiters[] )
 
 	char* newString = __wstr_dup( string );
 	char* context = NULL;
-	char* token = strtok_r( newString, delimiters, &context );
+	char* token = __wstrtok_r( newString, delimiters, &context );
 
 	while ( token ) {
 		warray_append( array, token );
-		token = strtok_r( NULL, delimiters, &context );
+		token = __wstrtok_r( NULL, delimiters, &context );
 	}
 
 	free( newString );
