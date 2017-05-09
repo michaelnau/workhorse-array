@@ -392,8 +392,7 @@ warray_slice( const WArray* array, size_t start, size_t end )
 
 	assert( slice );
 	assert( slice->size == end-start+1 );
-
-	return slice;
+	return checkArray( slice );
 }
 
 void*
@@ -453,7 +452,7 @@ warray_removeAt( WArray* array, size_t position )
 	array->size--;
 
 	assert( array );
-	return array;
+	return checkArray( array );
 }
 
 WArray*
@@ -503,17 +502,17 @@ warray_filter( const WArray* array, WElementCondition* filter, const void* filte
 	assert( array );
 	assert( filter );
 
-	WArray* xnewArray = (WArray*)warray_new( array->capacity, array->type );
+	WArray* newArray = (WArray*)warray_new( array->capacity, array->type );
 
 	//TODO: warray_filter() with OpenMP pragma???
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( filter( array->data[i], filterData ))
-			xnewArray->data[xnewArray->size++] = array->type->clone( array->data[i] );
+			newArray->data[newArray->size++] = array->type->clone( array->data[i] );
     }
 
-	assert( xnewArray );
-	assert( warray_size( xnewArray ) <= warray_size( array ));
-	return xnewArray;
+	assert( newArray );
+	assert( warray_size( newArray ) <= warray_size( array ));
+	return checkArray( newArray );
 }
 
 WArray*
@@ -522,16 +521,16 @@ warray_reject( const WArray* array, WElementCondition* reject, const void* rejec
 	assert( array );
 	assert( reject );
 
-	WArray* xnewArray = (WArray*)warray_new( array->capacity, array->type );
+	WArray* newArray = (WArray*)warray_new( array->capacity, array->type );
 
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( not reject( array->data[i], rejectData ))
-			xnewArray->data[xnewArray->size++] = array->type->clone( array->data[i] );
+			newArray->data[newArray->size++] = array->type->clone( array->data[i] );
     }
 
-	assert( xnewArray );
-	assert( warray_size( xnewArray ) <= warray_size( array ));
-	return xnewArray;
+	assert( newArray );
+	assert( warray_size( newArray ) <= warray_size( array ));
+	return checkArray( newArray );
 }
 
 WArray*
