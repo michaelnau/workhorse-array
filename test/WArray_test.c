@@ -18,7 +18,8 @@ str_printf( const char* format, ... )
 
     va_list args;
     va_start( args, format );
-	vasprintf( &string, format, args );
+	if ( vasprintf( &string, format, args ) < 0 )
+		abort();
 	va_end( args );
 
 	return string;

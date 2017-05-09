@@ -50,7 +50,7 @@ xrealloc( void* pointer, size_t size )
 	return ptr;
 }
 
-#define xnew( type, ... )							\
+#define xnew( type, ... )		\
 	memcpy( xmalloc( sizeof( type )), &(type){ __VA_ARGS__ }, sizeof(type) )
 
 #define max( x, y )	((x) > (y) ? (x) : (y))

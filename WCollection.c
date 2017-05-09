@@ -4,10 +4,11 @@
 #include <assert.h>		//assert()
 #include <iso646.h>		//and, or, not
 #include <string.h>
+#include <stdarg.h>		//va_copy() etc.
 #include <stdio.h>
 #include <stdlib.h>
 
-//TODO: Remove dependency from _POSIX_C_SOURCE.
+//TODO: Remove dependency from _strdup()
 
 //---------------------------------------------------------------------------------
 //	Helper functions
@@ -21,6 +22,42 @@ xmalloc( size_t size )
 		fputs( "Out of memory.", stderr );
 		exit( EXIT_FAILURE );
 	}
+
+	return ptr;
+}
+
+//Taken from ccan/asprintf, then modified
+static int
+vasprintf( char **strp, const char *fmt, va_list ap )
+{
+	int len;
+	va_list ap_copy;
+
+	va_copy( ap_copy, ap );
+	len = vsnprintf( NULL, 0, fmt, ap_copy );
+	va_end( ap_copy );
+
+	if ( len < 0 )
+		return -1;
+
+	*strp = malloc( len+1 );
+	if ( !*strp )
+		return -1;
+
+	return vsprintf( *strp, fmt, ap );
+}
+
+//Taken from ccan/asprintf, then modified
+static char*
+str_printf( const char *fmt, ... )
+{
+	va_list ap;
+	char* ptr;
+
+	va_start( ap, fmt );
+	if ( vasprintf( &ptr, fmt, ap ) < 0 )
+		abort();
+	va_end( ap );
 
 	return ptr;
 }
@@ -75,8 +112,7 @@ void* welement_fromStringInt( const char* string ) {
 }
 
 char* welement_toStringInt( const void* element ) {
-	char* string = NULL;
-    return asprintf( &string, "%ld", (long)element ) >= 0 ? string : strdup( "" );
+    return str_printf( "%ld", (long)element );
 }
 
 const WType* wtypeInt = &(WType) {
@@ -148,10 +184,9 @@ void* welement_fromStringDouble( const char* string ) {
 }
 
 char* welement_toStringDouble( const void* element ) {
-	char* string = NULL;
-    return not element ?									strdup("") :	//NULL element
-		asprintf( &string, "%lf", *(double*)element ) < 0 ?	strdup("") :	//Problems in stringifying double
-															string;			//Actual double
+    return element ?
+		str_printf( "%lf", *(double*)element ) :
+		strdup("");
 }
 
 const WType* wtypeDouble = &(WType) {
