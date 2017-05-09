@@ -666,28 +666,6 @@ warray_rindex( const WArray* array, const void* element )
 	return -1;
 }
 
-#if 0
-static char*
-str_printf( const char* format, ... )
-{
-	assert( format );
-
-	char* string;
-
-    va_list args;
-    va_start( args, format );
-	if ( vasprintf( &string, format, args ) < 0 ) {
-		fputs( "Error in vasprintf().", stderr );
-		abort();
-	}
-
-	va_end( args );
-
-	assert( string );
-	return string;
-}
-#endif // 0
-
 //Helper for warray_toString()
 static char*
 str_cat3( const char* str1, const char* str2, const char* str3 )

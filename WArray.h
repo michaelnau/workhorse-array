@@ -109,9 +109,6 @@
 
 	Check properties of the elements
 	--------------------------------
-
-    Set operations
-    --------------
 */
 #ifndef WARRAY_H_INCLUDED
 #define WARRAY_H_INCLUDED
@@ -649,7 +646,7 @@ warray_toString( const WArray* array, const char delimiters[] );
 
 	@param string
 	@param delimiters
-	@return
+	@return array of type wtypeStr
 	@pre string != NULL
 	@pre delimiters != NULL and delimiters[0] != 0
 */

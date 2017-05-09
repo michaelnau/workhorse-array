@@ -162,42 +162,6 @@ const WType* wtypeDouble = &(WType) {
 	.toString = welement_toStringDouble
 };
 
-#if 0
-
-//---------------------------------------------------------------------------------
-//	Stubs for elements not implementing methods
-//---------------------------------------------------------------------------------
-
-void* Element_cloneUndefined( const void* element ) {
-	(void)element;
-	die( "The clone() method is undefined for this element type." );
-	return NULL;
-}
-
-void Element_deleteUndefined( void** wtypePtr ) {
-	(void)wtypePtr;
-	die( "The delete() method is undefined for this element type." );
-}
-
-int Element_compareUndefined( const void* e1, const void* e2 ) {
-	(void)e1, (void)e2;
-	die( "The compare() method is undefined for this element type." );
-	return -1;
-}
-
-void* Element_fromStringUndefined( const char* string ) {
-	(void)string;
-	die( "The fromString() method is undefined for this element type." );
-	return NULL;
-}
-
-char* Element_toStringUndefined( const void* element ) {
-	(void)element;
-	die( "The toString() method is undefined for this element type." );
-	return NULL;
-}
-#endif // 0
-
 //---------------------------------------------------------------------------------
 //	Condition functions
 //---------------------------------------------------------------------------------
