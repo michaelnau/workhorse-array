@@ -9,7 +9,7 @@
 //TODO: Remove GNU C nested functions.
 
 //-------------------------------------------------------------------------------
-//	Check invariants
+//	Invariants check, performed after every public function
 //-------------------------------------------------------------------------------
 
 static WArray*
@@ -28,7 +28,7 @@ checkArray( const WArray* array ) {
 //	Helpers
 //-------------------------------------------------------------------------------
 
-//Taken from http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 via Stackoverflow, Public Domain, then modified
+//Taken from http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 (Public Domain) via Stackoverflow.com, then modified
 static char*
 __wstrtok_r( char *str, const char* delim, char** nextp )
 {
@@ -37,14 +37,14 @@ __wstrtok_r( char *str, const char* delim, char** nextp )
 
     str += strspn( str, delim );
 
-    if (*str == '\0')
+    if ( *str == '\0' )
         return NULL;
 
     char* ret = str;
 
     str += strcspn( str, delim );
 
-    if (*str)
+    if ( *str )
         *str++ = '\0';
 
     *nextp = str;
@@ -111,7 +111,7 @@ warray_clone( const WArray *self )
 void
 warray_delete( WArray** selfPointer )
 {
-	if ( not selfPointer or not *selfPointer ) return;
+	if ( not selfPointer ) return;
 
 	WArray *self = *selfPointer;
 
@@ -163,6 +163,7 @@ resize( WArray* array, size_t newSize )
 	array->capacity = __wmax( newSize, array->capacity * ArrayGrowthRate );
 	array->data = __wxrealloc( array->data, array->capacity * sizeof(void*));
 	assert( array->capacity >= newSize );
+	checkArray( array );
 }
 
 static WArray*
@@ -174,7 +175,10 @@ put( WArray* array, size_t position, const void* element )
 	array->data[position] = array->type->clone( element );
 	array->size = __wmax( array->size+1, position+1 );
 
-	return array;
+	assert( array );
+	assert( array->size > position );
+	assert( array->capacity > position );
+	return checkArray( array );
 }
 
 WArray*
@@ -195,7 +199,7 @@ warray_prepend( WArray* array, const void* element )
 	resize( array, array->size+1 );
 	memmove( &array->data[1], &array->data[0], array->size * sizeof(void*));
 
-	return put( array, 0, element );
+	return checkArray( put( array, 0, element ));
 }
 
 WArray*
@@ -214,7 +218,8 @@ warray_set( WArray* array, size_t position, const void* element )
 
 	array->data[position] = array->type->clone( element );
 
-	return array;
+	assert( array );
+	return checkArray( array );
 }
 
 WArray*
@@ -229,7 +234,7 @@ warray_insert( WArray* array, size_t position, const void* element )
 	else							//Fill the gap with zeros.
 		memset( &array->data[array->size], 0, (position-array->size) * sizeof(void*));
 
-	return put( array, position, element );
+	return checkArray( put( array, position, element ));
 }
 
 WArray*
@@ -262,7 +267,8 @@ warray_append_n( WArray* array, size_t n, void* const elements[n] )
 	for ( size_t i = 0; i < n; i++ )
 		warray_append( array, elements[i] );
 
-	return array;
+	assert( array );
+	return checkArray( array );
 }
 
 WArray*
@@ -273,6 +279,7 @@ warray_prepend_n( WArray* array, size_t n, void* const elements[n] )
 	assert( elements );
 
 	//TODO: warray_prepend_n() with OpenMP pragma
+	assert( array );
 	return warray_insert_n( array, 0, n, elements );
 }
 
@@ -287,7 +294,8 @@ warray_insert_n( WArray* array, size_t position, size_t n, void* const elements[
   	for ( size_t i = 0; i < n; i++ )
 		warray_insert( array, position+i, elements[i] );
 
-	return array;
+	assert( array );
+	return checkArray( array );
 }
 
 WArray*
@@ -301,7 +309,8 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
   	for ( size_t i = 0; i < n; i++ )
 		warray_set( array, position+i, elements[i] );
 
-	return array;
+	assert( array );
+	return checkArray( array );
 }
 
 //-------------------------------------------------------------------------------

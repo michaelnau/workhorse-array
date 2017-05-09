@@ -36,7 +36,7 @@ __wxrealloc( void* pointer, size_t size )
 
 //TODO: Integrate vasprintf() in __wstr_printf().
 
-//Taken from ccan/asprintf, then modified
+//Taken from ccan/asprintf (MIT license), then modified
 static int
 vasprintf( char **strp, const char *fmt, va_list ap )
 {
@@ -55,7 +55,7 @@ vasprintf( char **strp, const char *fmt, va_list ap )
 	return len;
 }
 
-//Taken from ccan/asprintf, then modified
+//Taken from ccan/asprintf (MIT license), then modified
 char*
 __wstr_printf( const char* fmt, ... )
 {
