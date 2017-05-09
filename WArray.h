@@ -927,26 +927,6 @@ bool
 warray_one( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 //------------------------------------------------------------
-//	Iterator functions
-//------------------------------------------------------------
-
-/** Return an iterator for traversing the array.
-
-	@param array
-	@return
-*/
-WIterator*
-warray_iterator( const WArray* array );
-
-/** Return an iterator for traversing the array in reverse direction.
-
-	@param array
-	@return
-*/
-WIterator*
-warray_iteratorReverse( const WArray* array );
-
-//------------------------------------------------------------
 
 void
 warray_print( const WArray* array );

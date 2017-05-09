@@ -51,7 +51,6 @@ xmalloc( size_t size )
 //--------------------------------------------------------------------------------
 
 WArrayNamespace a = warrayNamespace;
-WIteratorNamespace it = witeratorNamespace;
 
 //--------------------------------------------------------------------------------
 typedef struct Person {
@@ -1101,68 +1100,6 @@ Test_warray_bsearch()
 
 //--------------------------------------------------------------------------------
 
-void
-Test_warray_iterator()
-{
-	autoWArray* ar = a.new( 0, wtypeStr );
-	autoWIterator* iter1a = a.iterator( ar );
-	autoWIterator* iter1b = a.iteratorReverse( ar );
-	assert_false( it.hasNext( iter1a ));
-	assert_false( it.hasNext( iter1b ));
-
-	a.append( ar, "cat" );
-	autoWIterator* iter2a = a.iterator( ar );
-	autoWIterator* iter2b = a.iteratorReverse( ar );
-	assert_true( it.hasNext( iter2a ));
-	assert_true( it.hasNext( iter2b ));
-	assert_strequal( it.next( iter2a ), "cat" );
-	assert_strequal( it.next( iter2b ), "cat" );
-	assert_false( it.hasNext( iter2a ));
-	assert_false( it.hasNext( iter2b ));
-
-	a.append( ar, "dog" );
-	autoWIterator* iter3a = a.iterator( ar );
-	autoWIterator* iter3b = a.iteratorReverse( ar );
-	assert_true( it.hasNext( iter3a ));
-	assert_true( it.hasNext( iter3b ));
-	assert_strequal( it.next( iter3a ), "cat" );
-	assert_strequal( it.next( iter3b ), "dog" );
-	assert_true( it.hasNext( iter3a ));
-	assert_true( it.hasNext( iter3b ));
-	assert_strequal( it.next( iter3a ), "dog" );
-	assert_strequal( it.next( iter3b ), "cat" );
-	assert_false( it.hasNext( iter3a ));
-	assert_false( it.hasNext( iter3b ));
-}
-void
-Test_warray_iteratorFullExample()
-{
-	autoWArray* ar1 = a.new( 0, wtypeStr );
-	autoWArray* ar2 = a.new( 0, wtypeStr );
-
-	a.append_n( ar1, 3, (void*[]){ "1.", "2.", "3." });
-	a.append_n( ar2, 3, (void*[]){ "cat", "dog", "lion" });
-	autoWIterator* iter1 = warray_iterator( ar1 );
-	autoWIterator* iter2 = warray_iterator( ar2 );
-
-	WArray* ar3 = a.new( 0, wtypeStr );
-	while ( witerator_hasNext( iter1 ) and witerator_hasNext( iter2 )) {
-		a.append( ar3, witerator_next( iter1 ));
-		a.append( ar3, witerator_next( iter2 ));
-	}
-
-	assert_false( witerator_hasNext( iter1 ));
-	assert_false( witerator_hasNext( iter2 ));
-    assert_strequal( a.at( ar3, 0 ), "1." );
-    assert_strequal( a.at( ar3, 1 ), "cat" );
-    assert_strequal( a.at( ar3, 2 ), "2." );
-    assert_strequal( a.at( ar3, 3 ), "dog" );
-    assert_strequal( a.at( ar3, 4 ), "3." );
-    assert_strequal( a.at( ar3, 5 ), "lion" );
-}
-
-//--------------------------------------------------------------------------------
-
 int main() {
 	printf( "\n" );
 
@@ -1204,9 +1141,6 @@ int main() {
 
 	testsuite( Test_warray_compare );
 	testsuite( Test_warray_bsearch );
-
-	testsuite( Test_warray_iterator );
-	testsuite( Test_warray_iteratorFullExample );
 
 	printf( "\n" );
 	printf( "----------------------------\n" );

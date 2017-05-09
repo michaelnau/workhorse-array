@@ -104,9 +104,6 @@ typedef struct WArrayNamespace {
 	WArray*		(*fromString)(const char string[], const char delimiters[]);
 	int			(*compare) 	(const WArray* array1, const WArray* array2);
 	bool		(*equal)	(const WArray* array1, const WArray* array2);
-
-	WIterator*	(*iterator)	(const WArray* array);
-	WIterator*	(*iteratorReverse)(const WArray* array);
 }WArrayNamespace;
 
 /**	Predefined value for ArrayNamespace variables
@@ -176,9 +173,6 @@ typedef struct WArrayNamespace {
 	.fromString = warray_fromString,	\
 	.compare = warray_compare,			\
 	.equal = warray_equal,				\
-\
-	.iterator = warray_iterator,		\
-	.iteratorReverse = warray_iteratorReverse,	\
 }
 
 //------------------------------------------------------------

@@ -226,16 +226,3 @@ void welement_foreachIndexStrPrint( const void* element, size_t index, const voi
 }
 
 //---------------------------------------------------------------------------------
-//	Iterator functions
-//---------------------------------------------------------------------------------
-
-void
-witerator_delete( WIterator** iterator )
-{
-	if ( not iterator ) return;
-
-	free( *iterator );
-	*iterator = NULL;
-}
-
-//---------------------------------------------------------------------------------
