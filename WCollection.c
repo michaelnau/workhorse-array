@@ -26,6 +26,9 @@ xmalloc( size_t size )
 	return ptr;
 }
 
+//TODO: Integrate vasprintf() in str_printf().
+//TODO: Move all common helpers to WCollection and give it a "w" prefix.
+
 //Taken from ccan/asprintf, then modified
 static int
 vasprintf( char **strp, const char *fmt, va_list ap )

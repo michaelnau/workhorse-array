@@ -899,14 +899,7 @@ warray_sort( WArray* array )
    	assert( array );
    	assert( array->type->compare );
 
-	int wrappedCompare( const void* element1, const void* element2 ) {			//qsort delivers void**
-        return array->type->compare( *(void**)element1, *(void**)element2 );	//we deliver void* instead
-	}
-
-    qsort( array->data, array->size, sizeof( void* ), wrappedCompare );
-
-	assert( array );
-	return array;
+	return warray_sortBy( array, array->type->compare );
 }
 
 WArray*
