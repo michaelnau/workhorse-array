@@ -265,6 +265,10 @@ welement_foreachIndexStrPrint( const void* element, size_t index, const void* fo
 //	Common helpers
 //---------------------------------------------------------------------------------
 
+//Not part of the public API, do not use: abort program.
+void
+__wdie( const char* text );
+
 //Not part of the public API, do not use: malloc wrapper
 void*
 __wxmalloc( size_t size );

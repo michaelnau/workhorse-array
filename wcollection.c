@@ -10,14 +10,18 @@
 //	Helper functions
 //---------------------------------------------------------------------------------
 
+void
+__wdie( const char* text )
+{
+	fputs( text, stderr );
+	abort();
+}
+
 void*
 __wxmalloc( size_t size )
 {
 	void* ptr = malloc( size );
-	if ( !ptr ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
+	if ( not ptr ) __wdie( "Out of memory." );
 
 	return ptr;
 }
@@ -26,10 +30,7 @@ void*
 __wxrealloc( void* pointer, size_t size )
 {
 	void* ptr = realloc( pointer, size );
-	if ( !ptr ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
+	if ( !ptr ) __wdie( "Out of memory." );
 
 	return ptr;
 }
@@ -53,8 +54,8 @@ __wstr_printf( const char* fmt, ... )
 		}
 	}
 
-	fputs( "Out of memory.", stderr );
-	exit( EXIT_FAILURE );
+	__wdie( "Out of memory." );
+	return NULL;
 }
 
 char*

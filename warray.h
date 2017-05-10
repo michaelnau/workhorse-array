@@ -706,19 +706,58 @@ warray_foreachIndex( const WArray* array, WElementForeachIndex* foreach, void* f
 
 /**	Take all elements meeting a filter criterion and put them in a new array.
 
+	Function iterating through all array elements and calling a client condition function. If
+	the condition is true the current element is added to the output array.
+
+	@param array
+	@param condition Function taking the current element in the iteration and the optional
+		conditionData argument. If it returns true the element is added to the output array,
+		otherwise not.
+	@param conditionData Passed to the condition function. May be NULL.
+	@return The output array. Is never NULL.
 	@pre array != NULL
-	@pre filter != NULL
+	@pre condition != NULL
 */
 WArray*
-warray_filter( const WArray* array, WElementCondition* filter, const void* filterData );
+warray_filter( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Reject all elements meeting a criterion and put the rest in a new array.
 
+	@param array
+	@param condition Function taking the current element in the iteration and the optional
+		conditionData argument. If it returns false the element is added to the output array,
+		otherwise not.
+	@param conditionData Passed to the condition function. May be NULL.
+	@return The output array. Is never NULL.
 	@pre array != NULL
 	@pre reject != NULL
 */
 WArray*
-warray_reject( const WArray* array, WElementCondition* reject, const void* rejectData );
+warray_reject( const WArray* array, WElementCondition* condition, const void* conditionData );
+
+/**	Keep all elements meeting a filter criterion and delete the rest.
+
+	@param array
+	@param condition
+	@param conditionData
+	@return The array. Is never NULL.
+	@pre array != NULL
+	@pre filter != NULL
+*/
+WArray*
+warray_select( WArray* array, WElementCondition* condition, const void* conditionData );
+
+/**	Delete all elements meeting a filter criterion and keep the rest.
+
+	@param array
+	@param condition
+	@param conditionData
+	@return The array. Is never NULL.
+	@pre array != NULL
+	@pre filter != NULL
+*/
+WArray*
+warray_unselect( WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Map each element to a new element of a specified type and put them all in a new array.
 
@@ -729,7 +768,7 @@ warray_reject( const WArray* array, WElementCondition* reject, const void* rejec
 		type->clone() method would do it.
 	@param mapData Optional argument passed to the map function. Can be set to NULL if
 		not used.
-	@param type Structure describing the type of the mapped elements. If type == NULL, it
+	@param targetType Structure describing the type of the mapped elements. If type == NULL, it
 		is set by default to elementPtr.
 	@return A new array of the same size as the given array with the mapped elements and
 		of the type as specified in the type argument.
@@ -761,7 +800,7 @@ warray_reject( const WArray* array, WElementCondition* reject, const void* rejec
 	\endcode
 */
 WArray*
-warray_map( const WArray* array, WElementMap* map, const void* mapData, const WType* type );
+warray_map( const WArray* array, WElementMap* map, const void* mapData, const WType* targetType );
 
 /**	Reduce all elements to a single return value of an arbitrary type.
 
@@ -775,30 +814,6 @@ warray_map( const WArray* array, WElementMap* map, const void* mapData, const WT
 */
 void*
 warray_reduce( const WArray* array, WElementReduce* reduce, const void* startValue, const WType* type );
-
-/**	Keep all elements meeting a filter criterion and delete the rest.
-
-	@param array
-	@param filter
-	@param filterData
-	@return
-	@pre array != NULL
-	@pre filter != NULL
-*/
-WArray*
-warray_select( WArray* array, WElementCondition* filter, const void* filterData );
-
-/**	Delete all elements meeting a filter criterion and keep the rest.
-
-	@param array
-	@param filter
-	@param filterData
-	@return
-	@pre array != NULL
-	@pre filter != NULL
-*/
-WArray*
-warray_unselect( WArray* array, WElementCondition* filter, const void* filterData );
 
 //------------------------------------------------------------
 //	Do stuff with the elements.
