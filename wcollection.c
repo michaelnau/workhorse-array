@@ -34,43 +34,28 @@ __wxrealloc( void* pointer, size_t size )
 	return ptr;
 }
 
-//TODO: Integrate vasprintf() in __wstr_printf().
-
-//Taken from ccan/asprintf (MIT license), then modified
-static int
-vasprintf( char **strp, const char *fmt, va_list ap )
-{
-	int len;
-	va_list ap_copy;
-
-	va_copy( ap_copy, ap );
-	len = vsnprintf( NULL, 0, fmt, ap_copy );
-	va_end( ap_copy );
-
-	if ( len >= 0 ) {
-		*strp = __wxmalloc( len+1 );
-		len = vsprintf( *strp, fmt, ap );
-	}
-
-	return len;
-}
-
 //Taken from ccan/asprintf (MIT license), then modified
 char*
 __wstr_printf( const char* fmt, ... )
 {
-	va_list ap;
-	char* string;
-
+	va_list ap, ap_copy;
 	va_start( ap, fmt );
-	if ( vasprintf( &string, fmt, ap ) < 0 ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
-	va_end( ap );
+	va_copy( ap_copy, ap );
 
-	assert( string );
-	return string;
+	int len = vsnprintf( NULL, 0, fmt, ap_copy );
+	va_end( ap_copy );
+
+	if ( len >= 0 ) {
+		char* string = __wxmalloc( len+1 );
+		if ( vsprintf( string, fmt, ap ) >= 0 ) {
+			va_end( ap );
+			assert( string );
+			return string;
+		}
+	}
+
+	fputs( "Out of memory.", stderr );
+	exit( EXIT_FAILURE );
 }
 
 char*
