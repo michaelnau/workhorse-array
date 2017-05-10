@@ -987,7 +987,7 @@ bool
 warray_all( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
-	assert( condition );
+	assert( condition && "Need a condition to check for." );
 
 	//TODO: warray_all() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
@@ -1002,7 +1002,7 @@ bool
 warray_any( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
-	assert( condition );
+	assert( condition && "Need a condition to check for." );
 
 	//TODO: warray_any() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
@@ -1017,7 +1017,7 @@ bool
 warray_none( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
-	assert( condition );
+	assert( condition && "Need a condition to check for." );
 
 	//TODO: warray_none() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
@@ -1032,7 +1032,7 @@ bool
 warray_one( const WArray* array, WElementCondition* condition, const void* conditionData )
 {
 	assert( array );
-	assert( condition );
+	assert( condition && "Need a condition to check for." );
 
 	size_t counter = 0;
 	for ( size_t i = 0; i < array->size; i++ ) {
