@@ -1,4 +1,4 @@
-#include "WCollection.h"
+#include "wcollection.h"
 #include <assert.h>		//assert()
 #include <iso646.h>		//and, or, not
 #include <string.h>

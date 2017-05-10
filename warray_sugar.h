@@ -6,7 +6,7 @@
 #ifndef WARRAY_SUGAR_H_INCLUDED
 #define WARRAY_SUGAR_H_INCLUDED
 
-#include "WArray.h"
+#include "warray.h"
 
 //------------------------------------------------------------
 //	Type declaration with auto destruction

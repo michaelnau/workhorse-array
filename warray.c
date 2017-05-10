@@ -1,4 +1,4 @@
-#include "WArray.h"
+#include "warray.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not
 #include <string.h>	//memmove, memset, strdup

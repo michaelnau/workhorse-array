@@ -113,7 +113,7 @@
 #ifndef WARRAY_H_INCLUDED
 #define WARRAY_H_INCLUDED
 
-#include "WCollection.h"
+#include "wcollection.h"
 #include <stdbool.h>	//bool
 #include <sys/types.h>	//ssize_t
 
