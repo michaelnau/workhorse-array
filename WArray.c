@@ -646,8 +646,10 @@ warray_index( const WArray* array, const void* element )
 	WElementCompare* compare = array->type->compare;
 
 	for ( size_t i = 0; i < array->size; i++ ) {
-		if ( compare( element, array->data[i] ) == 0 )
+		if ( compare( element, array->data[i] ) == 0 ) {
+			assert( i <= array->size );
 			return i;
+		}
 	}
 
 	return -1;
@@ -662,8 +664,10 @@ warray_rindex( const WArray* array, const void* element )
 	WElementCompare* compare = array->type->compare;
 
 	for ( size_t i = array->size-1; i < array->size; i-- ) {
-		if ( compare( element, array->data[i] ) == 0 )
+		if ( compare( element, array->data[i] ) == 0 ) {
+			assert( i <= array->size );
 			return i;
+		}
 	}
 
 	return -1;
@@ -688,6 +692,7 @@ str_cat3( const char* str1, const char* str2, const char* str3 )
 	memcpy( newStr+size1+size2, str3, size3 );
 
 	newStr[size1+size2+size3] = 0;
+	assert( newStr );
 	return newStr;
 }
 
@@ -737,7 +742,7 @@ warray_fromString( const char string[], const char delimiters[] )
 	free( newString );
 
 	assert( array );
-	return array;
+	return checkArray( array );
 }
 
 int
@@ -771,7 +776,7 @@ warray_min( const WArray* array )
 {
 	assert( array );
 	assert( warray_nonEmpty( array ));
-	assert( array->type->compare );
+	assert( array->type->compare && "Need a comparison method!" );
 
 	WElementCompare* compare = array->type->compare;
 
@@ -789,7 +794,7 @@ warray_max( const WArray* array )
 {
 	assert( array );
 	assert( warray_nonEmpty( array ));
-	assert( array->type->compare );
+	assert( array->type->compare && "Need a comparison method!" );
 
 	WElementCompare* compare = array->type->compare;
 
@@ -821,7 +826,7 @@ ssize_t
 warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 {
 	assert( array );
-	assert( compare );
+	assert( compare && "Need a comparison method!" );
 
 	if ( not array->size ) return -1;
 
@@ -832,7 +837,9 @@ warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 	assert( element >= array->data );
 	assert( element < &array->data[array->size] );
 
-	return element - array->data;	//This gives the real position, not the byte difference!
+	size_t position = element - array->data;	//This gives the real position, not the byte difference!
+	assert( position <= array->size );
+	return position;
 }
 
 //-------------------------------------------------------------------------------
@@ -853,7 +860,7 @@ warray_reverse( WArray* array )
 	}
 
 	assert( array );
-	return array;
+	return checkArray( array );
 }
 
 WArray*
@@ -867,7 +874,7 @@ warray_shuffle( WArray* array )
 	}
 
 	assert( array );
-	return array;
+	return checkArray( array );
 }
 
 WArray*
@@ -884,7 +891,8 @@ warray_compact( WArray* array )
     array->size = write;
 
 	assert( array );
-	return array;
+	assert( not warray_contains( array, NULL ));
+	return checkArray( array );
 }
 
 static inline int
@@ -894,6 +902,20 @@ compareTwoElements( const void* element1, const void* element2 )
 	const ElementComparer* comparer = element1;
 	//bsearch gives us a pointer to the elements, we deliver the elements itself to the client comparison function.
 	return comparer->compare( *(void**)comparer->element, *(void**)element2 );
+}
+
+static bool
+isSorted( const WArray* array )
+{
+	if ( not array->size ) return true;
+
+	WElementCompare* compare = array->type->compare;
+	for ( size_t j = 0; j < array->size-1; j++ ) {
+		if ( compare( warray_at( array, j ), warray_at( array, j+1 )) == 1 )
+			return false;
+	}
+
+	return true;
 }
 
 WArray*
@@ -918,7 +940,8 @@ warray_sortBy( WArray* array, WElementCompare* compare )
     qsort( array->data, array->size, sizeof( void* ), wrappedCompare );
 
 	assert( array );
-	return array;
+	assert( isSorted( array ));
+	return checkArray( array );
 }
 
 WArray*
@@ -940,7 +963,7 @@ warray_distinct( WArray* array)
 	}
 
 	assert( array );
-	return array;
+	return checkArray( array );
 }
 
 WArray*
@@ -954,7 +977,7 @@ warray_concat( WArray* array1, const WArray* array2 )
 		warray_append( array1, array2->data[i] );
 
 	assert( array1 );
-	return array1;
+	return checkArray( array1 );
 }
 
 //-------------------------------------------------------------------------------
