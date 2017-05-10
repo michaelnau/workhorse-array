@@ -43,11 +43,10 @@ __wstr_printf( const char* fmt, ... )
 	va_copy( ap_copy, ap );
 
 	int len = vsnprintf( NULL, 0, fmt, ap_copy );
-	va_end( ap_copy );
-
 	if ( len >= 0 ) {
 		char* string = __wxmalloc( len+1 );
 		if ( vsprintf( string, fmt, ap ) >= 0 ) {
+			va_end( ap_copy );
 			va_end( ap );
 			assert( string );
 			return string;
