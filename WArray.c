@@ -512,6 +512,7 @@ warray_filter( const WArray* array, WElementCondition* filter, const void* filte
 
 	assert( newArray );
 	assert( warray_size( newArray ) <= warray_size( array ));
+	assert( warray_all( newArray, filter, filterData ));
 	return checkArray( newArray );
 }
 
@@ -530,6 +531,7 @@ warray_reject( const WArray* array, WElementCondition* reject, const void* rejec
 
 	assert( newArray );
 	assert( warray_size( newArray ) <= warray_size( array ));
+	assert( warray_none( newArray, reject, rejectData ));
 	return checkArray( newArray );
 }
 
@@ -550,7 +552,8 @@ warray_select( WArray* array, WElementCondition* filter, const void* filterData 
     array->size = to;
 
 	assert( array );
-	return array;
+	assert( warray_all( array, filter, filterData ));
+	return checkArray( array );
 }
 
 WArray*
@@ -570,7 +573,8 @@ warray_unselect( WArray* array, WElementCondition* filter, const void* filterDat
     array->size = to;
 
 	assert( array );
-	return array;
+	assert( warray_none( array, filter, filterData ));
+	return checkArray( array );
 }
 
 WArray*
@@ -591,7 +595,7 @@ warray_map( const WArray* array, WElementMap* map, const void* mapData, const WT
 	assert( newArray );
 	assert( newArray->size == array->size );
 	assert( not type or newArray->type == type );
-    return newArray;
+    return checkArray( newArray );
 }
 
 void*
@@ -629,6 +633,7 @@ warray_count( const WArray* array, WElementCondition* condition, const void* con
 			count++;
     }
 
+	assert( count <= array->size );
 	return count;
 }
 
