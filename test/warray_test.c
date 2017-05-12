@@ -574,14 +574,13 @@ Test_warray_foreachForeachIndex()
 	assert_strequal( warray_at( copy, 2 ), "mouse" );
 	assert_equal( warray_size( copy ), 3 );
 }
+static bool isLongWord( const void* element, const void* unused ) {
+	(void) unused;
+	return strlen( element ) > 3;
+}
 void
 Test_warray_filterReject()
 {
-	bool isLongWord( const void* element, const void* unused ) {
-		(void) unused;
-        return strlen( element ) > 3;
-	}
-
 	autoWArray *array = a.new( 0, wtypeStr );
 
 	autoWArray* newArray1 = warray_filter( array, isLongWord, NULL );
@@ -604,6 +603,42 @@ Test_warray_filterReject()
     assert_strequal( warray_at( newArray2b, 0 ), "cat" );
     assert_strequal( warray_at( newArray2b, 1 ), "dog" );
     assert_equal( newArray2b->size, 2 );
+}
+void
+Test_warray_select()
+{
+	autoWArray* array = a.new( 0, wtypeStr );
+
+	warray_select( array, isLongWord, NULL );
+	assert_equal( array->size, 0 );
+
+	warray_append( array, "cat" );
+	warray_append( array, "dog" );
+	warray_append( array, "sea-hawk" );
+	warray_append( array, "chimpanzee" );
+
+	warray_select( array, isLongWord, NULL );
+    assert_strequal( warray_at( array, 0 ), "sea-hawk" );
+    assert_strequal( warray_at( array, 1 ), "chimpanzee" );
+    assert_equal( array->size, 2 );
+}
+void
+Test_warray_unselect()
+{
+	autoWArray* array = a.new( 0, wtypeStr );
+
+	warray_unselect( array, isLongWord, NULL );
+	assert_equal( array->size, 0 );
+
+	warray_append( array, "cat" );
+	warray_append( array, "dog" );
+	warray_append( array, "sea-hawk" );
+	warray_append( array, "chimpanzee" );
+
+	warray_unselect( array, isLongWord, NULL );
+    assert_strequal( warray_at( array, 0 ), "cat" );
+    assert_strequal( warray_at( array, 1 ), "dog" );
+    assert_equal( array->size, 2 );
 }
 static void*
 makeItGood( const void* element, const void* mapData )
@@ -1123,6 +1158,8 @@ int main() {
 	testsuite( Test_warray_removeFirst );
 	testsuite( Test_warray_removeLast );
 	testsuite( Test_warray_filterReject );
+	testsuite( Test_warray_select );
+	testsuite( Test_warray_unselect );
 	testsuite( Test_warray_map );
 	testsuite( Test_warray_reduce );
 

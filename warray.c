@@ -546,7 +546,7 @@ warray_select( WArray* array, WElementCondition* filter, const void* filterData 
         if ( filter( array->data[from], filterData ))
 			array->data[to++] = array->data[from];
 		else
-			array->type->delete( array->data[from] );
+			array->type->delete( &array->data[from] );
     }
 
     array->size = to;
@@ -567,7 +567,7 @@ warray_unselect( WArray* array, WElementCondition* filter, const void* filterDat
         if ( !filter( array->data[from], filterData ))
 			array->data[to++] = array->data[from];
 		else
-			array->type->delete( array->data[from] );
+			array->type->delete( &array->data[from] );
 	}
 
     array->size = to;
