@@ -130,7 +130,7 @@ Test_warray_assign()
     a.append( array1, "cat" );
 
 	WArray* array2 = a.new( 0, wtypeStr );
-    warray_assign( &array1, array2 );
+	a.assign( &array1, array2 );
 	assert_equal( array1, array2 );
 
 	a.delete( &array1 );
@@ -596,16 +596,19 @@ Test_warray_slice()
 
 //--------------------------------------------------------------------------------
 
-static void
-append( const void* element, void* data )
-{
+static void append( const void* element, void* data ) {
 	WArray* array = data;
 	warray_append( array, element );
 }
-
+static void appendIndex( const void* element, size_t index, void* data ) {
+	WArray* array = data;
+	char* string = __wstr_printf( "%u. %s", index, element );
+	warray_append( array, string );
+	free( string );
+}
 
 void
-Test_warray_foreachForeachIndex()
+Test_warray_foreach()
 {
 	autoWArray* array = a.new( 0, wtypeStr );
 	autoWArray* copy = a.new( 0, wtypeStr );
@@ -632,6 +635,38 @@ Test_warray_foreachForeachIndex()
 	assert_strequal( warray_at( copy, 1 ), "dog" );
 	assert_strequal( warray_at( copy, 2 ), "mouse" );
 	assert_equal( warray_size( copy ), 3 );
+}
+void
+Test_warray_foreachIndex()
+{
+	WArray* array = a.new( 0, wtypeStr );
+	WArray* copy = a.new( 0, wtypeStr );
+
+	warray_foreachIndex( array, appendIndex, copy );
+	assert_true( warray_empty( copy ));
+
+	warray_append( array, "cat" );
+	a.foreachIndex( array, appendIndex, copy );
+	assert_strequal( warray_first( copy ), "0. cat" );
+	assert_equal( warray_size( copy ), 1 );
+
+	warray_clear( copy );
+	warray_append( array, "dog" );
+	a.foreachIndex( array, appendIndex, copy );
+	assert_strequal( warray_first( copy ), "0. cat" );
+	assert_strequal( warray_at( copy, 1 ), "1. dog" );
+	assert_equal( warray_size( copy ), 2 );
+
+	warray_clear( copy );
+	warray_append( array, "mouse" );
+	a.foreachIndex( array, appendIndex, copy );
+	assert_strequal( warray_first( copy ), "0. cat" );
+	assert_strequal( warray_at( copy, 1 ), "1. dog" );
+	assert_strequal( warray_at( copy, 2 ), "2. mouse" );
+	assert_equal( warray_size( copy ), 3 );
+
+	a.delete( &array );
+	a.delete( &copy );
 }
 static bool isLongWord( const void* element, const void* unused ) {
 	(void) unused;
@@ -1257,7 +1292,8 @@ int main() {
 	testsuite( Test_warray_count );
 
 	testsuite( Test_warray_toStringFromString );
-	testsuite( Test_warray_foreachForeachIndex );
+	testsuite( Test_warray_foreach );
+	testsuite( Test_warray_foreachIndex );
 	testsuite( Test_warray_allAnyOneNone );
 
 	testsuite( Test_warray_sort );

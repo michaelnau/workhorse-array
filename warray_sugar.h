@@ -58,6 +58,7 @@ typedef struct WArrayNamespace {
     WArray* 	(*clone)	(const WArray* array);
 	void		(*delete)	(WArray** array);
 	WArray*		(*clear)	(WArray* array);
+	void		(*assign)	(WArray** array, WArray *other);
 
 	WArray* 	(*append)	(WArray* array, const void* element);
 	WArray* 	(*prepend)	(WArray* array, const void* element);
@@ -131,6 +132,7 @@ typedef struct WArrayNamespace {
 	.clone = warray_clone,				\
 	.delete = warray_delete,			\
 	.clear = warray_clear,				\
+	.assign = warray_assign,			\
 \
 	.append = warray_append,			\
 	.prepend = warray_prepend,			\

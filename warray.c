@@ -373,6 +373,8 @@ void*
 warray_cloneAt( const WArray* array, size_t position )
 {
 	assert( array );
+	assert( array->type );
+	assert( array->type->clone );
 	assert( position < array->size );
 
 	return array->type->clone( array->data[position] );
