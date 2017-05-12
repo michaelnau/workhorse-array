@@ -123,6 +123,18 @@ Test_warray_clone_strings()
 	assert_strequal( warray_at( clone3, 3 ), "hawk" );
 	assert_equal( warray_size( clone3 ), 4 );
 }
+void
+Test_warray_assign()
+{
+	WArray* array1 = a.new( 0, wtypeStr );
+    a.append( array1, "cat" );
+
+	WArray* array2 = a.new( 0, wtypeStr );
+    warray_assign( &array1, array2 );
+	assert_equal( array1, array2 );
+
+	a.delete( &array1 );
+}
 
 //--------------------------------------------------------------------------------
 
@@ -1214,6 +1226,7 @@ int main() {
 
 	testsuite( Test_warray_clone_ints );
 	testsuite( Test_warray_clone_strings );
+	testsuite( Test_warray_assign );
 
 	testsuite( Test_warray_append_ints );
 	testsuite( Test_warray_append_strings );

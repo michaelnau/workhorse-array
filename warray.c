@@ -165,7 +165,7 @@ warray_assign( WArray** arrayPointer, WArray* other )
 	warray_delete( arrayPointer );
 	*arrayPointer = other;
 
-	checkArray( array );
+	checkArray( *arrayPointer );
 }
 
 //-------------------------------------------------------------------------------
