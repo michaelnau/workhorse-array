@@ -27,20 +27,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #define autoChar __attribute__(( cleanup( str_delete ))) char
 
-static char*
-str_printf( const char* format, ... )
-{
-	char* string;
-
-    va_list args;
-    va_start( args, format );
-	if ( vasprintf( &string, format, args ) < 0 )
-		abort();
-	va_end( args );
-
-	return string;
-}
-
 static void
 str_delete( char** string )
 {
@@ -49,21 +35,6 @@ str_delete( char** string )
 	free( *string );
 	*string = NULL;
 }
-
-static void*
-xmalloc( size_t size )
-{
-	void* ptr = malloc( size );
-	if ( !ptr ) {
-		fputs( "Out of memory.", stderr );
-		exit( EXIT_FAILURE );
-	}
-
-	return ptr;
-}
-
-#define xnew( type, ... )							\
-	memcpy( xmalloc( sizeof( type )), &(type){ __VA_ARGS__ }, sizeof(type) )
 
 //--------------------------------------------------------------------------------
 
@@ -80,7 +51,7 @@ Person*
 clonePerson( const Person* person ) {
 	assert( person );
 
-	return xnew( Person,
+	return __wxnew( Person,
 		.name = strdup( person->name ),
 		.firstname = strdup( person->firstname ),
 		.age = person->age,
@@ -743,7 +714,7 @@ Test_warray_unselect()
 static void*
 makeItGood( const void* element, const void* mapData )
 {
-	return str_printf( "My %s is %s.", (char*)element, (char*)mapData );
+	return __wstr_printf( "My %s is %s.", (char*)element, (char*)mapData );
 }
 void
 Test_warray_map()
@@ -768,7 +739,7 @@ Test_warray_map()
 }
 static void*
 joinAnimals( const void* element, const void* reduction ) {
-	return str_printf( "%s and %s", (char*)reduction, (char*)element );
+	return __wstr_printf( "%s and %s", (char*)reduction, (char*)element );
 }
 void
 Test_warray_reduce()
