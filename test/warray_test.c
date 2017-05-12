@@ -470,7 +470,6 @@ Test_warray_stealFirstLast()
 	autoChar* str4 = a.stealLast( array );
 	assert_strequal( str4, "bird" );
 }
-
 void
 Test_warray_removeAt()
 {
@@ -549,6 +548,34 @@ Test_warray_removeLast()
 	assert_strequal( a.at( array, 0 ), "dog" );
 	assert_strequal( a.at( array, 1 ), "bird" );
 	assert_equal( array->size, 2 );
+}
+void
+Test_warray_slice()
+{
+	WArray* array = warray_new( 0, wtypeStr );
+
+	a.append( array, "cat" );
+	WArray* slice1 = warray_slice( array, 0, 0 );
+	assert_strequal( a.at( slice1, 0 ), "cat" );
+	assert_equal( slice1->size, 1 );
+
+	a.append( array, "dog" );
+	WArray* slice2a = warray_slice( array, 0, 0 );
+	assert_strequal( a.at( slice2a, 0 ), "cat" );
+	assert_equal( slice2a->size, 1 );
+	WArray* slice2b = warray_slice( array, 1, 1 );
+	assert_strequal( a.at( slice2b, 0 ), "dog" );
+	assert_equal( slice2b->size, 1 );
+	WArray* slice2c = warray_slice( array, 0, 1 );
+	assert_strequal( a.at( slice2c, 0 ), "cat" );
+	assert_strequal( a.at( slice2c, 1 ), "dog" );
+	assert_equal( slice2c->size, 2 );
+
+	warray_delete( &array );
+	warray_delete( &slice1 );
+	warray_delete( &slice2a );
+	warray_delete( &slice2b );
+	warray_delete( &slice2c );
 }
 
 //--------------------------------------------------------------------------------
@@ -1197,6 +1224,8 @@ int main() {
 	testsuite( Test_warray_removeAt );
 	testsuite( Test_warray_removeFirst );
 	testsuite( Test_warray_removeLast );
+	testsuite( Test_warray_slice );
+
 	testsuite( Test_warray_filterReject );
 	testsuite( Test_warray_select );
 	testsuite( Test_warray_unselect );
