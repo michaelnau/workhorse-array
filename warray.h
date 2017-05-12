@@ -415,16 +415,29 @@ const void*
 warray_sample( const WArray* array );
 
 /**	Clone the element at the given position.
+
+	@param array
+	@param position
+	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 */
 void*
 warray_cloneAt( const WArray* array, size_t position );
 
 /**	Clone the first element.
+
+	@param array
+	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 */
 void*
 warray_cloneFirst( const WArray* array );
 
 /**	Clone the last element.
+
+	@param array
+	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 */
 void*
 warray_cloneLast( const WArray* array );
@@ -436,6 +449,7 @@ warray_cloneLast( const WArray* array );
 	@param array
 	@param position
 	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 	@pre array != NULL
 	@pre position < array->size
 */
@@ -448,6 +462,7 @@ warray_stealAt( WArray* array, size_t position );
 
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 	@pre array != NULL
 	@pre warray_nonEmpty( array )
 */
@@ -460,6 +475,7 @@ warray_stealFirst( WArray* array );
 
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 	@pre array != NULL
 	@pre warray_nonEmpty( array )
 */
@@ -472,6 +488,7 @@ warray_stealLast( WArray* array );
 
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
+		The calling code must ensure to deallocate it properly if needed.
 	@pre array != NULL
 	@pre warray_nonEmpty( array )
 */
