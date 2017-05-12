@@ -991,6 +991,8 @@ Test_warray_sort()
     assert_strequal( warray_at( array, 5 ), "mongoose");
     assert_strequal( warray_at( array, 6 ), "yak");
     assert_equal( warray_size( array ), 7 );
+
+	a.delete( &array );
 }
 void
 Test_warray_compact()
