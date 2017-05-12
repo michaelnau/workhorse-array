@@ -431,6 +431,8 @@ warray_cloneLast( const WArray* array );
 
 /**	Remove the element at the array position and return it.
 
+	The order of the other elements remains intact.
+
 	@param array
 	@param position
 	@return The element as it was copied into the array with the given ElementClone* function.
@@ -442,6 +444,8 @@ warray_stealAt( WArray* array, size_t position );
 
 /**	Remove the first element and return it.
 
+	The order of the other elements remains intact.
+
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
 	@pre array != NULL
@@ -451,6 +455,8 @@ void*
 warray_stealFirst( WArray* array );
 
 /**	Remove the last element and return it.
+
+	The order of the other elements remains intact.
 
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
@@ -462,6 +468,8 @@ warray_stealLast( WArray* array );
 
 /**	Remove a random element and return it.
 
+	The order of the other elements remains intact.
+
 	@param array
 	@return The element as it was copied into the array with the given ElementClone* function.
 	@pre array != NULL
@@ -471,6 +479,8 @@ void*
 warray_stealSample( WArray* array );
 
 /**	Remove and delete the element at the given position.
+
+	The order of the other elements remains intact.
 
 	@param array
 	@param position
@@ -483,6 +493,8 @@ warray_removeAt( WArray* array, size_t position );
 
 /**	Remove and delete the first element.
 
+	The order of the other elements remains intact.
+
 	@param array
 	@return The modified array
 	@pre array != NULL
@@ -492,6 +504,8 @@ WArray*
 warray_removeFirst( WArray* array );
 
 /**	Remove and delete the last element.
+
+	The order of the other elements remains intact.
 
 	@param array
 	@return The modified array
@@ -506,6 +520,7 @@ warray_removeLast( WArray* array );
 	@param array
 	@param start
 	@param end
+	@return
 	@pre array != NULL
 	@pre start <= end
 	@pre end < array->size

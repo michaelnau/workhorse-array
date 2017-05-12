@@ -643,7 +643,7 @@ Test_warray_foreachIndex()
 	WArray* copy = a.new( 0, wtypeStr );
 
 	warray_foreachIndex( array, appendIndex, copy );
-	assert_true( warray_empty( copy ));
+	assert_true( a.empty( copy ));
 
 	warray_append( array, "cat" );
 	a.foreachIndex( array, appendIndex, copy );
@@ -651,19 +651,19 @@ Test_warray_foreachIndex()
 	assert_equal( warray_size( copy ), 1 );
 
 	warray_clear( copy );
-	warray_append( array, "dog" );
+	a.append( array, "dog" );
 	a.foreachIndex( array, appendIndex, copy );
-	assert_strequal( warray_first( copy ), "0. cat" );
-	assert_strequal( warray_at( copy, 1 ), "1. dog" );
-	assert_equal( warray_size( copy ), 2 );
+	assert_strequal( a.first( copy ), "0. cat" );
+	assert_strequal( a.at( copy, 1 ), "1. dog" );
+	assert_equal( copy->size, 2 );
 
-	warray_clear( copy );
-	warray_append( array, "mouse" );
+	a.clear( copy );
+	a.append( array, "mouse" );
 	a.foreachIndex( array, appendIndex, copy );
-	assert_strequal( warray_first( copy ), "0. cat" );
-	assert_strequal( warray_at( copy, 1 ), "1. dog" );
-	assert_strequal( warray_at( copy, 2 ), "2. mouse" );
-	assert_equal( warray_size( copy ), 3 );
+	assert_strequal( a.first( copy ), "0. cat" );
+	assert_strequal( a.at( copy, 1 ), "1. dog" );
+	assert_strequal( a.at( copy, 2 ), "2. mouse" );
+	assert_equal( copy->size, 3 );
 
 	a.delete( &array );
 	a.delete( &copy );
