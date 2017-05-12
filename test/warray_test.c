@@ -578,6 +578,10 @@ static bool isLongWord( const void* element, const void* unused ) {
 	(void) unused;
 	return strlen( element ) > 3;
 }
+static bool isShortWord( const void* element, const void* unused ) {
+	(void) unused;
+	return strlen( element ) <= 3;
+}
 void
 Test_warray_filterReject()
 {
@@ -621,6 +625,16 @@ Test_warray_select()
     assert_strequal( warray_at( array, 0 ), "sea-hawk" );
     assert_strequal( warray_at( array, 1 ), "chimpanzee" );
     assert_equal( array->size, 2 );
+
+	//The same again, nothing to remove this time.
+	warray_select( array, isLongWord, NULL );
+    assert_strequal( warray_at( array, 0 ), "sea-hawk" );
+    assert_strequal( warray_at( array, 1 ), "chimpanzee" );
+    assert_equal( array->size, 2 );
+
+	//Now remove everything.
+	warray_select( array, isShortWord, NULL );
+    assert_equal( array->size, 0 );
 }
 void
 Test_warray_unselect()
@@ -639,6 +653,16 @@ Test_warray_unselect()
     assert_strequal( warray_at( array, 0 ), "cat" );
     assert_strequal( warray_at( array, 1 ), "dog" );
     assert_equal( array->size, 2 );
+
+	//The same again, nothing to remove this time.
+	warray_unselect( array, isLongWord, NULL );
+    assert_strequal( warray_at( array, 0 ), "cat" );
+    assert_strequal( warray_at( array, 1 ), "dog" );
+    assert_equal( array->size, 2 );
+
+	//Now remove everything.
+	warray_unselect( array, isShortWord, NULL );
+    assert_equal( array->size, 0 );
 }
 static void*
 makeItGood( const void* element, const void* mapData )
