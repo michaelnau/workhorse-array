@@ -380,6 +380,39 @@ Test_warray_prepend_n()
 	assert_strequal( a.at( array, 4 ), "cat" );
 	assert_equal( a.size( array ), 5 );
 }
+void
+Test_warray_set_n()
+{
+	WArray* array = a.new( 0, wtypeStr );
+
+	warray_set_n( array, 0, 1, (void*[]){ "cat" });
+	assert_strequal( a.at( array, 0 ), "cat" );
+	assert_equal( a.size( array ), 1 );
+
+	a.set_n( array, 0, 2, (void*[]){ "dog", "bird" });
+	assert_strequal( a.at( array, 0 ), "dog" );
+	assert_strequal( a.at( array, 1 ), "bird" );
+	assert_equal( a.size( array ), 2 );
+
+	a.set_n( array, 1, 3, (void*[]){ "", "lion", NULL });
+	assert_strequal( a.at( array, 0 ), "dog" );
+	assert_strequal( a.at( array, 1 ), "" );
+	assert_strequal( a.at( array, 2 ), "lion" );
+	assert_null( a.at( array, 3 ));
+	assert_equal( a.size( array ), 4 );
+
+	a.set_n( array, 5, 1, (void*[]){ "zebra" });
+	assert_strequal( a.at( array, 0 ), "dog" );
+	assert_strequal( a.at( array, 1 ), "" );
+	assert_strequal( a.at( array, 2 ), "lion" );
+	assert_null( a.at( array, 3 ));
+	assert_null( a.at( array, 4 ));
+	assert_strequal( a.at( array, 5 ), "zebra" );
+	assert_equal( a.size( array ), 6 );
+
+
+	a.delete( &array );
+}
 
 //--------------------------------------------------------------------------------
 
@@ -1219,6 +1252,7 @@ int main() {
 	testsuite( Test_warray_set );
 	testsuite( Test_warray_append_n );
 	testsuite( Test_warray_prepend_n );
+	testsuite( Test_warray_set_n );
 
 	testsuite( Test_warray_firstLastEmptyNonEmpty );
 	testsuite( Test_warray_steal );
