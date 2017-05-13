@@ -19,13 +19,13 @@
 	----------
 	- Once the elements are added to the array, they belong to the array and may only be
 		accessed through the array functions. Don't try to read or write elements directly
-		from the Array.data field, the behaviour in this case is undefined.
+		from the WArray.data field, the behaviour in this case is undefined.
     - All functions except warray_new() take an array pointer as first argument. This is the array
 		queried or manipulated by the functions. It may never be NULL.
     - Functions taking a const argument, be it an array or some other data guarantee not to modify it.
 	- Functions taking a non-const argument probably will modify it.
 	- Functions manipulating one or more array elements in general do it in place, except where it is not
-		possible or does not make sense. The latter functions take a const Array* argument.
+		possible or does not make sense. The latter functions take a const WArray* argument.
 	- The elements may be of any type, as long as they can be passed as void*. NULL as element is allowed.
 	- The functions never return NULL except when a NULL element is returned.
 	- When a function returns a pointer to const it means that the result is read-only for the calling
@@ -142,10 +142,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	reading the explicitly public fields.
 */
 typedef struct WArray {
-	size_t				size;			///<Public read-only, the actual number of elements
-	size_t				capacity;		///<Public read-only, the maximum number of elements before the array must grow
-	const WType*	type;			///<Public read only, pointer to the element methods
-	void**				data;			//Private, do not directly access it.
+	size_t			size;			///<Public read-only, the actual number of elements
+	size_t			capacity;		///<Public read-only, the maximum number of elements before the array must grow
+	const WType*	type;			//Private, do not directly access it. Pointer to the element methods
+	void**			data;			//Private, do not directly access it.
 }WArray;
 
 /** Pointer to a struct describing methods for elements that are arrays themselves.
@@ -168,8 +168,8 @@ extern const WType* wtypeArray;
 	@param capacity The initial element capacity. If 0 is given, the initial capacity is set to 100.
 	@param type Pointer to a structure with element methods to be used in array functions.
 		If NULL is passed, the elements are treated as raw pointers and the methods set in
-		\ref elementPtr are used. If a type is given, but the compare, fromString or toString
-		fields are NULL, then the Array functions using these methods may not be used. The array only
+		\ref wtypePtr are used. If a type is given, but the compare, fromString or toString
+		fields are NULL, then the WArray functions using these methods may not be used. The array only
 		keeps the type pointer, so the underlying struct must be permanently accessible.
 	@return The new array
 	@pre If type is given, type->clone may not be NULL.
@@ -177,16 +177,42 @@ extern const WType* wtypeArray;
 
 	Examples:
 	\code
-	Array* a1 = warray_new( 0, NULL );
-	Array* a2 = warray_new( 10, NULL );			//The predefined elementPtr for raw void* pointers is selected.
-	Array* a3 = warray_new( 10, elementStr );	//elementStr is predefined for char* strings.
-	Array* a4 = warray_new( 0, elementInt );		//elementInt is predefined for int values.
+	//An array is created treating its elements as raw void* pointers. No extra memory is
+	//allocated for the element itself, only for the pointer. The element does not get
+	//deallocated when it is removed from the array.
+	WArray* a1 = warray_new(		//Create an array
+		0,							//with the default capacity (100)
+		NULL						//and the default element type (wtypePtr, i.e. raw void*)
+	);
+	WArray* a2 = warray_new(
+		10,							//capacity = 10 elements
+		NULL						//type = wtypePtr
+	);
 
+	//An array is created treating its elements as char* strings. The elements get copied into
+	//the array with strdup(). If the elements are removed, they get freed.
+	WArray* a3 = warray_new(
+		10,
+		wtypeStr					//type = wtypeStr, treat the elements as char* strings.
+	);
+
+	//An array is created treating its elements as integer values. The integers are directly
+	//stored in the element pointers. The elements can be numerically compared or sorted.
+	WArray* a4 = warray_new(
+		0,
+		wtypeInt					//type = wtypeInt, treat the elements as int values
+	);
+
+	//An array is created treating its elements as custom carType object. A clone and deletion
+	//function are passed. With them the array can make proper copies and deallocations.
 	static const WType carType = {
         .clone = cloneCar,
         .delete = deleteCar
 	};
-	Array* a5 = warray_new( 0, &carType );
+	WArray* a5 = warray_new(
+		0,
+		&carType
+	);
 	\endcode
 */
 WArray*
@@ -673,7 +699,7 @@ static inline bool
 warray_equal( const WArray* array1, const WArray* array2 ){ return warray_compare( array1, array2 ) == 0; }
 
 //------------------------------------------------------------
-//	Array --> string --> Array
+//	WArray --> string --> WArray
 //------------------------------------------------------------
 
 /**	Join the elements to a string.
@@ -716,7 +742,7 @@ warray_size( const WArray* array ) { return array->size; }
 
 /**	Return true if the array has no elements.
 
-	@param array (const *Array)
+	@param array (const *WArray)
 	@return (bool)
 */
 inline static bool
@@ -724,7 +750,7 @@ warray_empty( const WArray* array ) { return array->size == 0; }
 
 /**	Return true if the array has elements.
 
-	@param array (const *Array)
+	@param array (const *WArray)
 	@return (bool)
 */
 inline static bool
@@ -818,7 +844,7 @@ warray_unselect( WArray* array, WElementCondition* condition, const void* condit
 	@param mapData Optional argument passed to the map function. Can be set to NULL if
 		not used.
 	@param targetType Structure describing the type of the mapped elements. If type == NULL, it
-		is set by default to elementPtr.
+		is set by default to wtypePtr.
 	@return A new array of the same size as the given array with the mapped elements and
 		of the type as specified in the type argument.
 	@pre array != NULL
@@ -841,11 +867,11 @@ warray_unselect( WArray* array, WElementCondition* condition, const void* condit
 	...
 
 	//Make an array with stringified numbers.
-	Array* array = warray_new( 0, elementStr );
+	WArray* array = warray_new( 0, wtypeStr );
 	warray_append_n( array, 3, "237", "11", "-42" );
 
 	//Map it to an array with numbers. ->238, 12, -41
-	Array* numbers = warray_map( array, toIntPlusX, (void*)1, elementInt );
+	WArray* numbers = warray_map( array, toIntPlusX, (void*)1, wtypeInt );
 	\endcode
 */
 WArray*
