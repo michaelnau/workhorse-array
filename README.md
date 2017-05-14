@@ -2,6 +2,10 @@
 
 A dynamic growing array of void* elements
 
+Warning
+-------
+The API is not stable yet.
+
 Features
 --------
 - Lots of common functions like append, prepend, insert, filter, map, reduce, search & sort

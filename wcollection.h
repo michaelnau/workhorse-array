@@ -36,45 +36,84 @@ extern const void* WElementNotFound;
 //---------------------------------------------------------------------------------
 
 /**	Function prototype for cloning an element.
+
+	@param element The element to be cloned. May be NULL.
+	@return Output element of the target collection, must be allocated according to the behaviour
+		of the target collection clone() method. May be NULL.
 */
 typedef void*	WElementClone(const void* element);
 
 /**	Function prototype for deleting an element.
+
+    The function must deallocate, free or close all resources connected with the element.
+
+	@param element Pointer to the element to be deleted. May be NULL.
 */
 typedef void	WElementDelete(void** element);
 
 /**	Function prototype for comparing to elements with another.
+
+	@param element1 1st input element to be compared. May be NULL.
+	@param element2 2nd input element to be compared. May be NULL.
+	@return < 0, == 0 or > 0 if element1 is less than, equal to or greater than element2
 */
 typedef int		WElementCompare(const void* element1, const void* element2);
 
+//TODO: Where do we actually use WElementFromString?
 /**	Function prototype for getting an element from a string.
+
+	@param string Input string to be converted to a collection element. May not be NULL.
+	@return The target collection element. May be NULL.
 */
-typedef void*	WElementFromString(const char* wtypeStr);
+typedef void*	WElementFromString(const char* string);
 
 /**	Function prototype for converting an element to a string.
 
-	@param element
-	@return The returned string. May not be NULL!
+	@param element Input element of the source collection. May be NULL.
+	@return The stringified element. May not be NULL.
 */
 typedef char*	WElementToString(const void* element);
 
 /**	Function prototype for doing read-only stuff to an element.
+
+	@param element Input element of the source collection. May be NULL.
+	@param foreachData Optional data passed to the function. May be NULL.
 */
 typedef void	WElementForeach(const void* element, void* foreachData );
 
 /**	Function prototype for doing read-only stuff to an element and its index.
+
+	@param element Input element of the source collection. May be NULL.
+	@param index The element's position in the array.
+	@param foreachData Optional data passed to the function. May be NULL.
 */
 typedef void	WElementForeachIndex(const void* element, size_t index, void* foreachData );
 
 /**	Function prototype for mapping an input element to an output element.
+
+	@param element Input element of the source collection. May be NULL.
+	@param mapData Optional data passed to the function. May be NULL.
+	@return Output element of the target collection, must be allocated according to the behaviour
+		of the target collection clone() method. May be NULL.
 */
 typedef void*	WElementMap(const void* element, const void* mapData);
 
+//TODO: Optional data argument for WElementReduce
 /**	Function prototype for combining the element and the intermediate result to a new internediate result.
+
+	@param element Input element of the source collection. May be NULL.
+	@param intermediate May be NULL.
+	@return The combined value of the input element and the intermediate value. Is fed back as intermediate
+		result into the next iteration. Must be allocated according to the behaviour of the target type
+		clone() method. May be NULL.
 */
 typedef	void*	WElementReduce(const void* element, const void* intermediate);
 
 /**	Function prototype returning true if the element meets a certaion condition.
+
+	@param element Input element of the source collection. May be NULL.
+	@param conditionData May be NULL.
+	@return true if the condition is met.
 */
 typedef bool	WElementCondition(const void* element, const void* conditionData);
 

@@ -882,13 +882,13 @@ warray_map( const WArray* array, WElementMap* map, const void* mapData, const WT
 	@param array
 	@param reduce
 	@param startValue
-	@param type
+	@param targetType
 	@return
 	@pre array != NULL
 	@pre reduce != NULL
 */
 void*
-warray_reduce( const WArray* array, WElementReduce* reduce, const void* startValue, const WType* type );
+warray_reduce( const WArray* array, WElementReduce* reduce, const void* startValue, const WType* targetType );
 
 //------------------------------------------------------------
 //	Do stuff with the elements.
