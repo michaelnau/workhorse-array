@@ -914,15 +914,6 @@ warray_compact( WArray* array )
 	return checkArray( array );
 }
 
-static inline int
-compareTwoElements( const void* element1, const void* element2 )
-{
-	//Extract the comparison function and the key.
-	const ElementComparer* comparer = element1;
-	//bsearch gives us a pointer to the elements, we deliver the elements itself to the client comparison function.
-	return comparer->compare( *(void**)comparer->element, *(void**)element2 );
-}
-
 static bool
 isSorted( const WArray* array )
 {
@@ -946,17 +937,23 @@ warray_sort( WArray* array )
 	return warray_sortBy( array, array->type->compare );
 }
 
+/*	Here we define a helper function converting the void** pointers from qsort to void* elements.
+	This helps keeping the API uniform, we always provide void* elements to the client
+	callback functions. The downside: we get a dependency from C11 to remain thread-safe.
+*/
+_Thread_local WElementCompare* sortCompare;
+static int compareTwoElements( const void* element1, const void* element2 ) {	//qsort delivers void**
+	return sortCompare( *(void**)element1, *(void**)element2 );					//we deliver void* instead
+}
+
 WArray*
 warray_sortBy( WArray* array, WElementCompare* compare )
 {
 	assert( array );
 	assert( compare );
 
-	int wrappedCompare( const void* element1, const void* element2 ) {	//qsort delivers void**
-        return compare( *(void**)element1, *(void**)element2 );			//we deliver void* instead
-	}
-
-    qsort( array->data, array->size, sizeof( void* ), wrappedCompare );
+	sortCompare = compare;
+	qsort( array->data, array->size, sizeof( void* ), compareTwoElements );
 
 	assert( array );
 	assert( isSorted( array ));
