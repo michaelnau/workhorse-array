@@ -1,5 +1,5 @@
 /**	@file
-	Types and functions common for collection modules
+	Types and functions common for workhorse collections
 */
 #ifndef WCOLLECTION_H_INCLUDED
 #define WCOLLECTION_H_INCLUDED
@@ -136,7 +136,7 @@ typedef struct WType {
 //	Predefined element types
 //---------------------------------------------------------------------------------
 
-/** Defines a collection WType for raw void* pointers. Can be passed to functions like warray_new().
+/** Defines a collection type for raw void* pointers. Can be passed to functions like warray_new().
 
 	- clone = Element_clonePtr()
 	- delete = Element_deletePtr()
@@ -146,7 +146,7 @@ typedef struct WType {
 */
 extern const WType* wtypePtr;
 
-/** Defines a collection WType for int values. Can be passed to functions like warray_new().
+/** Defines a collection type for int values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneInt()
 	- delete = Element_deleteInt()
@@ -156,7 +156,7 @@ extern const WType* wtypePtr;
 */
 extern const WType* wtypeInt;
 
-/** Defines a collection WType for char* values. Can be passed to functions like warray_new().
+/** Defines a collection type for char* values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneStr()
 	- delete = Element_delete()
@@ -166,7 +166,7 @@ extern const WType* wtypeInt;
 */
 extern const WType* wtypeStr;
 
-/** Defines a collection WType for double values. Can be passed to functions like warray_new().
+/** Defines a collection type for double values. Can be passed to functions like warray_new().
 
 	- clone = Element_cloneDouble()
 	- delete = Element_delete()

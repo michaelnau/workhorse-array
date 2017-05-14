@@ -92,64 +92,64 @@ warray_new( size_t capacity, const WType* type )
 	assert( not type or type->clone );
 	assert( not type or type->delete );
 
-	WArray *array = __wxnew( WArray,
+	WArray* array = __wxnew( WArray,
 		.capacity	= capacity ? capacity : ArrayDefaultCapacity,
-		.type	= type ? type : wtypePtr,
+		.type		= type ? type : wtypePtr,
 	);
-	array->data = __wxmalloc( array->capacity * sizeof( void* ));
+	array->data = __wxmalloc( array->capacity * sizeof(void*) );
 
 	assert( array );
 	return checkArray( array );
 }
 
 WArray*
-warray_clone( const WArray *self )
+warray_clone( const WArray* array )
 {
-	assert( self );
+	assert( array );
 
 	WArray *copy = __wxnew( WArray,
-		.size		= self->size,
-		.capacity	= self->capacity,
-		.data		= __wxmalloc( sizeof( void* ) * self->capacity ),
-		.type	= self->type
+		.size		= array->size,
+		.capacity	= array->capacity,
+		.data		= __wxmalloc( sizeof( void* ) * array->capacity ),
+		.type		= array->type
 	);
 
 	//TODO: warray_clone() with OpenMP pragma
-	for ( size_t i = 0; i < self->size; i++ )
-		copy->data[i] = self->type->clone( self->data[i] );
+	for ( size_t i = 0; i < array->size; i++ )
+		copy->data[i] = array->type->clone( array->data[i] );
 
 	assert( copy );
-	assert( warray_equal( self, copy ));
+	assert( not array->type->compare or warray_equal( array, copy ));
 	return checkArray( copy );
 }
 
 void
-warray_delete( WArray** selfPointer )
+warray_delete( WArray** arrayPtr )
 {
-	if ( not selfPointer ) return;
+	if ( not arrayPtr ) return;
 
-	WArray *self = *selfPointer;
+	WArray* array = *arrayPtr;
 
-	warray_clear( self );
-	free( self->data );
-	free( self );
-	*selfPointer = NULL;
+	warray_clear( array );
+	free( array->data );
+	free( array );
+	*arrayPtr = NULL;
 }
 
 WArray*
-warray_clear( WArray *self )
+warray_clear( WArray* array )
 {
-	if ( not self ) return self;
+	if ( not array ) return array;
 
 	//TODO: warray_clear() with OpenMP pragma
-	for ( size_t i = 0; i < self->size; i++ )
-		self->type->delete( &self->data[i] );
+	for ( size_t i = 0; i < array->size; i++ )
+		array->type->delete( &array->data[i] );
 
-	self->size = 0;
+	array->size = 0;
 
-	assert( self );
-	assert( warray_empty( self ));
-	return checkArray( self );
+	assert( array );
+	assert( warray_empty( array ));
+	return checkArray( array );
 }
 
 void
@@ -158,7 +158,7 @@ warray_assign( WArray** arrayPointer, WArray* other )
 	if ( not arrayPointer ) return;
 	WArray* array = *arrayPointer;
 
-	assert( array->type == other->type );
+	assert( array->type == other->type && "Can only assign arrays of the same type." );
 
 	warray_delete( arrayPointer );
 	*arrayPointer = other;
@@ -332,12 +332,12 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
 //-------------------------------------------------------------------------------
 
 const void*
-warray_at( const WArray *self, size_t index )
+warray_at( const WArray* array, size_t index )
 {
-	assert( self );
-	assert( index < self->size && "Array access out of bounds." );
+	assert( array );
+	assert( index < array->size && "Array access out of bounds." );
 
-	return self->data[index];
+	return array->data[index];
 }
 
 const void*
