@@ -23,8 +23,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdio.h>	//printf, fflush
 #include <stdlib.h>	//malloc, realloc
 
-//TODO: Remove GNU C nested functions.
-
 //-------------------------------------------------------------------------------
 //	Invariants check, performed after every public function
 //-------------------------------------------------------------------------------
@@ -1057,30 +1055,6 @@ warray_one( const WArray* array, WElementCondition* condition, const void* condi
 	}
 
 	return counter == 1;
-}
-
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-
-void
-warray_print( const WArray* array )
-{
-	assert( array );
-
-    printf("\n");
-    printf("size     = %u\n", array->size);
-    printf("capacity = %u\n", array->capacity);
-    printf("type     = %p\n", (void*)array->type);
-    printf("data     = %p\n", (void*)array->data);
-    printf("-->\n");
-
-    for ( size_t i = 0; i < array->size; i++ ) {
-//		printf("    %p --> %s\n", array->data[i], array->type->toString ? array->type->toString( array->data[i] ) : "-" );
-		printf("    %p\n", array->data[i] );
-    }
-
-    printf("\n");
-	fflush( stdout );
 }
 
 //-------------------------------------------------------------------------------

@@ -1015,9 +1015,4 @@ warray_one( const WArray* array, WElementCondition* condition, const void* condi
 
 //------------------------------------------------------------
 
-void
-warray_print( const WArray* array );
-
-//------------------------------------------------------------
-
 #endif
