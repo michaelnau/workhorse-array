@@ -110,6 +110,7 @@
 	Check properties of the elements
 	--------------------------------
 */
+//TODO: Extract main documentation in separate file.
 #ifndef WARRAY_H_INCLUDED
 #define WARRAY_H_INCLUDED
 
@@ -131,8 +132,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "wcollection.h"
-#include <stdbool.h>	//bool
-#include <sys/types.h>	//ssize_t
+#include <stdbool.h>			//bool
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+	#include <sys/types.h>		//ssize_t on POSIX systems
+#else
+	#define ssize_t intptr_t	//intptr_t as fallback for other C99 systems
+#endif
 
 //------------------------------------------------------------
 //	Types and constants

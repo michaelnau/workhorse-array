@@ -11,6 +11,7 @@ Features
 - Lots of common functions like append, prepend, insert, filter, map, reduce, search & sort
 - Automatic memory management for the contained elements
 - Elements have type information, so the array knows how to clone, delete or compare them.
+- Predefined types for int, string, double and raw pointer elements
 - Optional API with a namespace to allow shorter function names
 
 When to use
