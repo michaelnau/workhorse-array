@@ -142,8 +142,10 @@ warray_clear( WArray* array )
 	if ( not array ) return array;
 
 	//TODO: warray_clear() with OpenMP pragma
-	for ( size_t i = 0; i < array->size; i++ )
+	for ( size_t i = 0; i < array->size; i++ ) {
+		assert( &array->data[i] );
 		array->type->delete( &array->data[i] );
+	}
 
 	array->size = 0;
 
@@ -224,8 +226,10 @@ warray_set( WArray* array, size_t position, const void* element )
 
 	resize( array, __wmax( array->size, position+1 ));
 
-	if ( position < array->size )	//Delete the old element.
+	if ( position < array->size ) {	//Delete the old element.
+		assert( &array->data[position] );
 		array->type->delete( &array->data[position] );
+	}
 	else {							//Fill the gap with zeroes.
 		memset( &array->data[array->size], 0, (position-array->size) * sizeof(void*));
 		array->size = position+1;
@@ -461,6 +465,7 @@ warray_removeAt( WArray* array, size_t position )
 	assert( array );
 	assert( position < warray_size( array ));
 
+	assert( &array->data[position] );
 	array->type->delete( &array->data[position] );
 
 	if ( position < array->size-1 )
@@ -562,8 +567,10 @@ warray_select( WArray* array, WElementCondition* filter, const void* filterData 
     for ( size_t from = 0; from < array->size; from++ ) {
         if ( filter( array->data[from], filterData ))
 			array->data[to++] = array->data[from];
-		else
+		else {
+			assert( &array->data[from] );
 			array->type->delete( &array->data[from] );
+		}
     }
 
     array->size = to;
@@ -583,8 +590,10 @@ warray_unselect( WArray* array, WElementCondition* filter, const void* filterDat
     for ( size_t from = 0; from < array->size; from++ ) {
         if ( !filter( array->data[from], filterData ))
 			array->data[to++] = array->data[from];
-		else
+		else {
+			assert( &array->data[from] );
 			array->type->delete( &array->data[from] );
+		}
 	}
 
     array->size = to;
@@ -630,6 +639,7 @@ warray_reduce( const WArray* array, WElementReduce* reduce, const void* startVal
 
     for ( size_t i = 1; i < array->size; i++ ) {
 		void* newReduction = reduce( array->data[i], reduction );
+		assert( &reduction );
 		type->delete( &reduction );
 		reduction = newReduction;
 	}

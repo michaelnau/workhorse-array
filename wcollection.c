@@ -190,6 +190,7 @@ const WType* wtypeStr = &(WType) {
 //	double type
 //---------------------------------------------------------------------------------
 
+//FIX: Handle NULL elements.
 void* wtypeDouble_clone( const void* element ) {
 	double* clone = __wxmalloc( sizeof( double ));
 	*clone = *(double*)element;

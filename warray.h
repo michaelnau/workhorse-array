@@ -299,6 +299,18 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
 WArray*
 warray_insert_n( WArray* array, size_t position, size_t n, void* const elements[n] );
 
+/**	Append the elements of an array to another array.
+
+    @param array1 The array being modified
+    @param array2 The array that gets appended to array1
+    @return The concatenated array
+	@pre array1 != NULL
+	@pre array2 != NULL
+	@pre array1->type == array2->type
+*/
+WArray*
+warray_concat( WArray* array1, const WArray* array2 );
+
 //------------------------------------------------------------
 //	Read and delete elements from the array.
 //------------------------------------------------------------
@@ -846,18 +858,6 @@ warray_sortBy( WArray* array, WElementCompare* compare );
 */
 WArray*
 warray_distinct( WArray* array );
-
-/**	Append the elements of an array to another array.
-
-    @param array1 The array being modified
-    @param array2 The array that gets appended to array1
-    @return The concatenated array
-	@pre array1 != NULL
-	@pre array2 != NULL
-	@pre array1->type == array2->type
-*/
-WArray*
-warray_concat( WArray* array1, const WArray* array2 );
 
 //------------------------------------------------------------
 //	Check properties of the elements

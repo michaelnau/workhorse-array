@@ -35,6 +35,8 @@ extern const void* WElementNotFound;
 //	Function prototypes for the element methods
 //---------------------------------------------------------------------------------
 
+//TODO: Never pass NULL elements to WElementClone and WElementDelete etc.?
+
 /**	Function prototype for cloning an element.
 
 	@param element The element to be cloned. May be NULL.
@@ -47,7 +49,8 @@ typedef void*	WElementClone(const void* element);
 
     The function must deallocate, free or close all resources connected with the element.
 
-	@param element Pointer to the element to be deleted. May be NULL.
+	@param element Pointer to the element to be deleted. element may never be NULL. *element
+		may be NULL.
 */
 typedef void	WElementDelete(void** element);
 
