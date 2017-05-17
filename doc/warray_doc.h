@@ -317,6 +317,76 @@
 
 	@section iterate Iterating over array elements
 
+	There are several functions to operate on all elements at once. They all have in common
+	to take a callback function as argument which is executed for each element in the array.
+
+	Most basic is the warray_foreach() function. It allows you to read each element and do
+	something with it:
+
+	\code
+	//Define a simple callback function printing one element. We could optionally pass an
+	//additional data argument here. But we don't use it in the example.
+
+	void printAnimals( const void* element, const void* data ) {
+		const char* animal = element;
+		puts( animal );
+	}
+
+	//...
+	//Create an array and add some strings to it.
+
+	WArray* animals = warray_new( 0, wtypeStr );
+	warray_append_n( animals, 3, (void*[]){ "cat", "dog", "elephant" });
+
+	//Call printAnimals() for each element. Pass NULL for the unused data argument.
+	//Prints "cat", "dog" and "elephant", each in a separate line.
+
+	warray_foreach( animals, printAnimals, NULL );
+	\endcode
+
+	Then there are functions to remove array elements based on a condition. The warray_filter()
+	and warray_reject() functions create new arrays with the elements omitted that meet resp.
+	don't meet a condition:
+
+	\code
+	//Define a callback function checking if the string element is longer than a
+	//given length.
+
+	bool animalLongerThan( const void* element, const void* data ) {
+		const char* animal = element;
+		size_t length = (size_t)data;
+		return strlen( animal ) > length;
+	}	
+
+	//...
+
+	//Create an array and add some strings to it.
+
+	WArray* animals = warray_new( 0, wtypeStr );
+	warray_append_n( animals, 3, (void*[]){ "cat", "dog", "elephant" });
+
+	//Create two new arrays: One with animals longer than 3, one with animals shorter than or
+	//equal to 3. The elements are copied according to the element type's clone() method.
+	//longAnimals = ["elephant"] and shortAnimals = ["cat", "dog"].
+
+	WArray* longAnimals = warray_filter( animals, animalLongerThan, (void*)3 );
+	WArray* shortAnimals = warray_reject( animals, animalLongerThan, (void*)3 );
+
+	//...Do something with the new animal arrays.
+
+	//Then delete them all.
+
+	warray_delete( &animals );
+	warray_delete( &longAnimals );
+	warray_delete( &shortAnimals );
+	\endcode
+
+	The two functions warray_select() and warray_unselect() basically provide the same functionality. But
+	they remove the elements in place instead of creating a new array.
+
+	With warray_map() you can transform a given array with a callback function to a new array
+	with the same size and warray_reduce() lets you create a single result value from an array.
+
 	- warray_foreach()
 	- warray_foreachIndex()
 	- warray_filter()
@@ -327,6 +397,41 @@
 	- warray_reduce()
 
 
+	@section check Checking properties of the array elements
+
+	With the following functions you can check how many of the elements meet a given condition:
+
+	\code
+	//Define a callback function checking if the string element is longer than a
+	//given length.
+
+	bool animalLongerThan( const void* element, const void* data ) {
+		const char* animal = element;
+		size_t length = (size_t)data;
+		return strlen( animal ) > length;
+	}	
+
+	//Create an array and add some strings to it.
+
+	WArray* animals = warray_new( 0, wtypeStr );
+	warray_append_n( animals, 3, (void*[]){ "cat", "dog", "elephant" });
+
+	//Check if the array elements meet a condition.
+
+	assert( warray_count( animals, animalLongerThan, (void*)2 ) == 3 );
+	assert( warray_all( animals, animalLongerThan, (void*)2 ) == true );
+	assert( warray_any( animals, animalLongerThan, (void*)7 ) == true );
+	assert( warray_none( animals, animalLongerThan, (void*)100 ) == true );
+	assert( warray_one( animals, animalLongerThan, (void*)7 ) == true );
+	\endcode
+
+	- warray_count()
+	- warray_all()
+	- warray_any()
+	- warray_none()
+	- warray_one()
+
+
 	@section search Searching the array
 
 	- warray_min()
@@ -335,7 +440,6 @@
 	- warray_rindex()
 	- warray_bsearch()
 	- warray_contains()
-	- warray_count()
 
 
 	@section convert Converting an array to and from a string
@@ -344,15 +448,11 @@
 	- warray_fromString()
 
 
-	@section check Checking properties of the array and elements
+	@section basic_data Getting basic array data
 
 	- warray_size()
 	- warray_empty()
 	- warray_nonEmpty()
-	- warray_all()
-	- warray_any()
-	- warray_none()
-	- warray_one()
 
 
 	@section misc Miscellaneous

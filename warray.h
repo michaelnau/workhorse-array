@@ -555,18 +555,6 @@ warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 static inline bool
 warray_contains( const WArray* array, const void* element ) { return warray_index( array, element ) >= 0; }
 
-/**	Count how many elements meet a condition.
-
-	@param array
-	@param condition Function checking if the elements meet the condition
-	@param conditionData Optional data passed to the condition function
-	@return The count how many elements meet the condition
-	@pre array != NULL
-	@pre condition != NULL
-*/
-size_t
-warray_count( const WArray* array, WElementCondition* condition, const void* conditionData );
-
 //------------------------------------------------------------
 //	Comparing arrays
 //------------------------------------------------------------
@@ -623,6 +611,7 @@ warray_equal( const WArray* array1, const WArray* array2 ){ return warray_compar
 char*
 warray_toString( const WArray* array, const char delimiters[] );
 
+//TODO: Pass a WType to warray_fromString() to create an array with real elements
 /**	Split the string in elements separated by one of the given delimiters and create an array
 	with the string elements.
 
@@ -862,6 +851,18 @@ warray_distinct( WArray* array );
 //------------------------------------------------------------
 //	Check properties of the elements
 //------------------------------------------------------------
+
+/**	Count how many elements meet a condition.
+
+	@param array
+	@param condition Function checking if the elements meet the condition
+	@param conditionData Optional data passed to the condition function
+	@return The count how many elements meet the condition
+	@pre array != NULL
+	@pre condition != NULL
+*/
+size_t
+warray_count( const WArray* array, WElementCondition* condition, const void* conditionData );
 
 /**	Return true if all elements meet a condition.
 
