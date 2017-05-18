@@ -428,6 +428,31 @@ Test_warray_firstLastSampleEmptyNonEmpty()
 	assert_true( warray_contains( array, warray_sample( array )));
 }
 void
+Test_warray_cloneFirstLast()
+{
+	autoWArray* array = a.new( 0, wtypeStr );
+
+	warray_append( array, "cat" );
+	autoChar* str1 = warray_cloneFirst( array );
+	assert_strequal( str1, "cat" );
+	autoChar* str2 = warray_cloneLast( array );
+	assert_strequal( str2, "cat" );
+
+	warray_append( array, "dog" );
+	autoChar* str3 = warray_cloneFirst( array );
+	assert_strequal( str3, "cat" );
+	autoChar* str4 = warray_cloneLast( array );
+	assert_strequal( str4, "dog" );
+
+	warray_insert( array, 1, "tiger" );
+	autoChar* str5 = warray_cloneFirst( array );
+	assert_strequal( str5, "cat" );
+	autoChar* str6 = warray_cloneAt( array, 1 );
+	assert_strequal( str6, "tiger" );
+	autoChar* str7 = warray_cloneLast( array );
+	assert_strequal( str7, "dog" );
+}
+void
 Test_warray_steal()
 {
 	autoWArray *array = a.new( 0, wtypeStr );
@@ -1277,6 +1302,7 @@ int main() {
 	testsuite( Test_warray_set_n );
 
 	testsuite( Test_warray_firstLastSampleEmptyNonEmpty );
+	testsuite( Test_warray_cloneFirstLast );
 	testsuite( Test_warray_steal );
 	testsuite( Test_warray_stealFirstLast );
 	testsuite( Test_warray_removeAt );
