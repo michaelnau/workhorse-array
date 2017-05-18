@@ -1170,6 +1170,28 @@ Test_warray_reverse()
 	assert_strequal( a.at( array, 5 ), "bird" );
 }
 void
+Test_warray_shuffle()
+{
+	autoWArray* array1 = warray_new( 0, wtypeStr );
+
+    warray_shuffle( array1 );
+    assert_true( warray_empty( array1 ));
+
+	warray_append( array1, "cat" );
+	warray_shuffle( array1 );
+	assert_strequal( warray_first( array1 ), "cat" );
+	assert_equal( array1->size, 1 );
+
+	warray_append( array1, "dog" );
+	autoWArray* array2 = warray_shuffle( warray_clone( array1 ));
+	assert_true( warray_equal( array1, warray_sort( array2 )));
+
+	warray_append( array1, "lion" );
+	autoWArray* array3 = warray_shuffle( warray_clone( array1 ));
+	assert_true( warray_equal( array1, warray_sort( array3 )));
+}
+
+void
 Test_warray_concat()
 {
 	autoWArray* array1 = a.new( 0, wtypeStr );
@@ -1329,6 +1351,7 @@ int main() {
 	testsuite( Test_warray_compact );
 	testsuite( Test_warray_distinct );
 	testsuite( Test_warray_reverse );
+	testsuite( Test_warray_shuffle );
 	testsuite( Test_warray_concat );
 
 	testsuite( Test_warray_compare );
