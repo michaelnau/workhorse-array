@@ -193,7 +193,7 @@ wtypePtr_clone( const void* element );
 
 /**	Does nothing and especially does not free the element.
 
-	@param elementPtr
+	@param element The pointer to the element
 */
 void
 wtypePtr_delete( void** element );
@@ -221,7 +221,7 @@ wtypeInt_clone( const void* element );
 
 	Gets used e.g. for elements of type char and int.
 
-	@param elementPtr The pointer to the element
+	@param element The pointer to the element
 */
 void
 wtypeInt_delete( void** element );

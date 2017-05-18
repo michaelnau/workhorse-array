@@ -400,7 +400,7 @@ Test_warray_set_n()
 //--------------------------------------------------------------------------------
 
 void
-Test_warray_firstLastEmptyNonEmpty()
+Test_warray_firstLastSampleEmptyNonEmpty()
 {
 	autoWArray *array = a.new( 0, wtypeStr );
 	assert_true( warray_empty( array ));
@@ -411,18 +411,21 @@ Test_warray_firstLastEmptyNonEmpty()
 	assert_true( warray_nonEmpty( array ));
 	assert_strequal( warray_first( array ), "cat" );
 	assert_strequal( warray_last( array ), "cat" );
+	assert_strequal( warray_sample( array ), "cat" );
 
 	warray_append( array, "dog" );
 	assert_false( warray_empty( array ));
 	assert_true( warray_nonEmpty( array ));
 	assert_strequal( warray_first( array ), "cat" );
 	assert_strequal( warray_last( array ), "dog" );
+	assert_true( warray_contains( array, warray_sample( array )));
 
 	warray_insert( array, 15, "tiger" );
 	assert_false( warray_empty( array ));
 	assert_true( warray_nonEmpty( array ));
 	assert_strequal( warray_first( array ), "cat" );
 	assert_strequal( warray_last( array ), "tiger" );
+	assert_true( warray_contains( array, warray_sample( array )));
 }
 void
 Test_warray_steal()
@@ -1273,7 +1276,7 @@ int main() {
 	testsuite( Test_warray_prepend_n );
 	testsuite( Test_warray_set_n );
 
-	testsuite( Test_warray_firstLastEmptyNonEmpty );
+	testsuite( Test_warray_firstLastSampleEmptyNonEmpty );
 	testsuite( Test_warray_steal );
 	testsuite( Test_warray_stealFirstLast );
 	testsuite( Test_warray_removeAt );

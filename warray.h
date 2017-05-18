@@ -145,12 +145,12 @@ warray_clear( WArray* array );
 
 	If NULL is passed, this is a no-op.
 
-	@param array. After the call array points to other.
-	@param other
+	@param array After the call array points to other.
+	@param other The new array that is assigned to \c array
 	@pre array->type == other->type
 */
 void
-warray_assign( WArray** array, WArray *other );
+warray_assign( WArray** array, WArray* other );
 
 //------------------------------------------------------------
 //	Put one element in the array.
