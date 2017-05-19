@@ -1306,6 +1306,25 @@ Test_warray_bsearch()
 
 //--------------------------------------------------------------------------------
 
+void
+Test_warray_doStuffWithDoubleElements()
+{
+	autoWArray* array = warray_new( 0, wtypeDouble );
+
+	warray_append( array, &(double){ 1.0 });
+	warray_append( array, &(double){ -1.0 });
+	warray_append( array, &(double){ 0 });
+	warray_append( array, NULL );
+	warray_append( array, &(double){ 3.141 });
+
+	warray_sort( array );
+	autoChar* string = warray_toString( array, ", " );
+//	fprintf( stderr, "%s", warray_toString( array, ", " ));
+//	assert_strequal( string, "-1.0, 0.0, 1.0, 3.141" );
+}
+
+//--------------------------------------------------------------------------------
+
 int main() {
 	printf( "\n" );
 
@@ -1356,6 +1375,8 @@ int main() {
 
 	testsuite( Test_warray_compare );
 	testsuite( Test_warray_bsearch );
+
+	testsuite( Test_warray_doStuffWithDoubleElements );
 
 	printf( "\n" );
 	printf( "----------------------------\n" );
