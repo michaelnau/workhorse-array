@@ -154,12 +154,10 @@ const WType* wtypeInt = &(WType) {
 //---------------------------------------------------------------------------------
 
 void* wtypeStr_clone( const void* element ) {
-	return element ? __wstr_dup( element ) : NULL;
+	return __wstr_dup( element );
 }
 
 void wtype_delete( void** wtypePtr ) {
-	if ( not wtypePtr ) return;
-
 	free( *wtypePtr );
 	*wtypePtr = NULL;
 }
@@ -190,7 +188,6 @@ const WType* wtypeStr = &(WType) {
 //	double type
 //---------------------------------------------------------------------------------
 
-//FIX: Handle NULL elements.
 void* wtypeDouble_clone( const void* element ) {
 	double* clone = __wxmalloc( sizeof( double ));
 	*clone = *(double*)element;

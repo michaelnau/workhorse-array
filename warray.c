@@ -115,8 +115,12 @@ warray_clone( const WArray* array )
 	);
 
 	//TODO: warray_clone() with OpenMP pragma
-	for ( size_t i = 0; i < array->size; i++ )
-		copy->data[i] = array->type->clone( array->data[i] );
+	for ( size_t i = 0; i < array->size; i++ ) {
+		if ( array->data[i] )
+			copy->data[i] = array->type->clone( array->data[i] );
+		else
+			copy->data[i] = NULL;
+	}
 
 	assert( copy );
 	assert( not array->type->compare or warray_equal( array, copy ));
@@ -189,7 +193,10 @@ put( WArray* array, size_t position, const void* element )
 	assert( array );
 	assert( position < array->capacity );
 
-	array->data[position] = array->type->clone( element );
+	if ( element )
+		array->data[position] = array->type->clone( element );
+	else
+		array->data[position] = NULL;
 	array->size = __wmax( array->size+1, position+1 );
 
 	assert( array );
@@ -235,7 +242,10 @@ warray_set( WArray* array, size_t position, const void* element )
 		array->size = position+1;
 	}
 
-	array->data[position] = array->type->clone( element );
+	if ( element )
+		array->data[position] = array->type->clone( element );
+	else
+		array->data[position] = NULL;
 
 	assert( array );
 	return checkArray( array );
@@ -379,7 +389,10 @@ warray_cloneAt( const WArray* array, size_t position )
 	assert( array->type->clone );
 	assert( position < array->size );
 
-	return array->type->clone( array->data[position] );
+	if ( array->data[position] )
+		return array->type->clone( array->data[position] );
+	else
+		return NULL;
 }
 
 void*
@@ -528,8 +541,12 @@ warray_filter( const WArray* array, WElementCondition* filter, const void* filte
 
 	//TODO: warray_filter() with OpenMP pragma???
     for ( size_t i = 0; i < array->size; i++ ) {
-        if ( filter( array->data[i], filterData ))
-			newArray->data[newArray->size++] = array->type->clone( array->data[i] );
+        if ( filter( array->data[i], filterData )) {
+			if ( array->data[i] )
+				newArray->data[newArray->size++] = array->type->clone( array->data[i] );
+			else
+				newArray->data[newArray->size++] = NULL;
+		}
     }
 
 	assert( newArray );
@@ -547,8 +564,12 @@ warray_reject( const WArray* array, WElementCondition* reject, const void* rejec
 	WArray* newArray = (WArray*)warray_new( array->capacity, array->type );
 
     for ( size_t i = 0; i < array->size; i++ ) {
-        if ( not reject( array->data[i], rejectData ))
-			newArray->data[newArray->size++] = array->type->clone( array->data[i] );
+        if ( not reject( array->data[i], rejectData )) {
+			if ( array->data[i] )
+				newArray->data[newArray->size++] = array->type->clone( array->data[i] );
+			else
+				newArray->data[newArray->size++] = NULL;
+		}
     }
 
 	assert( newArray );
@@ -632,8 +653,12 @@ warray_reduce( const WArray* array, WElementReduce* reduce, const void* startVal
 
 	if ( not type ) type = wtypePtr;
 
-	if ( array->size == 0 )
-		return type->clone( startValue );
+	if ( array->size == 0 ) {
+		if ( startValue )
+			return type->clone( startValue );
+		else
+			return NULL;
+	}
 
 	void* reduction = reduce( array->data[0], startValue );
 
