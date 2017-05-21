@@ -610,15 +610,19 @@ warray_equal( const WArray* array1, const WArray* array2 ){ return warray_compar
 char*
 warray_toString( const WArray* array, const char delimiter[] );
 
-/**	Split the string in elements separated by the given delimiter string and create an array
-	with elements.
+/**	Create an array from a string.
+
+	Splits the given string in tokens separated by the delimiter string and creates elements
+	from the tokens using the targetType->fromString() method.
 
 	@param string
 	@param delimiter
-	@param targetType
+	@param targetType The type of the target array.
 	@return array of type targetType
 	@pre string != NULL
 	@pre delimiters != NULL and delimiters[0] != 0
+	@pre targetType != NULL
+	@pre targetType->clone != NULL and targetType->delete != NULL and targetType->fromString != NULL
 */
 WArray*
 warray_fromString( const char string[], const char delimiter[], const WType* targetType );

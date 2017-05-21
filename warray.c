@@ -20,8 +20,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iso646.h>	//and, or, not
 #include <string.h>	//memmove, memset, strdup
 #include <stdarg.h>	//va_list
-#include <stdio.h>	//printf, fflush
-#include <stdlib.h>	//malloc, realloc
+#include <stdlib.h>	//free, rand, bsearch, qsort
 
 //-------------------------------------------------------------------------------
 //	Invariants check, performed after every public function
