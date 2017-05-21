@@ -43,32 +43,6 @@ checkArray( const WArray* array ) {
 //	Helpers
 //-------------------------------------------------------------------------------
 
-#if 0
-//Taken from http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 (Public Domain) via Stackoverflow.com, then modified
-static char*
-__wstrtok_r( char *str, const char* delim, char** nextp )
-{
-    if ( not str )
-        str = *nextp;
-
-    str += strspn( str, delim );
-
-    if ( *str == '\0' )
-        return NULL;
-
-    char* ret = str;
-
-    str += strcspn( str, delim );
-
-    if ( *str )
-        *str++ = '\0';
-
-    *nextp = str;
-
-    return ret;
-}
-#endif // 0
-
 //Based on http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 (Public Domain) via Stackoverflow.com
 static char*
 __wstr_sep_r( char string[], const char delimiters[], char** next )

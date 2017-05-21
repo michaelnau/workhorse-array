@@ -60,10 +60,9 @@ typedef void	WElementDelete(void** elementPtr);
 */
 typedef int		WElementCompare(const void* element1, const void* element2);
 
-//TODO: Where do we actually use WElementFromString?
 /**	Function prototype for getting an element from a string.
 
-	@param string Input string to be converted to a collection element. May not be NULL.
+	@param string Input string to be converted to a collection element. Is never NULL.
 	@return The target collection element. May be NULL.
 */
 typedef void*	WElementFromString(const char* string);
