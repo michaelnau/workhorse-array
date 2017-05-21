@@ -948,14 +948,14 @@ Test_warray_toStringFromString()
 	autoChar* joined1 = warray_toString( array, ", " );
 	assert_strequal( joined1, "" );
 
-	autoWArray* split1 = warray_fromString( joined1, ", " );
+	autoWArray* split1 = warray_fromString( joined1, ", ", wtypeStr );
 	assert_equal( warray_size( split1 ), 0 );
 
     warray_append( array, "cat" );
 	autoChar* joined2 = warray_toString( array, ", " );
 	assert_strequal( joined2, "cat" );
 
-	autoWArray* split2 = warray_fromString( joined2, ", " );
+	autoWArray* split2 = warray_fromString( joined2, ", ", wtypeStr );
 	assert_strequal( warray_first( split2 ), "cat" );
 	assert_equal( warray_size( split2 ), 1 );
 
@@ -963,12 +963,12 @@ Test_warray_toStringFromString()
 	autoChar* joined3 = warray_toString( array, ", " );
 	assert_strequal( joined3, "cat, dog" );
 
-	autoWArray* split3 = warray_fromString( joined3, ", " );
+	autoWArray* split3 = warray_fromString( joined3, ", ", wtypeStr );
 	assert_strequal( warray_first( split3 ), "cat" );
 	assert_strequal( warray_at( split3, 1 ), "dog" );
 	assert_equal( warray_size( split3 ), 2 );
 
-	autoWArray* split3b = warray_fromString( joined3, "/" );
+	autoWArray* split3b = warray_fromString( joined3, "/", wtypeStr );
 	assert_strequal( warray_first( split3b ), "cat, dog" );
 	assert_equal( warray_size( split3b ), 1 );
 
@@ -976,13 +976,13 @@ Test_warray_toStringFromString()
 	autoChar* joined4 = warray_toString( array, ", " );
 	assert_strequal( joined4, "cat, dog, mouse" );
 
-	autoWArray* split4 = warray_fromString( joined4, ", " );
+	autoWArray* split4 = warray_fromString( joined4, ", ", wtypeStr );
 	assert_strequal( warray_first( split4 ), "cat" );
 	assert_strequal( warray_at( split4, 1 ), "dog" );
 	assert_strequal( warray_at( split4, 2 ), "mouse" );
 	assert_equal( warray_size( split4 ), 3 );
 
-	autoWArray* split4b = warray_fromString( joined4, "," );
+	autoWArray* split4b = warray_fromString( joined4, ",", wtypeStr );
 	assert_strequal( warray_first( split4b ), "cat" );
 	assert_strequal( warray_at( split4b, 1 ), " dog" );
 	assert_strequal( warray_at( split4b, 2 ), " mouse" );
@@ -1327,7 +1327,7 @@ Test_warray_doStuffWithDoubleElements()
 //--------------------------------------------------------------------------------
 
 void
-Fuzztest_Array();
+Fuzztest_warray();
 
 int main() {
 	printf( "\n" );
@@ -1382,7 +1382,7 @@ int main() {
 
 	testsuite( Test_warray_doStuffWithDoubleElements );
 
-	testsuite( Fuzztest_Array );
+	testsuite( Fuzztest_warray );
 
 	printf( "\n" );
 	printf( "----------------------------\n" );
@@ -1533,7 +1533,7 @@ removeAtElement( WArray* array, size_t size )
 	return size-1;
 }
 void
-Fuzztest_Array()
+Fuzztest_warray()
 {
 	autoWArray* array = a.new( 5, wtypeStr );
 	double direction = 0.01;
@@ -1612,7 +1612,7 @@ Fuzztest_Array()
 		else if ( ratio >= 0.66 and ratio < 0.67 ) {
 //			printf( "toString and fromString, size = %u\n", array->size );
 			autoChar* toString = a.toString( array, ", " );
-			autoWArray* fromString = warray_fromString2( toString, ", ", wtypeStr );
+			autoWArray* fromString = warray_fromString( toString, ", ", wtypeStr );
 			assert( a.equal( array, fromString ));
 		}
 

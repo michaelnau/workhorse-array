@@ -119,7 +119,7 @@ typedef struct WArrayNamespace {
 	WArray*		(*shuffle)	(WArray* array);
 
 	char*		(*toString)	(const WArray* array, const char delimiters[]);
-	WArray*		(*fromString)(const char string[], const char delimiters[]);
+	WArray*		(*fromString)(const char string[], const char delimiters[], const WType* targetType );
 	int			(*compare) 	(const WArray* array1, const WArray* array2);
 	bool		(*equal)	(const WArray* array1, const WArray* array2);
 }WArrayNamespace;

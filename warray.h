@@ -611,8 +611,7 @@ warray_equal( const WArray* array1, const WArray* array2 ){ return warray_compar
 char*
 warray_toString( const WArray* array, const char delimiters[] );
 
-//TODO: Pass a WType to warray_fromString() to create an array with real elements
-/**	Split the string in elements separated by one of the given delimiters and create an array
+/*	Split the string in elements separated by one of the given delimiters and create an array
 	with the string elements.
 
 	@param string
@@ -621,11 +620,20 @@ warray_toString( const WArray* array, const char delimiters[] );
 	@pre string != NULL
 	@pre delimiters != NULL and delimiters[0] != 0
 */
-WArray*
-warray_fromString( const char string[], const char delimiters[] );
+//WArray*
+//warray_fromString( const char string[], const char delimiters[] );
 
+/**	Split the string in elements separated by the given delimiter string and create an array
+	with elements.
+
+	@param string
+	@param delimiters
+	@return array of type wtypeStr
+	@pre string != NULL
+	@pre delimiters != NULL and delimiters[0] != 0
+*/
 WArray*
-warray_fromString2( const char string[], const char delimiters[], const WType* targetType );
+warray_fromString( const char string[], const char delimiters[], const WType* targetType );
 
 //------------------------------------------------------------
 //	Query basic array data.

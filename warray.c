@@ -804,31 +804,31 @@ warray_toString( const WArray* array, const char delimiters[] )
 	return string;
 }
 
+//WArray*
+//warray_fromString( const char string[], const char delimiters[] )
+//{
+//	assert( string );
+//	assert( delimiters and delimiters[0] );
+//
+//	WArray* array = warray_new( 0, wtypeStr );
+//
+//	char* newString = __wstr_dup( string );
+//	char* context = NULL;
+//	char* token = __wstr_sep_r( newString, delimiters, &context );
+//
+//	while ( token ) {
+//		warray_append( array, token );
+//		token = __wstr_sep_r( NULL, delimiters, &context );
+//	}
+//
+//	free( newString );
+//
+//	assert( array );
+//	return checkArray( array );
+//}
+
 WArray*
-warray_fromString( const char string[], const char delimiters[] )
-{
-	assert( string );
-	assert( delimiters and delimiters[0] );
-
-	WArray* array = warray_new( 0, wtypeStr );
-
-	char* newString = __wstr_dup( string );
-	char* context = NULL;
-	char* token = __wstr_sep_r( newString, delimiters, &context );
-
-	while ( token ) {
-		warray_append( array, token );
-		token = __wstr_sep_r( NULL, delimiters, &context );
-	}
-
-	free( newString );
-
-	assert( array );
-	return checkArray( array );
-}
-
-WArray*
-warray_fromString2( const char string[], const char delimiters[], const WType* targetType )
+warray_fromString( const char string[], const char delimiters[], const WType* targetType )
 {
 	assert( string );
 	assert( delimiters and delimiters[0] );
