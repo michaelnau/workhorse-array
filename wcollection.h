@@ -70,7 +70,7 @@ typedef void*	WElementFromString(const char* string);
 
 /**	Function prototype for converting an element to a string.
 
-	@param element Input element of the source collection. May be NULL.
+	@param element Input element of the source collection. Is never NULL.
 	@return The stringified element. May not be NULL.
 */
 typedef char*	WElementToString(const void* element);

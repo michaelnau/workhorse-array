@@ -19,6 +19,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define TEST_IMPLEMENTATION
 #include "Testing.h"
 #include <assert.h>
+#include <ctype.h>
 #include <iso646.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -1325,6 +1326,9 @@ Test_warray_doStuffWithDoubleElements()
 
 //--------------------------------------------------------------------------------
 
+void
+Fuzztest_Array();
+
 int main() {
 	printf( "\n" );
 
@@ -1378,6 +1382,8 @@ int main() {
 
 	testsuite( Test_warray_doStuffWithDoubleElements );
 
+	testsuite( Fuzztest_Array );
+
 	printf( "\n" );
 	printf( "----------------------------\n" );
 	printf( "| Tests  | Failed | Passed |\n" );
@@ -1387,9 +1393,8 @@ int main() {
 
 //--------------------------------------------------------------------------------
 
-#if 0
-#include "Random.h"
-enum {
+#if 1
+enum FuzztestParameters{
 	FuzztestRuns	= 10000,
 };
 
@@ -1428,12 +1433,33 @@ isDistinct( const WArray* array )
 
 	return true;
 }
+static char*
+randomString()
+{
+	const size_t maxSize = 100;
+	int size = (rand() % maxSize) -1;
 
+	if ( size < 0 ) return NULL;
+	if ( size == 0 ) return __wstr_dup( "" );
+
+	char* string = __wxmalloc( size+1 );
+
+    for ( int i = 0; i < size; i++ ) {
+		char tmp;
+		do {
+			tmp = rand() % 128;
+		}while( not isalpha( tmp ));
+		string[i] = tmp;
+	}
+
+	string[size] = 0;
+	return string;
+}
 static size_t
 appendElement( WArray* array, size_t size )
 {
-	printf( "append, size = %u\n", array->size );
-	autoChar* string = Random_string( .isSpace = true, .isNULL = true );
+//	printf( "append, size = %u\n", array->size );
+	autoChar* string = randomString();
 	a.append( array, string );
 	if ( string ) assert_strequal( a.last( array ), string );
 	else 		  assert_equal( a.last( array ), NULL );
@@ -1443,8 +1469,8 @@ appendElement( WArray* array, size_t size )
 static size_t
 prependElement( WArray* array, size_t size )
 {
-	printf( "prepend, size = %u\n", array->size );
-	autoChar* string = Random_string( .isSpace = true, .isNULL = true );
+//	printf( "prepend, size = %u\n", array->size );
+	autoChar* string = randomString();
 	a.prepend( array, string );
 	if ( string ) assert_strequal( a.first( array ), string );
 	else 		  assert_equal( a.first( array ), NULL );
@@ -1454,33 +1480,37 @@ prependElement( WArray* array, size_t size )
 static size_t
 insertElement( WArray* array, size_t size )
 {
-	printf( "insert, size = %u\n", array->size );
-	autoChar* string = Random_string( .isSpace = true, .isNULL = true );
+//	printf( "insert, size = %u\n", array->size );
+	autoChar* string = randomString();
 //TODO: insert up to array->capacity and even higher.
-	size_t position = Random_uint( .max = array->size ? array->size-1 : 0 );
+
+	size_t position = array->size ? rand() % array->size : 0;
+
 	a.insert( array, position, string );
 	if ( string ) assert_strequal( a.at( array, position ), string );
 	else 		  assert_equal( a.at( array, position ), NULL );
 
-	return max( size+1, position+1 );
+	return __wmax( size+1, position+1 );
 }
 static size_t
 setElement( WArray* array, size_t size )
 {
-	printf( "set, size = %u\n", array->size );
-	autoChar* string = Random_string( .isSpace = true, .isNULL = true );
+//	printf( "set, size = %u\n", array->size );
+	autoChar* string = randomString();
 //TODO: set up to array->capacity and even higher.
-	size_t position = Random_uint( .max = array->size ? array->size-1 : 0 );
+
+	size_t position = array->size ? rand() % array->size : 0;
+
 	a.set( array, position, string );
 	if ( string ) assert_strequal( a.at( array, position ), string );
 	else 		  assert_equal( a.at( array, position ), NULL );
 
-	return max( size, position+1 );
+	return __wmax( size, position+1 );
 }
 static size_t
 removeFirstElement( WArray* array, size_t size )
 {
-	printf( "removeFirst, size = %u\n", array->size );
+//	printf( "removeFirst, size = %u\n", array->size );
 	a.removeFirst( array );
 
 	return size-1;
@@ -1488,7 +1518,7 @@ removeFirstElement( WArray* array, size_t size )
 static size_t
 removeLastElement( WArray* array, size_t size )
 {
-	printf( "removeLast, size = %u\n", array->size );
+//	printf( "removeLast, size = %u\n", array->size );
 	a.removeLast( array );
 
 	return size-1;
@@ -1496,14 +1526,14 @@ removeLastElement( WArray* array, size_t size )
 static size_t
 removeAtElement( WArray* array, size_t size )
 {
-	printf( "removeAt, size = %u\n", array->size );
-	size_t position = Random_uint( .max = array->size ? array->size-1 : 0 );
+//	printf( "removeAt, size = %u\n", array->size );
+	size_t position = array->size ? rand() % array->size : 0;
 	a.removeAt( array, position );
 
 	return size-1;
 }
 void
-Fuzztest_Array
+Fuzztest_Array()
 {
 	autoWArray* array = a.new( 5, wtypeStr );
 	double direction = 0.01;
@@ -1511,39 +1541,39 @@ Fuzztest_Array
 	printf("\n");
 
 	for ( size_t i = 0; i < FuzztestRuns; i++ ) {
-        double ratio = Random_ratio();
+        double ratio = rand() / (double) RAND_MAX;
 
 		//Add elements.
 		if ( ratio < 0.30 + direction ) {
-			switch( Random_uint( .max = 3 )) {
+			switch( rand() % 3 ) {
 				case 0: size = appendElement( array, size ); break;
 				case 1: size = prependElement( array, size ); break;
 				case 2: size = insertElement( array, size ); break;
 				case 3: size = setElement( array, size ); break;
-				default: die();
+				default: __wdie( "Invalid switch path" );
 			}
         }
 
         //Remove elements.
 		else if ( ratio >= 0.30 + direction and ratio < 0.60 ) {
 			if ( array->size )
-			switch( Random_uint( .max = 2 )) {
+			switch( rand() % 2 ) {
 				case 0: size = removeFirstElement( array, size ); break;
 				case 1: size = removeLastElement( array, size ); break;
 				case 2: size = removeAtElement( array, size ); break;
-				default: die();
+				default: __wdie( "Invalid switch path" );
 			}
 		}
 
         //Switch direction.
 		else if ( ratio >= 0.60 and ratio < 0.601 ) {
-			printf( "change direction, size = %u\n", array->size );
+//			printf( "change direction, size = %u\n", array->size );
 			direction *= -1;
 		}
 
 		//Clear elements.
 		else if ( ratio >= 0.61 and ratio < 0.6101 ) {
-			printf( "clear, size = %u\n", array->size );
+//			printf( "clear, size = %u\n", array->size );
 			a.clear( array );
 			size = 0;
 			direction = abs( direction );
@@ -1551,20 +1581,20 @@ Fuzztest_Array
 
 		//Sort the array.
 		else if ( ratio >= 0.62 and ratio < 0.63 ) {
-			printf( "sort, size = %u\n", array->size );
+//			printf( "sort, size = %u\n", array->size );
 			a.sort( array );
 			assert_true( isSorted( array ));
 		}
 
 		//Shuffle the array.
 		else if ( ratio >= 0.63 and ratio < 0.64 ) {
-			printf( "shuffle, size = %u\n", array->size );
+//			printf( "shuffle, size = %u\n", array->size );
 			a.shuffle( array );
 		}
 
 		//Compact the array.
 		else if ( ratio >= 0.64 and ratio < 0.65 ) {
-			printf( "compact, size = %u\n", array->size );
+//			printf( "compact, size = %u\n", array->size );
 			a.compact( array );
 			assert_true( isCompact( array ));
 			size = array->size;
@@ -1572,7 +1602,7 @@ Fuzztest_Array
 
 		//Remove duplicates in the array.
 		else if ( ratio >= 0.65 and ratio < 0.66 ) {
-			printf( "distinct, size = %u\n", array->size );
+//			printf( "distinct, size = %u\n", array->size );
 			a.distinct( array );
 			assert_true( isDistinct( array ));
 			size = array->size;
@@ -1580,30 +1610,30 @@ Fuzztest_Array
 
 		//Compare fromString( toString()) with the original array.
 		else if ( ratio >= 0.66 and ratio < 0.67 ) {
-			printf( "toString and fromString, size = %u\n", array->size );
-			autoChar* toString = a.toString( array, "," );
-			autoWArray* fromString = a.fromString( toString, "," );
-			assert_true( a.equal( array, fromString ));
+//			printf( "toString and fromString, size = %u\n", array->size );
+			autoChar* toString = a.toString( array, ", " );
+			autoWArray* fromString = warray_fromString2( toString, ", ", wtypeStr );
+			assert( a.equal( array, fromString ));
 		}
 
 		//Test filter()
 		else if ( ratio >= 0.67 and ratio < 0.68 ) {
-			printf( "filter() and all(), size = %u\n", array->size );
+//			printf( "filter() and all(), size = %u\n", array->size );
             bool lessThanSize( const void* element, const void* data ) {
-                return strlen( element ) < (int)data;
+                return not element or strlen( element ) < (size_t)data;
             }
-			int stringSize = Random_uint( .max = 100 );
+			int stringSize = rand() % 100;
 			autoWArray* less = a.filter( array, lessThanSize, (void*)stringSize );
 			assert_true( a.all( less, lessThanSize, (void*)stringSize ));
 		}
 
 		//Test reject()
 		else if ( ratio >= 0.68 and ratio < 0.69 ) {
-			printf( "reject() and none(), size = %u\n", array->size );
+//			printf( "reject() and none(), size = %u\n", array->size );
             bool lessThanSize( const void* element, const void* data ) {
-                return strlen( element ) < (int)data;
+                return not element or strlen( element ) < (size_t)data;
             }
-			int stringSize = Random_uint( .max = 100 );
+			int stringSize = rand() % 100;
 			autoWArray* greater = a.reject( array, lessThanSize, (void*)stringSize );
 			assert_true( a.none( greater, lessThanSize, (void*)stringSize ));
 		}

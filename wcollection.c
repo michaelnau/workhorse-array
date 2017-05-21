@@ -138,6 +138,7 @@ void* wtypeInt_fromString( const char* string ) {
 }
 
 char* wtypeInt_toString( const void* element ) {
+    assert( element );
     return __wstr_printf( "%ld", (long)element );
 }
 
@@ -173,6 +174,7 @@ void* wtypeStr_fromString( const char* string ) {
 }
 
 char* wtypeStr_toString( const void* element ) {
+    assert( element );
 	return __wstr_dup( element );
 }
 
@@ -208,9 +210,8 @@ void* wtypeDouble_fromString( const char* string ) {
 }
 
 char* wtypeDouble_toString( const void* element ) {
-    return element ?
-		__wstr_printf( "%lf", *(double*)element ) :
-		__wstr_dup( "" );
+    assert( element );
+    return __wstr_printf( "%lf", *(double*)element );
 }
 
 const WType* wtypeDouble = &(WType) {

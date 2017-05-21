@@ -624,6 +624,9 @@ warray_toString( const WArray* array, const char delimiters[] );
 WArray*
 warray_fromString( const char string[], const char delimiters[] );
 
+WArray*
+warray_fromString2( const char string[], const char delimiters[], const WType* targetType );
+
 //------------------------------------------------------------
 //	Query basic array data.
 //------------------------------------------------------------

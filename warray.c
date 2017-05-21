@@ -43,6 +43,7 @@ checkArray( const WArray* array ) {
 //	Helpers
 //-------------------------------------------------------------------------------
 
+#if 0
 //Taken from http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 (Public Domain) via Stackoverflow.com, then modified
 static char*
 __wstrtok_r( char *str, const char* delim, char** nextp )
@@ -65,6 +66,35 @@ __wstrtok_r( char *str, const char* delim, char** nextp )
     *nextp = str;
 
     return ret;
+}
+#endif // 0
+
+//Based on http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684 (Public Domain) via Stackoverflow.com
+static char*
+__wstr_sep_r( char string[], const char delimiters[], char** next )
+{
+	assert( string or next );
+	assert( delimiters and delimiters[0] );
+
+	if ( not string )
+        string = *next;
+
+    if ( not *string )
+        return NULL;
+
+    char* token = string;
+
+    string = strstr( string, delimiters );
+    if ( string ) {
+		*string = '\0';
+		*next = string + strlen( delimiters );
+	}
+	else {
+		*next = "";
+	}
+
+	assert( token );
+    return token;
 }
 
 //-------------------------------------------------------------------------------
@@ -758,11 +788,11 @@ warray_toString( const WArray* array, const char delimiters[] )
 	if ( not array->size ) return __wstr_dup( "" );
 
 	WElementToString* toString = array->type->toString;
-	char* string = toString( array->data[0] );		//The first element without delimiters
+	char* string = array->data[0] ? toString( array->data[0] ) : __wstr_dup( "NULL" );	//The first element without delimiters
 	assert( string );
 
 	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiters and next element.
-		char* elementStr = toString( array->data[i] );
+		char* elementStr = array->data[i] ? toString( array->data[i] ) : __wstr_dup( "NULL" );
 		assert( elementStr );
 		char* temp = str_cat3( string, delimiters, elementStr );
 		free( string );
@@ -784,11 +814,44 @@ warray_fromString( const char string[], const char delimiters[] )
 
 	char* newString = __wstr_dup( string );
 	char* context = NULL;
-	char* token = __wstrtok_r( newString, delimiters, &context );
+	char* token = __wstr_sep_r( newString, delimiters, &context );
 
 	while ( token ) {
 		warray_append( array, token );
-		token = __wstrtok_r( NULL, delimiters, &context );
+		token = __wstr_sep_r( NULL, delimiters, &context );
+	}
+
+	free( newString );
+
+	assert( array );
+	return checkArray( array );
+}
+
+WArray*
+warray_fromString2( const char string[], const char delimiters[], const WType* targetType )
+{
+	assert( string );
+	assert( delimiters and delimiters[0] );
+	assert( targetType );
+	assert( targetType->clone and targetType->delete and targetType->fromString );
+
+	WArray* array = warray_new( 0, targetType );
+
+	char* newString = __wstr_dup( string );
+	char* context = NULL;
+	char* token = __wstr_sep_r( newString, delimiters, &context );
+
+	while ( token ) {
+		void* element;
+		if ( strcmp( token, "NULL" ) != 0 ) {
+			element = targetType->fromString( token );
+			assert( element );
+			warray_append( array, element );
+			targetType->delete( &element );
+		}
+		else
+			warray_append( array, NULL );
+		token = __wstr_sep_r( NULL, delimiters, &context );
 	}
 
 	free( newString );
