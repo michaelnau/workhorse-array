@@ -1538,7 +1538,7 @@ Fuzztest_warray()
 	autoWArray* array = a.new( 5, wtypeStr );
 	double direction = 0.01;
 	size_t size = 0;
-	printf("\n");
+//	printf("\n");
 
 	for ( size_t i = 0; i < FuzztestRuns; i++ ) {
         double ratio = rand() / (double) RAND_MAX;
@@ -1575,6 +1575,7 @@ Fuzztest_warray()
 		else if ( ratio >= 0.61 and ratio < 0.6101 ) {
 //			printf( "clear, size = %u\n", array->size );
 			a.clear( array );
+			assert_equal( array->size, 0 );
 			size = 0;
 			direction = abs( direction );
 		}
@@ -1636,6 +1637,13 @@ Fuzztest_warray()
 			int stringSize = rand() % 100;
 			autoWArray* greater = a.reject( array, lessThanSize, (void*)stringSize );
 			assert_true( a.none( greater, lessThanSize, (void*)stringSize ));
+		}
+
+		//Reverse the array.
+		else if ( ratio >= 0.69 and ratio < 0.70 ) {
+//			printf( "reverse, size = %u\n", array->size );
+			autoWArray* reversed = a.reverse( a.clone( array ));
+			assert_true( a.equal( array, a.reverse( reversed )));
 		}
 
 		assert_equal( size, array->size );
