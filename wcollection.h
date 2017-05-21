@@ -138,9 +138,9 @@ typedef struct WType {
 
 /** Defines a collection type for raw void* pointers. Can be passed to functions like warray_new().
 
-	- clone = Element_clonePtr()
-	- delete = Element_deletePtr()
-	- compare = Element_comparePtr()
+	- clone = wtypePtr_clone()
+	- delete = wtypePtr_delete()
+	- compare = wtypePtr_compare()
 	- fromString = NULL
 	- toString = NULL
 */
@@ -148,31 +148,31 @@ extern const WType* wtypePtr;
 
 /** Defines a collection type for int values. Can be passed to functions like warray_new().
 
-	- clone = Element_cloneInt()
-	- delete = Element_deleteInt()
-	- compare = Element_compareInt()
-	- fromString = Element_fromStringInt()
-	- toString = Element_toStringInt()
+	- clone = wtypeInt_clone()
+	- delete = wtypeInt_delete()
+	- compare = wtypeInt_compare()
+	- fromString = wtypeInt_fromString()
+	- toString = wtypeInt_toString()
 */
 extern const WType* wtypeInt;
 
 /** Defines a collection type for char* values. Can be passed to functions like warray_new().
 
-	- clone = Element_cloneStr()
-	- delete = Element_delete()
-	- compare = Element_compareStr()
-	- fromString = Element_fromStringStr()
-	- toString = Element_toStringStr()
+	- clone = wtypeStr_clone()
+	- delete = wtypeStr_delete()
+	- compare = wtypeStr_compare()
+	- fromString = wtypeStr_fromString()
+	- toString = wtypeStr_toString()
 */
 extern const WType* wtypeStr;
 
 /** Defines a collection type for double values. Can be passed to functions like warray_new().
 
-	- clone = Element_cloneDouble()
-	- delete = Element_delete()
-	- compare = Element_compareDouble()
-	- fromString = Element_fromStringDouble()
-	- toString = Element_toStringDouble()
+	- clone = wtypeDouble_clone()
+	- delete = wtypeDouble_delete()
+	- compare = wtypeDouble_compare()
+	- fromString = wtypeDouble_fromString()
+	- toString = wtypeDouble_toString()
 */
 extern const WType* wtypeDouble;
 
