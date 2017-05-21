@@ -3,9 +3,6 @@
 	- autoWArray
 	- ArrayNamespace
 */
-#ifndef WARRAY_SUGAR_H_INCLUDED
-#define WARRAY_SUGAR_H_INCLUDED
-
 /* Copyright (c) 2017 Michael Nau
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,6 +19,9 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
+#ifndef WARRAY_SUGAR_H_INCLUDED
+#define WARRAY_SUGAR_H_INCLUDED
 
 #include "warray.h"
 

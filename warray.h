@@ -1,9 +1,5 @@
 /**@file
 */
-//TODO: Extract main documentation in separate file.
-#ifndef WARRAY_H_INCLUDED
-#define WARRAY_H_INCLUDED
-
 /* Copyright (c) 2017 Michael Nau
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,6 +16,9 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
+#ifndef WARRAY_H_INCLUDED
+#define WARRAY_H_INCLUDED
 
 #include "wcollection.h"
 #include <stdbool.h>			//bool
@@ -602,38 +601,27 @@ warray_equal( const WArray* array1, const WArray* array2 ){ return warray_compar
 	Each element is stringified with the array->toString() method given at warray_new().
 
 	@param array
-	@param delimiters Separator string inserted between the strings of two elements
+	@param delimiter Separator string inserted between the strings of two elements
 	@return Allocated string, either of stringified elements or "", if the array is empty
 	@pre array != NULL
 	@pre delimiters != NULL
 	@pre array->type->toString != NULL
 */
 char*
-warray_toString( const WArray* array, const char delimiters[] );
-
-/*	Split the string in elements separated by one of the given delimiters and create an array
-	with the string elements.
-
-	@param string
-	@param delimiters
-	@return array of type wtypeStr
-	@pre string != NULL
-	@pre delimiters != NULL and delimiters[0] != 0
-*/
-//WArray*
-//warray_fromString( const char string[], const char delimiters[] );
+warray_toString( const WArray* array, const char delimiter[] );
 
 /**	Split the string in elements separated by the given delimiter string and create an array
 	with elements.
 
 	@param string
-	@param delimiters
-	@return array of type wtypeStr
+	@param delimiter
+	@param targetType
+	@return array of type targetType
 	@pre string != NULL
 	@pre delimiters != NULL and delimiters[0] != 0
 */
 WArray*
-warray_fromString( const char string[], const char delimiters[], const WType* targetType );
+warray_fromString( const char string[], const char delimiter[], const WType* targetType );
 
 //------------------------------------------------------------
 //	Query basic array data.
