@@ -4,7 +4,7 @@
 	@mainpage Workhorse Array
 
 	A dynamic growing array of typed void* elements supporting many common operations and automatic
-	element cloning and deletion.
+	management of the elements' memory.
 
 	@section Content
 
@@ -21,20 +21,22 @@
 		- \ref searching
 		- \ref converting
 		- \ref misc
+	- \ref namespace_api
+	- \ref auto_destructor
 
 
 	@section features Features
 
-	- The array can only contain elements of the same type.
-	- Has many functions to add elements: warray_prepend(), warray_append(), warray_insert(),
-	  warray_update().
-	- Peek at elements with warray_first(), warray_last() and warray_at().
-	- Take elements out of the array with warray_stealFirst(), warray_stealLast() and warray_stealAt().
+	- Has many functions to add elements, e.g. warray_prepend(), warray_append(), warray_insert(),
+	  warray_set().
+	- Get elements with functions like warray_at(), warray_stealFirst() or warray_cloneLast().
 	- Iterate through all elements with warray_filter(), warray_map() and warray_reduce().
-	- The array copies the given elements and leaves the originals untouched.
-	- Elements get deleted automatically when necessary.
-	- The array takes full ownership of the elements. They can only be manipulated through functions.
-	- Supports sparse arrays. The gaps are filled with NULL.
+	- Many manipulating functions like warray_sort(), warray_reverse() or warray_compact()
+	- Serialize arrays with warray_toString() and warray_fromString().
+	- ... and many more functions.
+	- The array takes full ownership of the elements and automatically manages their memory. No
+	  manual copying or deleting necessary.
+	- Supports sparse arrays with the gaps being filled with NULL.
 
 
 	@section hello_world Hello world
@@ -43,7 +45,8 @@
 	#include "warray.h"
 
 	void foo() {
-		//Create an array with an initial capacity of 10 elements holding char* strings.
+		//Create an array with an initial capacity of 10 elements holding elements of the type
+		wtypeStr (char* strings).
 		WArray* animals = warray_new( 10, wtypeStr );
 
 		//Insert the allocated copies of three strings into the array. From now on the array
@@ -67,7 +70,7 @@
 
 		//Free the array including the remaining dog.
 		warray_delete( &animals );									//->animals = NULL
-		
+
 		//We stole the mouse, so we must free it ourselves.
 		free( mouse );
 	}
@@ -265,7 +268,7 @@
 	warray_removeAt( array, 3 );
 	warray_removeLast( array );
 	\endcode
-	
+
 	- warray_at()
 	- warray_first()
 	- warray_last()
@@ -340,7 +343,7 @@
 		const char* animal = element;
 		size_t length = (size_t)data;
 		return strlen( animal ) > length;
-	}	
+	}
 
 	//...
 
@@ -393,7 +396,7 @@
 		const char* animal = element;
 		size_t length = (size_t)data;
 		return strlen( animal ) > length;
-	}	
+	}
 
 	//Create an array and add some strings to it.
 
@@ -436,5 +439,67 @@
 
 	- warray_compare()
 	- warray_equal()
+
+
+	@section namespace_api Namespace API
+
+	If you include "warray_sugar.h" instead of "warray.h" you can define a namespace for workhorse
+	arrays and use shorter function calls:
+
+	\code
+	//Include this to get the Namespace capability.
+	#include "warray_sugar.h"
+
+	//Define the namespace with a variable name of your liking. Internally a struct of function
+	//pointers is set to the warray function calls here.
+	WArrayNamespace a = warrayNamespace;
+
+	int main() {
+		WArray* array = a.new( 0, wtypeStr );
+
+		//Equivalent to warray_append()
+		a.append( array, "cat" );
+
+        //You can mix namespace calls and conventional calls.
+		warray_append( array, "dog" );
+		a.append( array, "mouse" );
+
+		a.toString( array, ", " );
+
+        a.delete( &array );
+	}
+	\endcode
+
+
+	\section auto_destructor Automatic destructor
+	If you include "warray_sugar.h" instead of "warray.h" you can define a workhorse array
+	so, that it gets automatically deleted when leaving scope. Thus you can avoid memory
+	leaks or dangling pointers much easier:
+
+	\code
+	void foo()
+	{
+		//Define a normal array.
+		WArray* array1 = warray_new( 0, wtypeStr );
+		//Define an auto destructive array.
+		autoWArray* array2 = warray_new( 0, wtypeStr );
+
+		//Do some stuff with the arrays.
+		warray_append( array1, "cat" );
+		warray_append( array2, "dog" );
+		//...
+
+		//Delete array1 manually.
+		warray_delete( &array1 );
+
+		//array2 gets automatically deleted here when leaving scope.
+	}
+	\endcode
+
+	The autoWArray feature needs GCC's non-standard cleanup() attribute to work. So if you
+	want to stay portable, you'd better do not use it. Clang on the other hand should
+	support it as well, so you might reach a broad base of platforms with it anyway.
+
+
 */
 
