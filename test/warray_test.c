@@ -1387,7 +1387,7 @@ int main() {
 	printf( "\n" );
 	printf( "----------------------------\n" );
 	printf( "| Tests  | Failed | Passed |\n" );
-	printf( "| %-6u | %-6u | %-6u |\n", testsFailed+testsPassed, testsFailed, testsPassed );
+	printf( "| %-6zu | %-6zu | %-6zu |\n", testsFailed+testsPassed, testsFailed, testsPassed );
 	printf( "----------------------------\n" );
 }
 

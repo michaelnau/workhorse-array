@@ -112,10 +112,10 @@ extern const WType* wtypeArray;
 WArray*
 warray_new( size_t capacity, const WType* type );
 
-/**	Clone the given array by cloning the elements with the array->type->clone() method.
+/**	Clone the given array by cloning the elements with the array's clone() method.
 
 	@param array
-	@return The new array
+	@return The new array. Is never NULL.
 	@pre array != NULL
 */
 WArray*

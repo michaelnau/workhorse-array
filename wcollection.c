@@ -246,7 +246,7 @@ void wtypeStr_foreachPrint( const void* element, const void* foreachData ) {
 }
 
 void wtypeStr_foreachIndexPrint( const void* element, size_t index, const void* foreachData ) {
-	printf( "%u/%s%s", index, (char*)element, foreachData ? (char*)foreachData : "" );
+	printf( "%zu/%s%s", index, (char*)element, foreachData ? (char*)foreachData : "" );
 }
 
 //---------------------------------------------------------------------------------

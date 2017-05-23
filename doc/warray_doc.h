@@ -10,6 +10,7 @@
 
 	- \ref features
 	- \ref hello_world
+	- \ref compiling
 	- \ref function_overview
 		- \ref create_delete
 		- \ref putting
@@ -23,6 +24,7 @@
 		- \ref misc
 	- \ref namespace_api
 	- \ref auto_destructor
+	- \ref testing
 
 
 	@section features Features
@@ -74,6 +76,28 @@
 		//We stole the mouse, so we must free it ourselves.
 		free( mouse );
 	}
+	\endcode
+
+
+	@section compiling Compiling & dependencies
+
+	For compiling and using the library you only need a C11 compatible compiler and the C
+	standard library. No other external dependencies are required. The exception: If you'd like
+	to use (but not compile!) the optional autoWArray feature you need GCC or another compiler
+	supporting GCC's cleanup attribute.
+
+	Put warray.c, warray.h, wcollection.c and wcollection.h in your project folder and compile
+	your app with e.g.
+
+	\code
+	gcc -std=c11 warray.c wcollection.c myapp.c myapp
+	\endcode
+
+	The workhorse array files compile cleanly with -Wall -Wextra -pedantic. So you might also compile
+	like this:
+
+	\code
+	gcc -std=c11 warray.c -Wall -Wextra -Wpedantic wcollection.c myapp.c myapp
 	\endcode
 
 
@@ -193,7 +217,7 @@
 	\endcode
 
 	You can also put several elements in the array at once, if you like. But you must ensure
-	that the given element number matches the data:
+	that the given element count matches the data:
 
 	\code
 	WArray* array = warray_new( 0, wtypeStr );
@@ -450,11 +474,12 @@
 	//Include this to get the Namespace capability.
 	#include "warray_sugar.h"
 
-	//Define the namespace with a variable name of your liking. Internally a struct of function
-	//pointers is set to the warray function calls here.
-	WArrayNamespace a = warrayNamespace;
+	//Define the namespace with a variable name of your liking. Internally a struct of
+	//function pointers is set to the warray function calls.
+	const WArrayNamespace a = warrayNamespace;
 
 	int main() {
+		//Equivalent to warray_new()
 		WArray* array = a.new( 0, wtypeStr );
 
 		//Equivalent to warray_append()
@@ -464,7 +489,8 @@
 		warray_append( array, "dog" );
 		a.append( array, "mouse" );
 
-		a.toString( array, ", " );
+		//Prints "cat, dog, mouse".
+		puts( a.toString( array, ", " ));
 
         a.delete( &array );
 	}
@@ -500,6 +526,13 @@
 	want to stay portable, you'd better do not use it. Clang on the other hand should
 	support it as well, so you might reach a broad base of platforms with it anyway.
 
+
+	\section testing Testing
+    The workhorse array library is tested in many ways:
+    - unit tests
+    - fuzz tests
+    - valgrind
+    - cppcheck
 
 */
 

@@ -40,11 +40,11 @@ do {												\
 	printf( "Testing %s", #functionname );			\
 	functionname();									\
 	if ( testsFailed > __testsFailedOld )			\
-		printf( " - *** %u failed, %u passed ***\n",\
+		printf( " - *** %zu failed, %zu passed ***\n",\
 		testsFailed - __testsFailedOld,				\
 		testsPassed - __testsPassedOld );			\
 	else											\
-		printf( " - %u passed\n",					\
+		printf( " - %zu passed\n",					\
 		testsPassed - __testsPassedOld );			\
 }while(0)
 

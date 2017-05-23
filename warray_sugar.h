@@ -43,14 +43,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	Example:
 	\code
-    ArrayNamespace a = arrayNamespace;
+	const WArrayNamespace a = warrayNamespace;
 
-    ...
-
-    Array* array = warray_new( 15, elementStr );
-    a.append( array, "cat" );
-    a.prepend( array, "dog" );
-    printf( "%s", a.toString( array ));		//->"dog", "cat"
+	void foo()
+	{
+		WArray* array = a.new( 15, elementStr );
+		a.append( array, "cat" );
+		a.prepend( array, "dog" );
+		printf( "%s", a.toString( array ));		//->"dog", "cat"
+		a.delete( &array );
+	}
 	\endcode
 */
 typedef struct WArrayNamespace {
@@ -124,7 +126,7 @@ typedef struct WArrayNamespace {
 	bool		(*equal)	(const WArray* array1, const WArray* array2);
 }WArrayNamespace;
 
-/**	Predefined value for ArrayNamespace variables
+/**	Predefined value for WArrayNamespace variables
 */
 #define warrayNamespace					\
 {										\
