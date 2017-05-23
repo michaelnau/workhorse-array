@@ -159,14 +159,14 @@
 		return strcmp( person1->name, person2->name );
 	}
 
-	//Here we define our custom element type.
+	//And finally we define our custom person type using the functions from above.
 	const WType personType = {
 		.clone = clonePerson,	//Used e.g. in warray_clone().
 		.delete = deletePerson,	//Used e.g. in warray_clear() and warray_delete().
 		.comparePerson			//Used e.g. in warray_sort() or warray_index().
 	};
 
-	//And finally we pass the type information to a new array.
+	//Let's create a new array holding elements of our custom type.
 	WArray* array4 = warray_new( 0, &personType );
 	\endcode
 
@@ -196,9 +196,9 @@
 
 	@subsection putting Putting elements in the array
 
-	There are several functions to put elements in arrays, be it at the front or back or at
+	There are several functions to put elements in arrays, be it at the front or back or
 	some other position. They all have in common, that they leave the given data untouched, but
-	rather take a copy with the array type's clone method.
+	rather take a copy with the array's clone method.
 
 	\code
 	//Create an array of char* strings.
@@ -377,7 +377,7 @@
 	warray_append_n( animals, 3, (void*[]){ "cat", "dog", "elephant" });
 
 	//Create two new arrays: One with animals longer than 3, one with animals shorter than or
-	//equal to 3. The elements are copied according to the element type's clone() method.
+	//equal to 3. The elements are copied according to the array's clone() method.
 	//longAnimals = ["elephant"] and shortAnimals = ["cat", "dog"].
 
 	WArray* longAnimals = warray_filter( animals, animalLongerThan, (void*)3 );
@@ -500,9 +500,12 @@
 	\section auto_destructor Automatic destructor
 	If you include "warray_sugar.h" instead of "warray.h" you can define a workhorse array
 	so, that it gets automatically deleted when leaving scope. Thus you can avoid memory
-	leaks or dangling pointers much easier:
+	leaks or dangling pointers:
 
 	\code
+	//Include this to get the autoWArray capability.
+	#include "warray_sugar.h"
+
 	void foo()
 	{
 		//Define a normal array.
@@ -524,15 +527,26 @@
 
 	The autoWArray feature needs GCC's non-standard cleanup() attribute to work. So if you
 	want to stay portable, you'd better do not use it. Clang on the other hand should
-	support it as well, so you might reach a broad base of platforms with it anyway.
+	support it too, so you might reach a broad base of platforms with it anyway.
 
 
 	\section testing Testing
     The workhorse array library is tested in many ways:
-    - unit tests
-    - fuzz tests
-    - valgrind
-    - cppcheck
-
+	- Compile with GCC warnings: GCC compiles the library files without warnings using
+	  \code -std=c11 -Wall -Wextra -pedantic -Werror \endcode
+    - tbd: Compile with GCC sanitizer options.
+	- tbd: Compile with clang warnings
+    - Cppcheck: To get further hints of bugs the static checker cppcheck is run with
+      \code --enable=warning,performance,portability,information \endcode on every commit.
+    - Unit testing: There is a suite of unit tests with the purpose to cover all known cases and edge cases. The
+      intent is to get near 100 % code coverage excluding terminating code.
+    - Fuzz testing: There is a fuzz test suite trying to cover all cases we haven't thought of in the unit
+      tests. We randomly generate arrays of random elements and randomly call warray functions on it. If possible we
+	  try to verify the results.
+	- Design by contract: The warray functions make heavy use of assertions to check preconditions, postconditions
+	  and invariants. They are active in all unit and fuzz tests.
+    - Valgrind: To get run time checks for memory bugs or undefined behaviour valgrind is used
+	  to double-check before any commit. We only commit with the results
+	  "0 errors from 0 contexts (suppressed: 0 from 0)" and "All heap blocks were freed -- no leaks are possible".
 */
 
