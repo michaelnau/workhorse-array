@@ -18,7 +18,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "warray.h"
 #include <assert.h>	//assert
 #include <iso646.h>	//and, or, not
-#include <string.h>	//memmove, memset, strdup
+#include <string.h>	//memmove, memset
 #include <stdarg.h>	//va_list
 #include <stdlib.h>	//free, rand, bsearch, qsort
 

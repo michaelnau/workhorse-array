@@ -24,7 +24,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 
 //---------------------------------------------------------------------------------
-//	Helper functions
+
+/**
+*/
+typedef enum WCollectionOomResult {
+    WCollectionOomRetry,
+    WCollectionOomGiveup
+}WCollectionOomResult;
+
+/**
+*/
+typedef WCollectionOomResult WCollectionOomHandler( void );
+
+static WCollectionOomHandler* oomHandler;
+
+//---------------------------------------------------------------------------------
+//	WCollection memory management and helpers
 //---------------------------------------------------------------------------------
 
 void
@@ -34,45 +49,91 @@ __wdie( const char* text )
 	abort();
 }
 
+static void
+handleOom( void )
+{
+	if ( oomHandler ) {
+		WCollectionOomResult result = oomHandler();
+		if ( result == WCollectionOomRetry )
+			return;
+		assert( result == WCollectionOomGiveup && "Invalid oomHandler return value." );
+	}
+
+	__wdie( "Out of memory." );
+}
+
 void*
 __wxmalloc( size_t size )
 {
 	void* ptr = malloc( size );
-	if ( not ptr ) __wdie( "Out of memory." );
+	if ( ptr ) return ptr;
 
-	return ptr;
+	handleOom();
+
+	ptr = malloc( size );
+	if ( ptr ) return ptr;
+
+	__wdie( "Out of memory." );
+	return NULL;
 }
 
 void*
 __wxrealloc( void* pointer, size_t size )
 {
 	void* ptr = realloc( pointer, size );
-	if ( !ptr ) __wdie( "Out of memory." );
+	if ( ptr ) return ptr;
 
-	return ptr;
-}
+	handleOom();
 
-//Taken from ccan/asprintf (MIT license), then modified
-char*
-__wstr_printf( const char* fmt, ... )
-{
-	va_list ap, ap_copy;
-	va_start( ap, fmt );
-	va_copy( ap_copy, ap );
-
-	int len = vsnprintf( NULL, 0, fmt, ap_copy );
-	if ( len >= 0 ) {
-		char* string = __wxmalloc( len+1 );
-		if ( vsprintf( string, fmt, ap ) >= 0 ) {
-			va_end( ap_copy );
-			va_end( ap );
-			assert( string );
-			return string;
-		}
-	}
+	ptr = realloc( pointer, size );
+	if ( ptr ) return ptr;
 
 	__wdie( "Out of memory." );
 	return NULL;
+}
+
+/*	vsnprintf() wrapper trying to handle once a possible OOM situation and aborting if
+	even this fails.
+*/
+static int
+__wxvsnprintf( char* string, size_t size, const char* format, va_list args )
+{
+	assert( format );
+
+	int len = vsnprintf( string, size, format, args );
+	if ( len >= 0 ) return len;
+
+	handleOom();
+
+	len = vsnprintf( string, size, format, args );
+	if ( len >= 0 ) return len;
+
+	__wdie( "Out of memory." );
+	return -1;
+}
+
+//Taken from ccan/asprintf (BSD-MIT license), then modified massively.
+/*	asprintf() like function trying to handle once a possible OOM situation and aborting if
+	even this fails.
+*/
+char*
+__wstr_printf( const char* format, ... )
+{
+	assert( format );
+
+	va_list args, args_copy;
+	va_start( args, format );
+	va_copy( args_copy, args );
+
+	int len = __wxvsnprintf( NULL, 0, format, args_copy ) + 1;
+	char* string = __wxmalloc( len );
+	__wxvsnprintf( string, len, format, args );
+
+	va_end( args_copy );
+	va_end( args );
+
+	assert( string && "vsnprintf() should not return a NULL pointer." );
+	return string;
 }
 
 char*
