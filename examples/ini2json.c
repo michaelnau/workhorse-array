@@ -1,3 +1,10 @@
+/*	Test program converting a key-value ini file to a corresponding JSON file.
+	It demonstrates the use of the warray_fromString(), warray_map() and warray_reduce() functions.
+
+	Compile e.g. with gcc -std=c11 ini2json.c warray.c wcollection.c -o ./ini2json
+	and test with ./ini2json test.ini
+	The program will then create a test.ini.json file.
+*/
 #include "warray.h"		//warray_xyz()
 #include <assert.h>		//assert()
 #include <stdio.h>		//fread(), fwrite(), fprintf(), fclose()
@@ -82,7 +89,7 @@ line2keyValuePair( const void* element, const void* unused )
 
 */
 static void*
-reducekeyValuePairs( const void* element, const void* intermediate )
+appendKeyValuePairToJson( const void* element, const void* intermediate )
 {
 	const WArray* pair = element;
 	return __wstr_printf( "%s\t\"%s\": \"%s\",\n", intermediate, warray_at( pair, 0 ), warray_at( pair, 1 ));
@@ -113,14 +120,25 @@ ini2json( const char ini[] )
 	WArray* lines = warray_fromString( ini, "\n", wtypeStr );
 
 	//Map it to an array with elements like this: [[key1, value1], [key2, values], ...]
-	WArray* keyValuePairs = warray_map( lines, line2keyValuePair, NULL, wtypeArray );
+	WArray* keyValuePairs = warray_map(	//Map
+		lines,							//the array with key-value string elements
+		line2keyValuePair,				//applying this map function to every array element
+		NULL,							//without additional data to the callback function
+		wtypeArray						//and the hint on the result type (a WArray of WArrays).
+	);
 
-	//"{
-	//	"key1": "value1",
-	//	"key2": "value2",
-	//	...,
-	//"
-	char* json = warray_reduce( keyValuePairs, reducekeyValuePairs, "{\n", wtypeStr );
+	/*"	{
+			"key1": "value1",
+			"key2": "value2",
+			...,
+		"
+	*/
+	char* json = warray_reduce(		//Reduce
+		keyValuePairs,				//the array with key-value pairs
+		appendKeyValuePairToJson,	//applying this function to every key-value pair
+		"{\n",						//with this as start for the json string
+		wtypeStr					//and this hint about the intermediate and result type (char*).
+	);
 
 	//Now we only have to replace the last ",\n" with a "\n}" and we are done.
 	char* jsonEnd = strrchr( json, ',' );
