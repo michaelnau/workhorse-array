@@ -28,6 +28,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	#define ssize_t intptr_t	//intptr_t as fallback for other C99 systems
 #endif
 
+//TODO: May be make functions using OpenMP pragmas, e.g. warray_map()
+
 //------------------------------------------------------------
 //	Types and constants
 //------------------------------------------------------------

@@ -98,7 +98,6 @@ typedef void	WElementForeachIndex(const void* element, size_t index, void* forea
 */
 typedef void*	WElementMap(const void* element, const void* mapData);
 
-//TODO: Optional data argument for WElementReduce
 /**	Function prototype for combining the element and the intermediate result to a new internediate result.
 
 	@param element Input element of the source collection. May be NULL.

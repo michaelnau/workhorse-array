@@ -117,7 +117,6 @@ warray_clone( const WArray* array )
 		.type		= array->type
 	);
 
-	//TODO: warray_clone() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
 		if ( array->data[i] )
 			copy->data[i] = array->type->clone( array->data[i] );
@@ -148,7 +147,6 @@ warray_clear( WArray* array )
 {
 	if ( not array ) return array;
 
-	//TODO: warray_clear() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
 		assert( &array->data[i] );
 		array->type->delete( &array->data[i] );
@@ -295,7 +293,6 @@ warray_append_n( WArray* array, size_t n, void* const elements[n] )
 	assert( n > 0 );
 	assert( elements );
 
-	//TODO: warray_append_n() with OpenMP pragma
 	for ( size_t i = 0; i < n; i++ )
 		warray_append( array, elements[i] );
 
@@ -310,7 +307,6 @@ warray_prepend_n( WArray* array, size_t n, void* const elements[n] )
 	assert( n > 0 );
 	assert( elements );
 
-	//TODO: warray_prepend_n() with OpenMP pragma
 	assert( array );
 	return warray_insert_n( array, 0, n, elements );
 }
@@ -322,7 +318,6 @@ warray_insert_n( WArray* array, size_t position, size_t n, void* const elements[
 	assert( n > 0 );
 	assert( elements );
 
- 	//TODO: warray_insert_n() with OpenMP pragma
   	for ( size_t i = 0; i < n; i++ )
 		warray_insert( array, position+i, elements[i] );
 
@@ -337,7 +332,6 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
 	assert( n > 0 );
 	assert( elements );
 
- 	//TODO: warray_set_n() with OpenMP pragma
   	for ( size_t i = 0; i < n; i++ )
 		warray_set( array, position+i, elements[i] );
 
@@ -542,7 +536,6 @@ warray_filter( const WArray* array, WElementCondition* filter, const void* filte
 
 	WArray* newArray = (WArray*)warray_new( array->capacity, array->type );
 
-	//TODO: warray_filter() with OpenMP pragma???
     for ( size_t i = 0; i < array->size; i++ ) {
         if ( filter( array->data[i], filterData )) {
 			if ( array->data[i] )
@@ -636,7 +629,6 @@ warray_map( const WArray* array, WElementMap* map, const void* mapData, const WT
 	if ( not type ) type = wtypePtr;
 	WArray* newArray = warray_new( array->capacity, type );
 
-	//TODO: warray_map() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ )
 		newArray->data[i] = map( array->data[i], mapData );
 
@@ -1051,7 +1043,6 @@ warray_all( const WArray* array, WElementCondition* condition, const void* condi
 	assert( array );
 	assert( condition && "Need a condition to check for." );
 
-	//TODO: warray_all() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( not condition( array->data[i], conditionData ))
 			return false;
@@ -1066,7 +1057,6 @@ warray_any( const WArray* array, WElementCondition* condition, const void* condi
 	assert( array );
 	assert( condition && "Need a condition to check for." );
 
-	//TODO: warray_any() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( condition( array->data[i], conditionData ))
 			return true;
@@ -1081,7 +1071,6 @@ warray_none( const WArray* array, WElementCondition* condition, const void* cond
 	assert( array );
 	assert( condition && "Need a condition to check for." );
 
-	//TODO: warray_none() with OpenMP pragma
 	for ( size_t i = 0; i < array->size; i++ ) {
         if ( condition( array->data[i], conditionData ))
 			return false;
