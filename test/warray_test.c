@@ -429,7 +429,7 @@ Test_warray_firstLastSampleEmptyNonEmpty()
 	assert_true( warray_contains( array, warray_sample( array )));
 }
 void
-Test_warray_cloneFirstLast()
+Test_warray_cloneFirstLastAt()
 {
 	autoWArray* array = a.new( 0, wtypeStr );
 
@@ -452,6 +452,9 @@ Test_warray_cloneFirstLast()
 	assert_strequal( str6, "tiger" );
 	autoChar* str7 = warray_cloneLast( array );
 	assert_strequal( str7, "dog" );
+
+	warray_append( array, NULL );
+	assert_null( warray_cloneLast( array ));
 }
 void
 Test_warray_steal()
@@ -699,11 +702,11 @@ Test_warray_foreachIndex()
 }
 static bool isLongWord( const void* element, const void* unused ) {
 	(void) unused;
-	return strlen( element ) > 3;
+	return element and strlen( element ) > 3;
 }
 static bool isShortWord( const void* element, const void* unused ) {
 	(void) unused;
-	return strlen( element ) <= 3;
+	return element and strlen( element ) <= 3;
 }
 void
 Test_warray_filterReject()
@@ -720,6 +723,7 @@ Test_warray_filterReject()
 	warray_append( array, "dog" );
 	warray_append( array, "sea-hawk" );
 	warray_append( array, "chimpanzee" );
+	warray_append( array, NULL );
 
     autoWArray* newArray2 = warray_filter( array, isLongWord, NULL );
     assert_strequal( warray_at( newArray2, 0 ), "sea-hawk" );
@@ -729,7 +733,8 @@ Test_warray_filterReject()
     autoWArray* newArray2b = warray_reject( array, isLongWord, NULL );
     assert_strequal( warray_at( newArray2b, 0 ), "cat" );
     assert_strequal( warray_at( newArray2b, 1 ), "dog" );
-    assert_equal( newArray2b->size, 2 );
+    assert_null( warray_at( newArray2b, 2 ));
+    assert_equal( newArray2b->size, 3 );
 }
 void
 Test_warray_select()
@@ -822,8 +827,11 @@ Test_warray_reduce()
 {
 	autoWArray *array = a.new( 0, wtypeStr );
 
-	autoChar* string1 = warray_reduce( array, joinAnimals, "My favorite animals are turtle", wtypeStr );
-	assert_strequal( string1, "My favorite animals are turtle");
+	autoChar* string1a = warray_reduce( array, joinAnimals, "My favorite animals are turtle", wtypeStr );
+	assert_strequal( string1a, "My favorite animals are turtle");
+
+	autoChar* string1b = warray_reduce( array, joinAnimals, NULL, wtypeStr );
+	assert_null( string1b );
 
 	warray_append( array, "cat" );
 	warray_append( array, "dog" );
@@ -1347,7 +1355,7 @@ int main() {
 	testsuite( Test_warray_set_n );
 
 	testsuite( Test_warray_firstLastSampleEmptyNonEmpty );
-	testsuite( Test_warray_cloneFirstLast );
+	testsuite( Test_warray_cloneFirstLastAt );
 	testsuite( Test_warray_steal );
 	testsuite( Test_warray_stealFirstLast );
 	testsuite( Test_warray_removeAt );
