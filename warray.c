@@ -896,6 +896,7 @@ warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 
 	size_t position = element - array->data;	//This gives the real position, not the byte difference!
 	assert( position <= array->size );
+	assert( compare( key, warray_at( array, position )) == 0 );
 	return position;
 }
 
@@ -1025,7 +1026,7 @@ warray_concat( WArray* array1, const WArray* array2 )
 {
 	assert( array1 );
 	assert( array2 );
-	assert( array1->type == array2->type && "Cannot concatenate arrays with different element types." );
+	assert( array1->type == array2->type && "Arrays to be concatenated must have the same element types." );
 
 	for ( size_t i = 0; i < array2->size; i++ )
 		warray_append( array1, array2->data[i] );
