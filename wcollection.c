@@ -23,23 +23,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdio.h>
 #include <stdlib.h>
 
-//TODO: __wassert() with WCollectionAssertHandler
-
-//---------------------------------------------------------------------------------
-
-/**
-*/
-typedef enum WCollectionOomResult {
-    WCollectionOomRetry,
-    WCollectionOomGiveup
-}WCollectionOomResult;
-
-/**
-*/
-typedef WCollectionOomResult WCollectionOomHandler( void );
-
-static WCollectionOomHandler* oomHandler;
-
 //---------------------------------------------------------------------------------
 //	WCollection memory management and helpers
 //---------------------------------------------------------------------------------
@@ -51,28 +34,10 @@ __wdie( const char* text )
 	abort();
 }
 
-static void
-handleOom( void )
-{
-	if ( oomHandler ) {
-		WCollectionOomResult result = oomHandler();
-		if ( result == WCollectionOomRetry )
-			return;
-		assert( result == WCollectionOomGiveup && "Invalid oomHandler return value." );
-	}
-
-	__wdie( "Out of memory." );
-}
-
 void*
 __wxmalloc( size_t size )
 {
 	void* ptr = malloc( size );
-	if ( ptr ) return ptr;
-
-	handleOom();
-
-	ptr = malloc( size );
 	if ( ptr ) return ptr;
 
 	__wdie( "Out of memory." );
@@ -85,18 +50,10 @@ __wxrealloc( void* pointer, size_t size )
 	void* ptr = realloc( pointer, size );
 	if ( ptr ) return ptr;
 
-	handleOom();
-
-	ptr = realloc( pointer, size );
-	if ( ptr ) return ptr;
-
 	__wdie( "Out of memory." );
 	return NULL;
 }
 
-/*	vsnprintf() wrapper trying to handle once a possible OOM situation and aborting if
-	even this fails.
-*/
 static int
 __wxvsnprintf( char* string, size_t size, const char* format, va_list args )
 {
@@ -105,19 +62,11 @@ __wxvsnprintf( char* string, size_t size, const char* format, va_list args )
 	int len = vsnprintf( string, size, format, args );
 	if ( len >= 0 ) return len;
 
-	handleOom();
-
-	len = vsnprintf( string, size, format, args );
-	if ( len >= 0 ) return len;
-
 	__wdie( "Out of memory." );
 	return -1;
 }
 
 //Taken from ccan/asprintf (BSD-MIT license), then modified massively.
-/*	asprintf() like function trying to handle once a possible OOM situation and aborting if
-	even this fails.
-*/
 char*
 __wstr_printf( const char* format, ... )
 {
