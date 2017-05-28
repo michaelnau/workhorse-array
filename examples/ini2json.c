@@ -1,16 +1,14 @@
-/*	Test program converting a key-value ini file to a corresponding JSON file.
+/*	Test program converting a key-value ini file from stdin to a corresponding JSON file at stdout.
 	It demonstrates the use of the warray_fromString(), warray_map() and warray_reduce() functions.
 
 	Compile e.g. with gcc -std=c11 ini2json.c warray.c wcollection.c -o ./ini2json
-	and test with ./ini2json test.ini
-	The program will then create a test.ini.json file.
+	and test with cat test.ini | ./ini2json > test.json
 */
 #include "warray.h"		//warray_xyz()
 #include <assert.h>		//assert()
-#include <stdio.h>		//fread(), fwrite(), fprintf(), fclose()
+#include <stdio.h>		//fread(), fprintf(), fclose()
 #include <stdlib.h>		//free(), exit()
 #include <string.h>		//strcpy(), strrchr()
-#include <sys/stat.h>	//POSIX stat() used for readFile()
 
 //---------------------------------------------------------------------------------
 //	The necessary prototypes
@@ -20,10 +18,10 @@ char*
 ini2json( const char* ini );
 
 char*
-readFile( const char* filePath );
+readStdin();
 
 int
-writeFile( const char* filename, const char* string );
+writeStdout( const char* string );
 
 void
 error( const char* text );
@@ -32,16 +30,12 @@ error( const char* text );
 //	The simple main logic
 //---------------------------------------------------------------------------------
 
-int
-main( int argc, char* argv[argc+1] )
+int main()
 {
-	//Read the given ini file.
-	const char* inifilename = argv[1];
-	if ( !inifilename || !inifilename[0] )
-		error( "Need a ini filename." );
-	char* ini = readFile( inifilename );
+	//Read an ini file from stdin.
+	char* ini = readStdin();
 	if ( !ini )
-		error( "Error in reading ini file." );
+		error( "Error in reading ini file from stdin." );
 
 	//Convert the ini string to a json string.
 	char* json = ini2json( ini );
@@ -49,13 +43,11 @@ main( int argc, char* argv[argc+1] )
 	if ( !json )
 		error( "Error in converting ini file." );
 
-	//Write json to a file.
-	char* jsonfilename = __wstr_printf( "%s.json", inifilename );
-	int result = writeFile( jsonfilename, json );
+	//Write the json file to stdout.
+	int result = writeStdout( json );
 
 	//And clean up.
 	free( json );
-	free( jsonfilename );
 	if ( result < 0 )
 		error( "Error in writing json file." );
 }
@@ -155,49 +147,38 @@ ini2json( const char ini[] )
 //	Some needed helper functions.
 //---------------------------------------------------------------------------------
 
-//Helper function to read a file into an allocated char* buffer.
 char*
-readFile( const char* filePath )
+readStdin()
 {
-	assert( filePath );
+	enum { bufferSize = 256 };
+	char buffer[bufferSize];
 
-	//Open the file.
-	FILE* file = fopen( filePath, "r" );
-	if ( !file ) return NULL;
+	size_t stringCapacity = 2 * bufferSize;
+	size_t stringIndex = 0;
+	char* string = __wxmalloc( stringCapacity );
 
-	//Get the file size.
-	struct stat fileData;
-	if ( stat( filePath, &fileData ) < 0 ) { fclose( file ); return NULL; }
-	size_t size = fileData.st_size;
+	while ( true ) {
+		size_t size = fread( buffer, 1, bufferSize, stdin );
+		if ( !size ) break;
 
-	//Allocate and read into the buffer.
-	char* buffer = __wxmalloc( size + 1 );
-	if ( fread( buffer, 1, size, file ) != size ) { fclose( file ); free( buffer ); return NULL; }
-	buffer[ size ] = 0;
+		memcpy( &string[stringIndex], buffer, size );
+		stringIndex += size;
 
-	fclose( file );
-
-	assert( buffer );
-	return buffer;
-}
-
-//Helper function to write a file from a char* buffer.
-int
-writeFile( const char* filename, const char* string )
-{
-	FILE* file = fopen( filename, "w" );
-	if ( !file )
-		return -1;
-
-	if ( fputs( string, file ) < 0 ) {
-		if ( fclose( file ) < 0 )
-			return -3;
-
-		return -2;
+		if ( stringIndex >= stringCapacity ) {
+			stringCapacity *= 2;
+			string = __wxrealloc( string, stringCapacity );
+		}
 	}
 
-	if ( fclose( file ) < 0 )
-		return -4;
+	string[stringIndex] = 0;
+	return string;
+}
+
+int
+writeStdout( const char* string )
+{
+	if ( fputs( string, stdout ) < 0 )
+		return -1;
 
 	return 0;
 }

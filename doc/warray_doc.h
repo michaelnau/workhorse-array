@@ -3,8 +3,9 @@
 
 	@mainpage Workhorse Array
 
-	A dynamic growing array of typed void* elements supporting many common operations and automatic
-	management of the elements' memory.
+	Dynamic growing arrays of void* elements offering the same
+	functionality and ease of use as arrays or lists in scripting languages.
+
 
 	@section Content
 
