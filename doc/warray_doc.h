@@ -3,8 +3,7 @@
 
 	@mainpage Workhorse Array
 
-	Dynamic growing arrays of void* elements offering the same
-	functionality and ease of use as arrays or lists in scripting languages.
+	Dynamic growing C arrays with the power and ease of a scripting language.
 
 
 	@section Content

@@ -1,6 +1,6 @@
 # workhorse-array
 
-A dynamic growing array of void* elements
+Dynamic growing C arrays with the power and ease of a scripting language.
 
 Warning
 -------
