@@ -1,4 +1,4 @@
-# workhorse-array
+# Workhorse Array
 
 Dynamic growing C arrays with the power and ease of a scripting language.
 
@@ -35,5 +35,5 @@ Dependencies
 
 License
 -------
-MIT
+LGPL V3.0
 
