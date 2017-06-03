@@ -531,7 +531,21 @@ warray_index( const WArray* array, const void* element );
 ssize_t
 warray_rindex( const WArray* array, const void* element );
 
-/**	Search an element in a sorted array.
+/**	Do a linear search for an element in an unsorted array.
+
+	@param array
+	@param compare Function comparing the the key (1st argument) and the current
+		element in the array (2nd argument). For the search it is sufficient to
+		return either 0 (key matches) or != 0 (key doesn't match).
+	@param key The key being passed to the compare function
+	@return The position of the found element or -1 if no element was found.
+	@pre array != NULL
+	@pre compare != NULL
+*/
+ssize_t
+warray_search( const WArray* array, WElementCompare* compare, const void* key );
+
+/**	Do a binary search for an element in a sorted array.
 
 	@param array
 	@param compare Function comparing the the key (1st argument) and the current

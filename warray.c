@@ -864,6 +864,20 @@ warray_max( const WArray* array )
 	return maximum;
 }
 
+ssize_t
+warray_search( const WArray* array, WElementCompare* compare, const void* key )
+{
+	assert( array );
+	assert( compare && "Need a comparison function!" );
+
+	for ( size_t i = 0; i < array->size; i++ ) {
+		if ( compare( key, array->data[i] ) == 0 )
+			return i;
+	}
+
+	return -1;
+}
+
 // Helper struct to get both the bsearch comparison function and the key into our actual comparison function.
 typedef struct ElementComparer {
 	WElementCompare* compare;
@@ -883,7 +897,7 @@ ssize_t
 warray_bsearch( const WArray* array, WElementCompare* compare, const void* key )
 {
 	assert( array );
-	assert( compare && "Need a comparison method!" );
+	assert( compare && "Need a comparison function!" );
 
 	if ( not array->size ) return -1;
 

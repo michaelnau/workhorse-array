@@ -1312,6 +1312,32 @@ Test_warray_bsearch()
 	assert_equal( a.bsearch( array2, comparePerson, "West" ), 4 );
 	assert_equal( a.bsearch( array2, comparePerson, "Unknown" ), -1 );
 }
+void
+Test_warray_search()
+{
+	autoWArray* array1 = a.new( 0, wtypeStr );
+	a.append_n( array1, 5, (void*[]){ "cat", "dog", "lion", "mouse", "zebra" });
+	assert_equal( warray_search( array1, wtypeStr_compare, "cat" ), 0 );
+	assert_equal( a.search( array1, wtypeStr_compare, "dog" ), 1 );
+	assert_equal( a.search( array1, wtypeStr_compare, "lion" ), 2 );
+	assert_equal( a.search( array1, wtypeStr_compare, "mouse" ), 3 );
+	assert_equal( a.search( array1, wtypeStr_compare, "zebra" ), 4 );
+	assert_equal( a.search( array1, wtypeStr_compare, "wolpertinger" ), -1 );
+
+	autoWArray* array2 = a.new( 0, personType );
+	a.append_n( array2, 5, (void*[]){
+		&(Person){	"Abelson",	"Peter",	33	},
+		&(Person){	"Johnson",	"Jack",		89	},
+		&(Person){	"Johnson",	"Paul",		54	},
+		&(Person){	"Smith",	"Greg",		12	},
+		&(Person){	"West",		"Mitch", 	66	},
+	});
+
+	assert_equal( a.search( array2, comparePerson, "Abelson" ), 0 );
+	assert_equal( a.search( array2, comparePerson, "Smith" ), 3 );
+	assert_equal( a.search( array2, comparePerson, "West" ), 4 );
+	assert_equal( a.search( array2, comparePerson, "Unknown" ), -1 );
+}
 
 //--------------------------------------------------------------------------------
 
@@ -1387,6 +1413,7 @@ int main() {
 
 	testsuite( Test_warray_compare );
 	testsuite( Test_warray_bsearch );
+	testsuite( Test_warray_search );
 
 	testsuite( Test_warray_doStuffWithDoubleElements );
 

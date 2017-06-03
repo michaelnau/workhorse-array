@@ -109,6 +109,7 @@ typedef struct WArrayNamespace {
 //	const void*	(*max)		(const Array*);
 	ssize_t		(*index)	(const WArray* array, const void* element);
 	ssize_t		(*rindex)	(const WArray* array, const void* element);
+	ssize_t		(*search)	(const WArray* array, WElementCompare* compare, const void* key);
 	ssize_t		(*bsearch)	(const WArray* array, WElementCompare* compare, const void* key);
 	bool		(*contains)	(const WArray* array, const void* element);
 	size_t		(*count)	(const WArray* array, WElementCondition*, const void* conditionData);
@@ -180,6 +181,7 @@ typedef struct WArrayNamespace {
 	.index = warray_index,				\
 	.rindex = warray_rindex,			\
 	.bsearch = warray_bsearch,			\
+	.search = warray_search,			\
 	.contains = warray_contains,		\
 	.count = warray_count,				\
 \
