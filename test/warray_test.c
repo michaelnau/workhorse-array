@@ -1357,6 +1357,22 @@ Test_warray_doStuffWithDoubleElements()
 	autoWArray* fromString = warray_fromString( string, ", ", wtypeDouble );
     assert_true( warray_equal( array, fromString ));
 }
+void
+Test_warray_doStuffWithIntElements()
+{
+	autoWArray* array = warray_new( 0, wtypeInt );
+
+	warray_append( array, &(int){ 1 });
+	warray_append( array, &(int){ -1 });
+	warray_append( array, &(int){ 0 });
+	warray_append( array, NULL );
+	warray_append( array, &(int){ 3 });
+
+	warray_sort( array );
+	autoChar* string = warray_toString( array, ", " );
+	autoWArray* fromString = warray_fromString( string, ", ", wtypeInt );
+    assert_true( warray_equal( array, fromString ));
+}
 
 //--------------------------------------------------------------------------------
 
@@ -1416,6 +1432,7 @@ int main() {
 	testsuite( Test_warray_search );
 
 	testsuite( Test_warray_doStuffWithDoubleElements );
+	testsuite( Test_warray_doStuffWithIntElements );
 
 	testsuite( Fuzztest_warray );
 

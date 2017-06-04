@@ -744,22 +744,22 @@ str_cat3( const char* str1, const char* str2, const char* str3 )
 }
 
 char*
-warray_toString( const WArray* array, const char delimiters[] )
+warray_toString( const WArray* array, const char delimiter[] )
 {
 	assert( array );
-	assert( delimiters );
+	assert( delimiter );
 	assert( array->type->toString );
 
 	if ( not array->size ) return __wstr_dup( "" );
 
 	WElementToString* toString = array->type->toString;
-	char* string = array->data[0] ? toString( array->data[0] ) : __wstr_dup( "NULL" );	//The first element without delimiters
+	char* string = array->data[0] ? toString( array->data[0] ) : __wstr_dup( "NULL" );	//The first element without delimiter
 	assert( string );
 
-	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiters and next element.
+	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiter and next element.
 		char* elementStr = array->data[i] ? toString( array->data[i] ) : __wstr_dup( "NULL" );
 		assert( elementStr );
-		char* temp = str_cat3( string, delimiters, elementStr );
+		char* temp = str_cat3( string, delimiter, elementStr );
 		free( string );
 		free( elementStr );
 		string = temp;
@@ -770,10 +770,10 @@ warray_toString( const WArray* array, const char delimiters[] )
 }
 
 WArray*
-warray_fromString( const char string[], const char delimiters[], const WType* targetType )
+warray_fromString( const char string[], const char delimiter[], const WType* targetType )
 {
 	assert( string );
-	assert( delimiters and delimiters[0] );
+	assert( delimiter and delimiter[0] );
 	assert( targetType );
 	assert( targetType->clone and targetType->delete and targetType->fromString );
 
@@ -781,7 +781,7 @@ warray_fromString( const char string[], const char delimiters[], const WType* ta
 
 	char* newString = __wstr_dup( string );
 	char* context = NULL;
-	char* token = __wstr_sep_r( newString, delimiters, &context );
+	char* token = __wstr_sep_r( newString, delimiter, &context );
 
 	while ( token ) {
 		void* element;
@@ -793,7 +793,7 @@ warray_fromString( const char string[], const char delimiters[], const WType* ta
 		}
 		else
 			warray_append( array, NULL );
-		token = __wstr_sep_r( NULL, delimiters, &context );
+		token = __wstr_sep_r( NULL, delimiter, &context );
 	}
 
 	free( newString );
