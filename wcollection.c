@@ -210,6 +210,7 @@ void* wtypeDouble_clone( const void* element ) {
 
 int wtypeDouble_compare( const void* e1, const void* e2 ) {
 	return (e1 and e2) ? *(double*)e1 - *(double*)e2 :
+			not e1 and not e2 ? 0 :
 			e1 ? +1 : -1;	//NULL values are considered to be less than every double value
 }
 

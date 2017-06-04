@@ -1354,8 +1354,8 @@ Test_warray_doStuffWithDoubleElements()
 
 	warray_sort( array );
 	autoChar* string = warray_toString( array, ", " );
-//	fprintf( stderr, "%s", warray_toString( array, ", " ));
-//	assert_strequal( string, "-1.0, 0.0, 1.0, 3.141" );
+	autoWArray* fromString = warray_fromString( string, ", ", wtypeDouble );
+    assert_true( warray_equal( array, fromString ));
 }
 
 //--------------------------------------------------------------------------------
