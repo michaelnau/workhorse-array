@@ -159,10 +159,12 @@ warray_assign( WArray** array, WArray* other );
 
 /**	Append an element to the array.
 
+	The array makes a copy of the given element with the array's clone() method and takes full
+	ownership of the copy. The given element remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
-	@param element The element to be added. NULL elements are allowed. The
-		element is copied into the array with the clone() method given in
-		the type field at warray_new().
+	@param element The element to be added. NULL elements are allowed.
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
@@ -171,10 +173,12 @@ warray_append( WArray* array, const void* element );
 
 /**	Prepend an element to the array.
 
+	The array makes a copy of the given element with the array's clone() method and takes full
+	ownership of the copy. The given element remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
-	@param element The element to be added. NULL elements are allowed. The
-		element is copied into the array with the clone() method given in
-		the type field at warray_new().
+	@param element The element to be added. NULL elements are allowed.
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
@@ -183,13 +187,15 @@ warray_prepend( WArray* array, const void* element );
 
 /**	Set or update the element at the given position.
 
+	The array makes a copy of the given element with the array's clone() method and takes full
+	ownership of the copy. The given element remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param position May be greater than the current size. A possible gap
 		between the last current and the new element is filled with
 		NULL elements.
-	@param element The element to be added. NULL elements are allowed. The
-		element is copied into the array with the clone() method given in
-		the type field at warray_new().
+	@param element The element to be added. NULL elements are allowed.
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
@@ -198,13 +204,15 @@ warray_set( WArray* array, size_t position, const void* element );
 
 /**	Insert an element into the array.
 
+	The array makes a copy of the given element with the array's clone() method and takes full
+	ownership of the copy. The given element remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param position May be greater than the current size. A possible gap
 		between the last current and the new element is filled with
 		NULL elements.
-	@param element The element to be added. NULL elements are allowed. The
-		element is copied into the array with the clone() method given in
-		the type field at warray_new().
+	@param element The element to be added. NULL elements are allowed.
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 */
@@ -214,10 +222,12 @@ warray_insert( WArray* array, size_t position, const void* element );
 /**	Insert an element into the array, so that it keeps the ascending element order
 	according to the array->type->compare() method.
 
+	The array makes a copy of the given element with the array's clone() method and takes full
+	ownership of the copy. The given element remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
-	@param element The element to be added. NULL elements are allowed. The
-		element is copied into the array with the clone() method given in
-		the type field at warray_new().
+	@param element The element to be added. NULL elements are allowed.
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 	@pre array->type->compare != NULL
@@ -231,12 +241,14 @@ warray_insertSorted( WArray* array, const void* element );
 
 /**	Append one or several elements to the array.
 
+	The array makes copies of the given elements with the array's clone() method and takes full
+	ownership of the copies. The given elements remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param n The number of elements to be added. Must match with the actual
 		number of elements in the elements array.
 	@param elements A list of n elements to be added. NULL elements are allowed.
-		The element is copied into the array with the clone() method given in
-		the type field at warray_new().
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 	@pre n > 0
@@ -248,12 +260,14 @@ warray_append_n( WArray* array, size_t n, void* const elements[n] );
 
 /**	Prepend one or several elements to the array.
 
+	The array makes copies of the given elements with the array's clone() method and takes full
+	ownership of the copies. The given elements remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param n The number of elements to be added. Must match with the actual
 		number of elements in the elements array.
 	@param elements A list of n elements to be added. NULL elements are allowed.
-		The element is copied into the array with the clone() method given in
-		the type field at warray_new().
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 	@pre n > 0
@@ -264,6 +278,10 @@ warray_prepend_n( WArray* array, size_t n, void* const elements[n] );
 
 /**	Set or update one or several elements in the array.
 
+	The array makes copies of the given elements with the array's clone() method and takes full
+	ownership of the copies. The given elements remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param position May be greater than the current size. A possible gap
 		between the last current and the first new element is filled with
@@ -271,8 +289,6 @@ warray_prepend_n( WArray* array, size_t n, void* const elements[n] );
 	@param n The number of elements to be added. Must match with the actual
 		number of elements in the elements array.
 	@param elements A list of n elements to be added. NULL elements are allowed.
-		The element is copied into the array with the clone() method given in
-		the type field at warray_new().
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 	@pre n > 0
@@ -283,6 +299,10 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
 
 /**	Insert one or several elements to the array.
 
+	The array makes copies of the given elements with the array's clone() method and takes full
+	ownership of the copies. The given elements remains untouched, so allocated elements can be
+	passed, but also literals.
+
 	@param array The array to be modified in place.
 	@param position May be greater than the current size. A possible gap
 		between the last current and the first new element is filled with
@@ -290,8 +310,6 @@ warray_set_n( WArray* array, size_t position, size_t n, void* const elements[n] 
 	@param n The number of elements to be added. Must match with the actual
 		number of elements in the elements array.
 	@param elements A list of n elements to be added. NULL elements are allowed.
-		The element is copied into the array with the clone() method given in
-		the type field at warray_new().
 	@return The modified array, allowing the chaining of function calls.
 	@pre array != NULL
 	@pre n > 0
@@ -301,6 +319,9 @@ WArray*
 warray_insert_n( WArray* array, size_t position, size_t n, void* const elements[n] );
 
 /**	Append the elements of an array to another array.
+
+	The array makes copies of the 2nd array's elements with the array's clone() method and takes full
+	ownership of the copies. The given 2nd array remains untouched.
 
     @param array1 The array being modified
     @param array2 The array that gets appended to array1
