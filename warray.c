@@ -283,6 +283,32 @@ warray_insertSorted( WArray* array, const void* element )
 	return warray_append( array, element );
 }
 
+WArray*
+warray_pushAt( WArray* array, size_t position, void** element )
+{
+	assert( array );
+
+	resize( array, __wmax( array->size, position+1 ));
+
+	if ( position < array->size ) {	//Delete the old element.
+		assert( &array->data[position] );
+		array->type->delete( &array->data[position] );
+	}
+	else {							//Fill the gap with zeroes.
+		memset( &array->data[array->size], 0, (position-array->size) * sizeof(void*));
+		array->size = position+1;
+	}
+
+	if ( element )
+		array->data[position] = *element;
+	else
+		array->data[position] = NULL;
+
+	*element = NULL;
+	assert( array );
+	return checkArray( array );
+}
+
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 

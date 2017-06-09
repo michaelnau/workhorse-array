@@ -235,10 +235,34 @@ warray_insert( WArray* array, size_t position, const void* element );
 WArray*
 warray_insertSorted( WArray* array, const void* element );
 
+/*	Prepend an element to the array and pass its ownership.
+
+	@param array The array to be modified in place.
+	@param elementPtr Pointer to the element gifted to the array. The element must be
+		properly allocated like the array's clone() method would do it. *elementPtr
+		equals NULL afterwards.
+	@return The modified array, allowing the chaining of function calls.
+*/
+WArray*
+warray_pushFirst( WArray* array, void** elementPtr );
+
+WArray*
+warray_pushLast( WArray* array, void** elementPtr );
+
+WArray*
+warray_pushAt( WArray* array, size_t position, void** elementPtr );
+
+WArray*
+warray_pushInsert( WArray* array, size_t position, void** elementPtr );
+
+WArray*
+warray_pushInsertSorted( WArray* array, size_t position, void** elementPtr );
+
 //------------------------------------------------------------
 //	Put several elements in the array.
 //------------------------------------------------------------
 
+//TODO: Remove warray_append_n() and friends.
 /**	Append one or several elements to the array.
 
 	The array makes copies of the given elements with the array's clone() method and takes full
