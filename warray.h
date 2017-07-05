@@ -28,8 +28,6 @@
 	#define ssize_t intptr_t	//intptr_t as fallback for other C99 systems
 #endif
 
-//TODO: May be make functions using OpenMP pragmas, e.g. warray_map()
-
 //------------------------------------------------------------
 //	Types and constants
 //------------------------------------------------------------
@@ -246,17 +244,23 @@ warray_insertSorted( WArray* array, const void* element );
 WArray*
 warray_pushFirst( WArray* array, void** elementPtr );
 
+/*	Append an element to the array and pass its ownership.
+*/
 WArray*
 warray_pushLast( WArray* array, void** elementPtr );
 
+/*	Put an element into the array and pass its ownership.
+*/
 WArray*
 warray_pushAt( WArray* array, size_t position, void** elementPtr );
 
+#if 0
 WArray*
 warray_pushInsert( WArray* array, size_t position, void** elementPtr );
 
 WArray*
 warray_pushInsertSorted( WArray* array, size_t position, void** elementPtr );
+#endif
 
 //------------------------------------------------------------
 //	Put several elements in the array.

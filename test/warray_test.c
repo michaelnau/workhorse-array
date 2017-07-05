@@ -319,6 +319,19 @@ Test_warray_set()
 //--------------------------------------------------------------------------------
 
 void
+Test_warray_pushAt()
+{
+	autoWArray* array = a.new( 0, wtypeStr );
+
+	char* str1 = strdup( "cat" );
+    warray_pushAt( array, 0, (void**)&str1 );
+	assert_strequal( a.first( array ), "cat" );
+	assert_null( str1 );
+}
+
+//--------------------------------------------------------------------------------
+
+void
 Test_warray_append_n()
 {
 	autoWArray* array = a.new( 0, wtypeStr );
@@ -1395,6 +1408,8 @@ int main() {
 	testsuite( Test_warray_append_n );
 	testsuite( Test_warray_prepend_n );
 	testsuite( Test_warray_set_n );
+
+	testsuite( Test_warray_pushAt );
 
 	testsuite( Test_warray_firstLastSampleEmptyNonEmpty );
 	testsuite( Test_warray_cloneFirstLastAt );

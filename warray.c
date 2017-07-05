@@ -284,9 +284,10 @@ warray_insertSorted( WArray* array, const void* element )
 }
 
 WArray*
-warray_pushAt( WArray* array, size_t position, void** element )
+warray_pushAt( WArray* array, size_t position, void** elementPtr )
 {
 	assert( array );
+	assert( elementPtr );
 
 	resize( array, __wmax( array->size, position+1 ));
 
@@ -299,18 +300,37 @@ warray_pushAt( WArray* array, size_t position, void** element )
 		array->size = position+1;
 	}
 
-	if ( element )
-		array->data[position] = *element;
+	if ( elementPtr )
+		array->data[position] = *elementPtr;
 	else
 		array->data[position] = NULL;
 
-	*element = NULL;
+	*elementPtr = NULL;
 	assert( array );
 	return checkArray( array );
 }
 
+WArray*
+warray_pushFirst( WArray* array, void** elementPtr )
+{
+	assert( array );
+	assert( elementPtr );
+
+    return warray_pushAt( array, 0, elementPtr );
+}
+
+WArray*
+warray_pushLast( WArray* array, void** elementPtr )
+{
+	assert( array );
+	assert( elementPtr );
+
+    return warray_pushAt( array, array->size, elementPtr );
+}
+
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
+
 
 WArray*
 warray_append_n( WArray* array, size_t n, void* const elements[n] )
