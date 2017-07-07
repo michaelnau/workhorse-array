@@ -167,7 +167,7 @@ const WType* wtypeInt = &(WType) {
 //---------------------------------------------------------------------------------
 
 void* wtypeStr_clone( const void* element ) {
-	return __wstr_dup( element );
+	return element ? __wstr_dup( element ) : NULL;
 }
 
 void wtype_delete( void** wtypePtr ) {

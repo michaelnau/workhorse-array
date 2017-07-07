@@ -799,11 +799,11 @@ warray_toString( const WArray* array, const char delimiter[] )
 	if ( not array->size ) return __wstr_dup( "" );
 
 	WElementToString* toString = array->type->toString;
-	char* string = array->data[0] ? toString( array->data[0] ) : __wstr_dup( "NULL" );	//The first element without delimiter
+	char* string = array->data[0] ? toString( array->data[0] ) : __wstr_dup( "(NULL)" );	//The first element without delimiter
 	assert( string );
 
 	for ( size_t i = 1; i < array->size; i++ ) {	//Concatenate current string, delimiter and next element.
-		char* elementStr = array->data[i] ? toString( array->data[i] ) : __wstr_dup( "NULL" );
+		char* elementStr = array->data[i] ? toString( array->data[i] ) : __wstr_dup( "(NULL)" );
 		assert( elementStr );
 		char* temp = str_cat3( string, delimiter, elementStr );
 		free( string );
@@ -831,7 +831,7 @@ warray_fromString( const char string[], const char delimiter[], const WType* tar
 
 	while ( token ) {
 		void* element;
-		if ( strcmp( token, "NULL" ) != 0 ) {
+		if ( strcmp( token, "(NULL)" ) != 0 ) {
 			element = targetType->fromString( token );
 			assert( element );
 			warray_append( array, element );
@@ -1037,8 +1037,9 @@ warray_sort( WArray* array )
 }
 
 /*	Here we define a helper function converting the void** pointers from qsort to void* elements.
-	This helps keeping the API uniform, we always provide void* elements to the client
 	callback functions. The downside: we get a dependency from C11 to remain thread-safe.
+	This helps keeping the API uniform, we always provide void* elements to the client. The only
+	working alternative would require a GNU non-standard nested function inside warray_sortBy().
 */
 _Thread_local WElementCompare* sortCompare;
 static int compareTwoElements( const void* element1, const void* element2 ) {	//qsort delivers void**
