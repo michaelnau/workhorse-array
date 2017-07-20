@@ -324,7 +324,7 @@ Test_warray_pushAt()
 	autoWArray* array = a.new( 0, wtypeStr );
 
 	char* str1 = strdup( "cat" );
-    warray_pushAt( array, 0, (void**)&str1 );
+    warray_pushAt( array, 0, str1 );
 	assert_strequal( a.first( array ), "cat" );
 	assert_null( str1 );
 }

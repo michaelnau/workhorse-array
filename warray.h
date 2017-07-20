@@ -235,32 +235,44 @@ warray_insertSorted( WArray* array, const void* element );
 
 /*	Prepend an element to the array and pass its ownership.
 
+	void
+	warray_pushFirst( WArray* array, void* element );
+
 	@param array The array to be modified in place.
-	@param elementPtr Pointer to the element gifted to the array. The element must be
-		properly allocated like the array's clone() method would do it. *elementPtr
+	@param element The element gifted to the array. The element must be
+		properly allocated like the array's clone() method would do it. element
 		equals NULL afterwards.
-	@return The modified array, allowing the chaining of function calls.
 */
-WArray*
-warray_pushFirst( WArray* array, void** elementPtr );
+#define warray_pushFirst( array, element )	\
+do {										\
+	__warray_pushAt( array, 0, element );	\
+	element = NULL;							\
+}while(0)
 
 /*	Append an element to the array and pass its ownership.
+
+	void
+	warray_pushLast( WArray* array, void* element );
 */
-WArray*
-warray_pushLast( WArray* array, void** elementPtr );
+#define warray_pushLast( array, element )			\
+do {												\
+	__warray_pushAt( array, array->size, element );	\
+	element = NULL;									\
+}while(0)
 
-/*	Put an element into the array and pass its ownership.
+/*	Insert an element into the array and pass its ownership.
+
+	void
+	warray_pushAt( WArray* array, size_t position, void* element );
 */
-WArray*
-warray_pushAt( WArray* array, size_t position, void** elementPtr );
+#define warray_pushAt( array, position, element )	\
+do {												\
+	__warray_pushAt( array, position, element );	\
+	element = NULL;									\
+}while(0)
 
-#if 0
-WArray*
-warray_pushInsert( WArray* array, size_t position, void** elementPtr );
-
-WArray*
-warray_pushInsertSorted( WArray* array, size_t position, void** elementPtr );
-#endif
+void
+__warray_pushAt( WArray* array, size_t position, void* element );
 
 //------------------------------------------------------------
 //	Put several elements in the array.
