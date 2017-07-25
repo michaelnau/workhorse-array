@@ -103,7 +103,7 @@ __wstr_dup( const char* string )
 //---------------------------------------------------------------------------------
 
 static char welementNotFound;
-const void* WElementNotFound = &welementNotFound;
+void* WElementNotFound = &welementNotFound;
 
 //---------------------------------------------------------------------------------
 //	Raw void* type

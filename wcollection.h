@@ -29,7 +29,7 @@
 /**	Return value of search functions if no element could be found. A unique pointer
 	value not matching any other pointer.
 */
-extern const void* WElementNotFound;
+extern void* WElementNotFound;
 
 //---------------------------------------------------------------------------------
 //	Function prototypes for the element methods

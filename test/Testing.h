@@ -1,6 +1,7 @@
 #ifndef TESTING_H_INCLUDED
 #define TESTING_H_INCLUDED
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>

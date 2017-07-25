@@ -905,6 +905,7 @@ warray_compact( WArray* array );
 WArray*
 warray_sort( WArray* array );
 
+//TODO: Pass an optional data argument to the comparison function?
 /**	Sort the array elements in place using qsort() with the given comparison function.
 
 	@param array
